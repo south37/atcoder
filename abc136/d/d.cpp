@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
         }
 
         the_most_left_l = i;
-        diffs[i] = 1;
+        diffs[i] = - 1;
         left_is_r = false; // From now, left i L
       }
     } else { // left is L
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
         diffs[i] = 0;
         left_is_r = true;
       } else { // s[i] == 'L'
-        diffs[i] = (i - the_most_left_l) + 1;
+        diffs[i] = - (i - the_most_left_l) - 1;
       }
     }
   }
