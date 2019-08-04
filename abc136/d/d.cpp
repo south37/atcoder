@@ -43,9 +43,42 @@ int main(int argc, char** argv) {
   }
 
   // NOTE: Only for debug
-  cout << diffs[0];
+  // cout << diffs[0];
+  // for (int i = 1; i < n; ++i) {
+  //   cout << " " << diffs[i];
+  // }
+
+  // ### input2
+  // RRLLLLRLRRLL
+  //
+  // 1(R) 0(R) -1(L) -2(L) -3(L) -4(L) 0(R) -1(L) 1(R) 0(R) -1(L) -2(L)
+  //
+  // We calculate after the n.
+  vector<int> cnts(n, 0);
+
+  int trial = n + (n % 2); // If n is odd, + 1.
+
+  for (int i = 0; i < n; ++i) {
+    if (diffs[i] >= 0) { // R
+      int idx = i + diffs[i];  // Base index
+      if ((trial - diffs[i]) % 2 == 1) {
+        cnts[idx + 1] += 1;
+      } else {
+        cnts[idx] += 1;
+      }
+    } else { // L
+      int idx = i + diffs[i]; // Base index
+      if ((trial + diffs[i]) % 2 == 1) {
+        cnts[idx + 1] += 1;
+      } else {
+        cnts[idx] += 1;
+      }
+    }
+  }
+
+  cout << cnts[0];
   for (int i = 1; i < n; ++i) {
-    cout << " " << diffs[i];
+    cout << " " << cnts[i];
   }
 
   // vector<int> n_cnts(n, -1); // initialize with -1

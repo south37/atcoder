@@ -21,8 +21,36 @@ RRLRL
 ### 2
 RRLLLLRLRRLL
 
-1(R) 0(R) 1(L) 2(L) 3(L) 4(L) 0(R) 1(L) 1(R) 0(R) 1(L) 2(L)
+1(R) 0(R) -1(L) -2(L) -3(L) -4(L) 0(R) -1(L) 1(R) 0(R) -1(L) -2(L)
 
 
 // How we calculate?
 
+left_is_r = 1;
+the_most_left_r = 0;
+the_most_left_l = -1;
+
+for (int i = 1; i < n; ++i) {
+  if (left_is_r == 1) {
+    if (s[i] == 'R') {
+      continue;
+    } else { // s[i] == 'L'
+      int diff = (i - the_most_left_r);
+      for (int j = 0; j < diff; ++j) {
+        cnts[i - (j + 1)] = j;
+      }
+
+      the_most_left_l = i;
+      cnts[i] = 1;
+      left_is_r = 0; // From now, left i L
+    }
+  } else { // left is L
+    if (s[i] == 'R') {
+      the_most_left_r = i;
+      cnts[i] = 0;
+      left_is_r = 1;
+    } else { // s[i] == 'L'
+      cnts[i] = (i - the_most_left_l) + 1;
+    }
+  }
+}
