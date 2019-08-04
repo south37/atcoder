@@ -1,3 +1,28 @@
 R...L
 
+// If you reach RL, then you can't move from it.
+R
+
+
+find RL pairs.
+
+After moving N, then only pair point is swapped (mod 2).
+
+//
+Calculate the distance of L and R.
+
+e.g.
+
+### 1
+RRLRL
+1(R) 0(R) 1(L) 0(R) 1(L)
+
+
+### 2
+RRLLLLRLRRLL
+
+1(R) 0(R) 1(L) 2(L) 3(L) 4(L) 0(R) 1(L) 1(R) 0(R) 1(L) 2(L)
+
+
+// How we calculate?
 
