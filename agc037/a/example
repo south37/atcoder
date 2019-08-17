@@ -1,1 +1,35 @@
 # ex. 2
+aaaccacabaababc
+
+(a) (aaccacabaababc)
+(a) (aa) (ccacabaababc)
+(a) (aa) (c) (cacabaababc)
+(a) (aa) (c) (ca) (cabaababc)
+(a) (aa) (c) (ca) (c) (abaababc)
+(a) (aa) (c) (ca) (c) (a) (baababc)
+(a) (aa) (c) (ca) (c) (a) (b) (aababc)
+(a) (aa) (c) (ca) (c) (a) (b) (a) (ababc)
+(a) (aa) (c) (ca) (c) (a) (b) (a) (ab) (abc)
+(a) (aa) (c) (ca) (c) (a) (b) (a) (ab) (a) (bc)
+(a) (aa) (c) (ca) (c) (a) (b) (a) (ab) (a) (b) (c)
+
+
+## ex. x
+aaaaa
+
+(a) (aaaa)
+(a) (aa) (aa)  # bad.
+(a) (aaa) (a)  # good.
+
+## ex. x-2
+aaaa
+
+(a) (aaa)
+(a) (aa) (a)
+
+## ex. x-3
+aaaaaa
+
+(a) (aaaaa)
+(a) (aa) (aaa)
+(a) (aa) (a) (aa)
