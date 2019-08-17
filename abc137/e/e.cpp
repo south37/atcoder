@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
 
   // NOTE: We focus only reachable vetices.
 
+  // Use Bellman-Ford
   bool negative_existence = false;
   vector<int64_t> d(N, INF);  // Initialize with INF.
   d[0] = 0;  // Set 0 to start point.
