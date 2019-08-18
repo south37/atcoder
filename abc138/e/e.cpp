@@ -47,19 +47,30 @@ int main(int argc, char** argv) {
       break;
     }
 
-    bool found = false;
-    for (auto e : indices) {
-      if (e > last_index) {  // e is larger than last_index. OK.
-        last_index = e;
-        found = true;
-        break;
-      }
-    }
+    auto it = lower_bound(all(indices), last_index); // indices is sorted.
 
-    if (!found) {
+    // If last_index is lower than any element in indices, we use the next value of indices.
+    // If last_index is larger than all value of indices, we have to cycle.
+    if ((it == indices.end()) || (it == --indices.end())) { // last_index is equal or the largest if incidex
       cycle_cnt += 1;
       last_index = indices[0];
+    } else {
+      last_index = *it;
     }
+
+    bool found = false;
+    // for (auto e : indices) {
+    //   if (e > last_index) {  // e is larger than last_index. OK.
+    //     last_index = e;
+    //     found = true;
+    //     break;
+    //   }
+    // }
+
+    // if (!found) {
+    //   cycle_cnt += 1;
+    //   last_index = indices[0];
+    // }
   }
 
 
