@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 
     // If last_index is lower than any element in posMap[c], we use the next value of posMap[c].
     // If last_index is larger than all value of posMap[c], we have to cycle.
-    if (it == posMap[c].end()) { // last_index is equal or the largest if incidex
+    if (it == posMap[c].end()) { // last_index is larger than the largest value of posMap[c].
       cycle_cnt += 1;
       last_index = posMap[c][0];
     } else {
