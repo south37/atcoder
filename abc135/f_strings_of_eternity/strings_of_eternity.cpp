@@ -117,14 +117,4 @@ int main(int argc, char** argv) {
   } else {
     cout << maxSize << endl;
   }
-
-  // int l = s.size();
-  // vector<int> vec;
-  // search(s, t, &vec);
-  // for (auto e : vec) {
-  //   cout << e << endl;
-  // }
-
-  // cout << s << endl;
-  // cout << t << endl;
 }
