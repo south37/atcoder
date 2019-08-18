@@ -2,6 +2,8 @@
 
 using namespace std;
 
+#define rep(i, n) for(int i = 0; i < n; ++i)
+
 static const uint64_t MOD = 1000000007LL;
 
 int n;
@@ -16,7 +18,7 @@ int main(int argc, char** argv) {
   n = strlen(s);
 
   dp[0][0] = 1;
-  for (i = 0; i < n; ++i) {
+  rep(i, n) {
     int c;
     if (s[i] == '?') {
       c = -1;
@@ -24,13 +26,20 @@ int main(int argc, char** argv) {
       c = s[i] - '0';
     }
 
-    for (j = 0; j < 10; ++j) {
-      if ((c != -1) && (c != j)) continue;
-      for (k = 0; k < 13; ++k) {
+    rep(j, 10) {
+      if (c != -1 && j != c) {
+        // If c is not '?', only the specified number must be summed.
+        continue;
+      }
+      rep(k, 13) {
         dp[i + 1][(k * 10 + j) % 13] += dp[i][k];
       }
     }
-    for (j = 0; j < 13; ++j) dp[i + 1][j] %= MOD;
+
+    // MOD
+    rep(k, 13) {
+      dp[i + 1][k] %= MOD;
+    }
   }
   res = dp[n][5];
 

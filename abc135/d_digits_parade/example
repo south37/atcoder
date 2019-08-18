@@ -1,0 +1,3 @@
+## recurrence relation
+- dp[i + 1][(k * 10 + j) % 13] sum(k 0-12,j 0-9) dp[i][k]
+  - summention of "13 * 10"
