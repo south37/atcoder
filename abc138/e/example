@@ -1,0 +1,49 @@
+## impossible case
+- t contains the characters which is not included in s
+
+## possible case
+- all characters in t is contained to s
+
+
+## What we should consider
+- the amount of each characters which we need.
+  - e.g. If t is "son", we need s-1, o-1, n-1
+
+  - when s is "contest", the first s occurs at
+               0123456
+
+## ex1. What we should create
+
+- the map of each character in "son".
+  - s .. 5
+  - o .. 1
+  - n .. 2
+
+- [..5..],[.1 2] is the result.
+
+
+## ex2. What we should create
+- s: contest
+     0123456
+- t: programmin g
+     012345678910
+  - p .. none
+  - r .. none
+  - o .. 1
+  - g .. none
+
+## ex3. What we should create
+- s: contest   (n=7)
+     0123456
+- t: sentence
+     01234567
+  - s .. 5
+  - e .. 4 .. (n + 4)
+  - n .. 2 .. (2n + 2)
+  - t .. 3, 6 .. (2n + 3)
+  - e .. 4 .. (2n + 4)
+  - n .. 2 .. (3n + 2)
+  - c .. 0 .. (4n + 0)
+  - e .. 4 .. (4n + 4)
+
+res = 4 * 7 + 4 + 1 = 33
