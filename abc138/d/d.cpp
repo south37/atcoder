@@ -22,20 +22,6 @@ vector<int> from_of_to[223456];
 vector<uint64_t> scores(223456, 0);
 vector<uint64_t> memo(223456, 0); // This is the score of vertex i.
 
-// void calculate(int i) {
-//   if (memo[i] >= 0) { return; } // memo[i] is already calculated.
-//
-//   memo[i] = 0;
-//   for (auto e : from_of_to[i]) {
-//     if (memo[e] < 0) { // memo[e] is not calculated.
-//       calculate(e);
-//     }
-//     // Now, memo[e] is calculated
-//     memo[i] += memo[e];
-//   }
-//   memo[i] += scores[i];
-// }
-
 int main(int argc, char** argv) {
   int N, Q;
   cin >> N >> Q;
