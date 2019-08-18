@@ -1,4 +1,9 @@
 #include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -35,7 +40,7 @@ void getZarr(string& str, int Z[]) {
 }
 
 
-void search(string& text, string& pattern) {
+void search(string& text, string& pattern, vector<int> *result) {
   string s = pattern + "$" + text;
   int l = s.length();
 
@@ -44,11 +49,27 @@ void search(string& text, string& pattern) {
 
   int p = pattern.length();
 
+  vector<int> res;
   for (int i = 0; i < l; ++i) {
     if (Z[i] == p) {
-      cout << "Pattern found at index " << i - p - 1 << endl;
+      result->push_back(i - p - 1);
     }
   }
+}
+
+int sch(int i, int stop, const string& s, const string& t, vector<int>& vm) {
+  int j = (i + t.size()) % s.size();  // The dst of next hop.
+  if (j == stop) { return -1; }  // Loop exists
+
+  if (vm[j] < 0) { // s[j..?] matches with t
+    if (sch(j, stop, s, t, vm) < 0) {
+      return -1;
+    }
+  }
+  // By calling sch, now, the positive value is set to vm[j].
+
+  vm[i] = vm[j] + 1;
+  return vm[i];
 }
 
 int main(int argc, char** argv) {
@@ -56,8 +77,54 @@ int main(int argc, char** argv) {
   cin >> s;
   cin >> t;
 
-  search(s, t);
+  int l = s.size();
 
-  cout << s << endl;
-  cout << t << endl;
+  // repeat count
+  int r = 1 + ((s.size() - 1 + t.size()) / s.size());
+  string reps;
+  reps.reserve(r * s.size());
+  rep(i, r) {
+    reps += s;
+  }
+
+  // For Debug
+  // cout << reps << endl;
+
+  vector<int> matches;
+  search(reps, t, &matches);
+
+  vector<int> vm(s.size());
+
+  for (auto i : matches) {
+    if (i >= s.size()) { break; }  // Treat only i <= s.size() - 1
+    vm[i] = - 1;
+  }
+
+  int loopExists = false;
+  int maxSize = 0;
+  for (auto i : matches) {
+    if (i >= s.size()) { break; }  // Treat only i <= s.size() - 1
+    int x = sch(i, i, s, t, vm);
+    if (x == -1) { // There is loop
+      loopExists = true;
+      break;
+    }
+    maxSize = max(maxSize, x);
+  }
+
+  if (loopExists) {
+    cout << -1 << endl;
+  } else {
+    cout << maxSize << endl;
+  }
+
+  // int l = s.size();
+  // vector<int> vec;
+  // search(s, t, &vec);
+  // for (auto e : vec) {
+  //   cout << e << endl;
+  // }
+
+  // cout << s << endl;
+  // cout << t << endl;
 }
