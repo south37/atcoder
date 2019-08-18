@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ void getZarr(string& str, int Z[]) {
 }
 
 
-void search(string& text, string& pattern) {
+void search(string& text, string& pattern, vector<int> *result) {
   string s = pattern + "$" + text;
   int l = s.length();
 
@@ -46,7 +47,7 @@ void search(string& text, string& pattern) {
 
   for (int i = 0; i < l; ++i) {
     if (Z[i] == p) {
-      cout << "Pattern found at index " << i - p - 1 << endl;
+      result->push_back(i - p - 1);
     }
   }
 }
@@ -56,7 +57,12 @@ int main(int argc, char** argv) {
   cin >> s;
   cin >> t;
 
-  search(s, t);
+  vector<int> matches;
+  search(s, t, &matches);
+
+  for (auto e : matches) {
+    cout << e << endl;
+  }
 
   cout << s << endl;
   cout << t << endl;
