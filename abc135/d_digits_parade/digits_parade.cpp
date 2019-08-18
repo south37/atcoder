@@ -9,9 +9,6 @@ using namespace std;
 uint64_t dp[123456][13];
 
 int main(int argc, char** argv) {
-  int i, j, k;
-  uint64_t res = 0;
-
   string s;
   cin >> s;
   int n = s.size();
@@ -40,7 +37,7 @@ int main(int argc, char** argv) {
       dp[i + 1][k] %= MOD;
     }
   }
-  res = dp[n][5];
+  uint64_t res = dp[n][5];
 
   cout << res << endl;
   return 0;
