@@ -101,19 +101,19 @@ int main(int argc, char** argv) {
 
   for (auto i : matches) {
     if (i >= s.size()) { break; }  // Treat only i <= s.size() - 1
-    vm[i] = - 1;
+    vm[i] = - 1; // Sentinel
   }
 
   int loopExists = false;
   int maxSize = 0;
   for (auto i : matches) {
     if (i >= s.size()) { break; }  // Treat only i <= s.size() - 1
-    int x = sch(i, i, s, t, vm);
-    if (x == -1) { // There is loop
+    int size = sch(i, i, s, t, vm);
+    if (size == -1) { // There is loop
       loopExists = true;
       break;
     }
-    maxSize = max(maxSize, x);
+    maxSize = max(maxSize, size);
   }
 
   if (loopExists) {
