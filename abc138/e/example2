@@ -4,3 +4,23 @@
 
 result: it = 3;
 
+## What we want
+
+- case 1.
+if last_index is 2. and indices equal (1, 3)
+  -> get 3 ast the last elemtn of indices
+
+- case 2.
+  - last index 2
+  - indices (1, 2)
+    -> get 1 and cycle_cnt++;
+
+- case 3.
+  - last index 2
+  - indices (2, 3)
+    -> get 3
+
+- case 4.
+  - last index 2
+  - indices (3, 4)
+    -> get 3
