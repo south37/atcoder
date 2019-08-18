@@ -58,6 +58,10 @@ void search(string& text, string& pattern, vector<int> *result) {
 }
 
 int sch(int i, int stop, const string& s, const string& t, vector<int>& vm) {
+  // Early check of vm[i]. If vm[i] is larger than 0, its value is alreday
+  // caluculated.
+  if (vm[i] > 0) { return vm[i]; }
+
   int j = (i + t.size()) % s.size();  // The dst of next hop.
   if (j == stop) { return -1; }  // Loop exists
 
