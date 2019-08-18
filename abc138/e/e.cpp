@@ -41,36 +41,21 @@ int main(int argc, char** argv) {
   int t_len = t.size();
   rep(i, t_len) {
     int c = t[i] - 'a';
-    vector<int> indices = posMap[c];
-    if (indices.size() == 0) {
+    if (posMap[c].size() == 0) {
       impossible = true;
       break;
     }
 
-    auto it = upper_bound(all(indices), last_index); // indices is sorted.
+    auto it = upper_bound(all(posMap[c]), last_index); // posMap[c] is sorted.
 
-    // If last_index is lower than any element in indices, we use the next value of indices.
-    // If last_index is larger than all value of indices, we have to cycle.
-    if (it == indices.end()) { // last_index is equal or the largest if incidex
+    // If last_index is lower than any element in posMap[c], we use the next value of posMap[c].
+    // If last_index is larger than all value of posMap[c], we have to cycle.
+    if (it == posMap[c].end()) { // last_index is equal or the largest if incidex
       cycle_cnt += 1;
-      last_index = indices[0];
+      last_index = posMap[c][0];
     } else {
       last_index = *it;
     }
-
-    bool found = false;
-    // for (auto e : indices) {
-    //   if (e > last_index) {  // e is larger than last_index. OK.
-    //     last_index = e;
-    //     found = true;
-    //     break;
-    //   }
-    // }
-
-    // if (!found) {
-    //   cycle_cnt += 1;
-    //   last_index = indices[0];
-    // }
   }
 
 
