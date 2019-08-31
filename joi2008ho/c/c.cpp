@@ -11,8 +11,6 @@ using namespace std;
 #define rep(i, n) for(int i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
-int64_t d[123456];
-
 int main(int argc, char** argv) {
   int64_t N, M;
   cin >> N >> M;
@@ -20,8 +18,6 @@ int main(int argc, char** argv) {
   rep(i, N) {
     cin >> P[i+1];
   }
-  sort(all(P));
-  reverse(all(P));
 
   // For Debug
   // cout << N << endl;
