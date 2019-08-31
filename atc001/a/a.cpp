@@ -11,17 +11,18 @@ using namespace std;
 #define rep(i, n) for(int i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
-// Try [1, 0], [-1, 0], [0, 1], [0, -1]
+#define MAX_W 500
+#define MAX_H 500
 
 int H, W;
-vector<string> c;
-vector< vector<bool> > visited;
+char c[MAX_W][MAX_H];  // c[x][y] is the char at (x, y)
+bool visited[MAX_W][MAX_H];
 
 void dfs(int x, int y) {
-  if (x < 0 || W <= x || y < 0 || H <= y || c[y][x] == '#') { return; }
-  if (visited[y][x]) return;
+  if (x < 0 || W <= x || y < 0 || H <= y || c[x][y] == '#') { return; }
+  if (visited[x][y]) return;
 
-  visited[y][x] = true;
+  visited[x][y] = true;
 
   dfs(x + 1, y);
   dfs(x - 1, y);
@@ -32,37 +33,25 @@ void dfs(int x, int y) {
 int main(int argc, char** argv) {
   cin >> H >> W;
 
-  // For Debug
-  // cout << H << endl;;
-  // cout << W << endl;
-
   rep(i, H) {
     string s;
     cin >> s;
-    c.push_back(s);
+    rep(j, W) {
+      c[j][i] = s[j];
+    }
   }
-
-  rep(i, H) {
-    vector<bool> v(W, false);
-    visited.push_back(v);
-  }
-
-  // For Debug
-  // rep(i, H) {
-  //   cout << c[i] << endl;
-  // }
 
   int x, y;
   int g_x, g_y;
-  rep(i, H) {
-    rep(j, W) {
+  rep(i, W) {
+    rep(j, H) {
       if (c[i][j] == 's') {
-        x = j;
-        y = i;
+        x = i;
+        y = j;
       }
       if (c[i][j] == 'g') {
-        g_x = j;
-        g_y = i;
+        g_x = i;
+        g_y = j;
       }
     }
   }
@@ -71,7 +60,7 @@ int main(int argc, char** argv) {
   // cout << "g: " << g_x << ", " << g_y << endl;
 
   dfs(x, y);
-  if (visited[g_y][g_x]) {
+  if (visited[g_x][g_y]) {
     cout << "Yes" << endl;
   } else {
     cout << "No" << endl;
