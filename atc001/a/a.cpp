@@ -16,39 +16,17 @@ using namespace std;
 int H, W;
 vector<string> c;
 vector< vector<bool> > visited;
-int g_x, g_y;
 
-bool dfs(int x, int y) {
-  if ((x + 1 == g_x) && (y == g_y)) {
-    return true;
-  }
-  if ((x - 1 == g_x) && (y == g_y)) {
-    return true;
-  }
-  if ((x == g_x) && (y + 1 == g_y)) {
-    return true;
-  }
-  if ((x == g_x) && (y - 1 == g_y)) {
-    return true;
-  }
+void dfs(int x, int y) {
+  if (x < 0 || W <= x || y < 0 || H <= y || c[y][x] == '#') { return; }
+  if (visited[y][x]) return;
 
-  if ((x < W-1) && (c[y][x+1] == '.') && !visited[y][x+1]) {
-    visited[y][x+1] = true;
-    if (dfs(x+1, y)) { return true; }
-  }
-  if ((x > 0) && (c[y][x-1] == '.') && !visited[y][x-1]) {
-    visited[y][x-1] = true;
-    if (dfs(x-1, y)) { return true; }
-  }
-  if ((y < H-1) && (c[y+1][x] == '.') && !visited[y+1][x]) {
-    visited[y+1][x] = true;
-    if (dfs(x, y+1)) { return true; }
-  }
-  if ((y > 0) && (c[y-1][x] == '.') && !visited[y-1][x]) {
-    visited[y-1][x] = true;
-    if (dfs(x, y-1)) { return true; }
-  }
-  return false;
+  visited[y][x] = true;
+
+  dfs(x + 1, y);
+  dfs(x - 1, y);
+  dfs(x, y + 1);
+  dfs(x, y - 1);
 }
 
 int main(int argc, char** argv) {
@@ -75,6 +53,7 @@ int main(int argc, char** argv) {
   // }
 
   int x, y;
+  int g_x, g_y;
   rep(i, H) {
     rep(j, W) {
       if (c[i][j] == 's') {
@@ -91,9 +70,8 @@ int main(int argc, char** argv) {
   // cout << "s: " << x << ", " << y << endl;
   // cout << "g: " << g_x << ", " << g_y << endl;
 
-  visited[y][x] = true;
-  bool r = dfs(x, y);
-  if (r) {
+  dfs(x, y);
+  if (visited[g_y][g_x]) {
     cout << "Yes" << endl;
   } else {
     cout << "No" << endl;
