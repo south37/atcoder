@@ -14,6 +14,9 @@ using namespace std;
 #define MAX_W 500
 #define MAX_H 500
 
+int dx[] = { 1, -1, 0, 0 };
+int dy[] = { 0, 0, 1, -1 };
+
 int H, W;
 char c[MAX_W][MAX_H];  // c[x][y] is the char at (x, y)
 bool visited[MAX_W][MAX_H];
@@ -24,10 +27,9 @@ void dfs(int x, int y) {
 
   visited[x][y] = true;
 
-  dfs(x + 1, y);
-  dfs(x - 1, y);
-  dfs(x, y + 1);
-  dfs(x, y - 1);
+  rep(i, 4) {
+    dfs(x + dx[i], y + dy[i]);
+  }
 }
 
 int main(int argc, char** argv) {
