@@ -34,5 +34,9 @@ int main(int argc, char** argv) {
   int n;
   cin >> n;
 
-  cout << n << endl;
+  rep(i, n) {
+    if (prime(i + 1)) {
+      cout << i + 1 << endl;
+    }
+  }
 }
