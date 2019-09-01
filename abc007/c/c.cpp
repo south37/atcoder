@@ -14,11 +14,8 @@ using namespace std;
 int dx[] = { 1, -1, 0, 0 };
 int dy[] = { 0, 0, 1, -1 };
 
-struct triple {
-  int x;
-  int y;
-  int dist;
-};
+typedef pair<int, int> P;
+typedef tuple<int, int, int> triple;
 
 int main(int argc, char** argv) {
   int R, C;
@@ -45,13 +42,11 @@ int main(int argc, char** argv) {
   }
 
   queue<triple> q;
-  triple s = { sx, sy, 0 };
-  q.push(s);
+  q.push(triple(sx, sy, 0));
   while (q.size() > 0) {
     triple v = q.front(); q.pop();
-    int x = v.x;
-    int y = v.y;
-    int dist = v.dist;
+    int x, y, dist;
+    tie(x, y, dist) = v;
     if (D[y][x] != -1) { // Already visited
       continue;
     }
@@ -74,8 +69,7 @@ int main(int argc, char** argv) {
       // For Debug
       // cout << "ny, nx, dist + 1: " << ny << ", " << nx << ", " << dist + 1 << endl;
 
-      triple n = { nx, ny, dist + 1 };
-      q.push(n);
+      q.push(triple(nx, ny, dist + 1));
     }
   }
 
