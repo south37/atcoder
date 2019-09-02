@@ -31,6 +31,11 @@ bool prime(int n) {
   return n != 1;
 }
 
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
+
+const int INF = 1e9;
+
 int main(int argc, char** argv) {
   int n;
   cin >> n;
