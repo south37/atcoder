@@ -35,6 +35,7 @@ template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true
 template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
 
 const int INF = 1e9;
+const int64_t MOD = 1000000009;
 
 int dp[123][12345];
 
@@ -54,6 +55,7 @@ int main(int argc, char** argv) {
       } else {
         dp[i+1][j] = dp[i][j];
       }
+      dp[i+1][j] %= MOD;
     }
   }
 
