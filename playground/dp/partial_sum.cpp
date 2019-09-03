@@ -57,6 +57,15 @@ int main(int argc, char** argv) {
     }
   }
 
+  // For Debug
+  rep(i, N + 1) {
+    cout << "dp[" << i << "]: ";
+    for (int j = A; j >= 0; --j) {
+      cout << dp[i][j] << ", ";
+    }
+    cout << endl;
+  }
+
   if (dp[N][A]) {
     cout << "YES" << endl;
   } else {
