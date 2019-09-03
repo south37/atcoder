@@ -64,6 +64,7 @@ int main(int argc, char** argv) {
   // We can also use this for initialization. O(N).
   // for (int x = 1; x < N+1; ++x) { bit[x] = v[x-1]; }
   // for (int x = 1; x < N; ++x) { bit[x + (x & -x)] += bit[x]; }
+
   cout << sum(5) << endl;;
   cout << sum(10) << endl;;
 }
