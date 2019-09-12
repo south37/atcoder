@@ -17,6 +17,7 @@ int dy[] = { 0, 0, 1, -1 };
 
 typedef pair<int, int> P;
 typedef tuple<int, int, int> triple;
+typedef long long ll;
 
 int gcd(int a, int b) {
   if (a < b) { swap(a, b); }
