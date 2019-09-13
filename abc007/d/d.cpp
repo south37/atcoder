@@ -69,12 +69,13 @@ ll permutation(ll n, ll k) {
   return (fac[n] * facinv[k] % MOD);
 }
 
+// Digit DP.
 ll f(string s) {
   int l = s.size();
   ll dp[20][2][2] = {}; // dp[i][j][k] top i digit, less than s(j), includes 4 or 9(k)
   dp[0][0][0] = 1;
   rep(i, l) {
-    int D = s[i] - '0';
+    int D = s[i] - '0'; // number at s[i];
     rep(j, 2) {
       rep(k, 2) {
         for (int d = 0; d <= (j ? 9 : D); ++d) {
