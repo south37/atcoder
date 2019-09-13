@@ -35,7 +35,39 @@ bool prime(int n) {
 template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
 template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
 
-const int INF = 1e9;
+const ll INF = 1e9;
+const ll MOD = 1000000007;  // 1e9 + 7
+
+ll powmod(ll x, ll y) {
+  ll r = 1;
+  while (y) {
+    if (y & 1) {
+      r = r * x % MOD;
+    }
+    x = x * x % MOD;
+    y >>= 1;
+  }
+  return r;
+}
+
+ll fac[200010], facinv[200010];  // 200010 is Larger than 1e5 + 1e5.
+void cominit() {
+  fac[0] = facinv[0] = 1;
+  ll c = 1;
+  for (int i = 1; i < 200010; ++i) {
+    c = c * i % MOD;
+    fac[i] = c;
+    facinv[i] = powmod(c, MOD-2);
+  }
+}
+
+ll combination(ll n, ll k) {
+  return (fac[n] * facinv[k] % MOD) * facinv[n-k] % MOD;
+}
+
+ll permutation(ll n, ll k) {
+  return (fac[n] * facinv[k] % MOD);
+}
 
 int main(int argc, char** argv) {
   int n;

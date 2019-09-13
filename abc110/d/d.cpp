@@ -42,11 +42,9 @@ ll powmod(ll x, ll y) {
   ll r = 1;
   while (y) {
     if (y & 1) {
-      r *= x;
-      r %= MOD;
+      r = r * x % MOD;
     }
-    x *= x;
-    x %= MOD;
+    x = x * x % MOD;
     y >>= 1;
   }
   return r;
@@ -57,8 +55,7 @@ void cominit() {
   fac[0] = facinv[0] = 1;
   ll c = 1;
   for (int i = 1; i < 200010; ++i) {
-    c *= i;
-    c %= MOD;
+    c = c * i % MOD;
     fac[i] = c;
     facinv[i] = powmod(c, MOD-2);
   }
