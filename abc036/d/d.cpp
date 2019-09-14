@@ -98,5 +98,5 @@ int main(int argc, char** argv) {
   }
 
   P p = rec(-1, 0);
-  cout << p.first + p.second << endl;
+  cout << (p.first + p.second) % MOD << endl;
 }
