@@ -15,9 +15,9 @@ using namespace std;
 int dx[] = { 1, -1, 0, 0 };
 int dy[] = { 0, 0, 1, -1 };
 
+typedef long long ll;
 typedef pair<int, int> P;
 typedef tuple<int, int, int> triple;
-typedef long long ll;
 
 int gcd(int a, int b) {
   if (a < b) { swap(a, b); }
