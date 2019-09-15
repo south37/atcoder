@@ -75,7 +75,17 @@ ll PERM(ll n, ll k) {
 string S;
 vector< set<int> > chars(26);
 
+int memo[5010][5010]; // For memo
+
 int main(int argc, char** argv) {
+  memset(memo, -1, 5010 * 5010);
+  // For Debug
+  // rep(i, 5010) {
+  //   rep(j, 5010) {
+  //     cout << memo[i][j] << endl;
+  //   }
+  // }
+
   int N;
   cin >> N;
 
@@ -98,8 +108,6 @@ int main(int argc, char** argv) {
   //   cout << endl;
   // }
 
-  vector<int> distance(N);
-
   // Try search
   rep(i, N) {
     // search(i);
@@ -115,6 +123,11 @@ int main(int argc, char** argv) {
       // *it is the next position.
       int next_pos = *it;
 
+      // Check Memo
+      if (memo[current_pos][next_pos] >= 0) {
+        continue;
+      }
+
       // cout << "current_pos: " << current_pos << endl;
       // cout << "next_pos: " << next_pos << endl;
 
@@ -126,7 +139,30 @@ int main(int argc, char** argv) {
       }
       // cout << "[end] current_pos: " << current_pos << endl;
       // cout << "[end] next_pos: " << next_pos << endl;
-      distance[i] = max(distance[i], dist);
+      for (int j = i; j <= current_pos; ++j) {
+        memo[j][*it + (j - i)] = dist - (j - i);
+        // For Debug
+        // cout << "memo[" << j << "][" << (*it + (j - i)) << "]" << memo[j][*it + (j - i)] << endl;
+      }
+    }
+  }
+
+  vector<int> distance(N);
+  rep(i, N) {
+    // search(i);
+    int c = S[i] - 'a';
+    auto next_it = chars[c].upper_bound(i); // Here, we only check first one.
+    if (next_it == chars[c].end()) {
+      continue;
+    }
+
+    // NOTE: This is naive implementaion. O(N ^ 3).
+    for (auto it = next_it; it != chars[c].end(); ++it) {
+      int current_pos = i;
+      // *it is the next position.
+      int next_pos = *it;
+
+      distance[current_pos] = max(distance[current_pos], memo[current_pos][next_pos]);
     }
   }
 
