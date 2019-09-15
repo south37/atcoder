@@ -112,12 +112,8 @@ int main(int argc, char** argv) {
   rep(i, N) {
     // search(i);
     int c = S[i] - 'a';
-    auto next_it = chars[c].upper_bound(i); // Here, we only check first one.
-    if (next_it == chars[c].end()) {
-      continue;
-    }
+    auto next_it = chars[c].upper_bound(i);
 
-    // NOTE: This is naive implementaion. O(N ^ 3).
     for (auto it = next_it; it != chars[c].end(); ++it) {
       int current_pos = i;
       // *it is the next position.
