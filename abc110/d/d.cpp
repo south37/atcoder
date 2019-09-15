@@ -50,22 +50,24 @@ ll powmod(ll x, ll y) {
   return r;
 }
 
-ll fac[200010], facinv[200010];  // 200010 is Larger than 1e5 + 1e5.
-void cominit() {
-  fac[0] = facinv[0] = 1;
-  ll c = 1;
-  for (int i = 1; i < 200010; ++i) {
-    c = c * i % MOD;
-    fac[i] = c;
-    facinv[i] = powmod(c, MOD-2);
+const int COM_MAX = 500010;
+ll fac[COM_MAX], facinv[COM_MAX], inv[COM_MAX];
+void COMinit() {
+  fac[0] = fac[1] = 1;
+  facinv[0] = facinv[1] = 1;
+  inv[1] = 1;
+  for(int i = 2; i < COM_MAX; ++i) {
+    fac[i] = fac[i-1] * i % MOD;
+    inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
+    facinv[i] = facinv[i-1] * inv[i] % MOD;
   }
 }
 
-ll combination(ll n, ll k) {
+ll COM(ll n, ll k) {
   return (fac[n] * facinv[k] % MOD) * facinv[n-k] % MOD;
 }
 
-ll permutation(ll n, ll k) {
+ll PERM(ll n, ll k) {
   return (fac[n] * facinv[k] % MOD);
 }
 
@@ -84,10 +86,10 @@ int main(int argc, char** argv) {
     ++factors[M];
   }
 
-  cominit();
+  COMinit();
   ll r = 1;
   for (auto x : factors) {
-    r *= combination(x.second + N - 1, N - 1);
+    r *= COM(x.second + N - 1, N - 1);
     r %= MOD;
   }
 
