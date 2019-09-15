@@ -73,67 +73,57 @@ ll PERM(ll n, ll k) {
   return (fac[n] * facinv[k] % MOD);
 }
 
-string S;
-vector< set<int> > chars(26);
+void getZarr(string& str, int Z[]) {
+  int n = str.length();
+  int L, R, k;
+
+  L = R = 0;
+  for (int i = 1; i < n; ++i) {
+    if (i > R) {
+      L = R = i;
+      while (R < n && str[R - L] == str[R]) {
+        R++;
+      }
+      Z[i] = R - L;
+      R--;
+    } else {
+      k = i - L;
+
+      if (Z[k] < R - i + 1) {
+        Z[i] = Z[k];
+      } else {
+        L = i;
+        while (R < n && str[R - L] == str[R]) {
+          R++;
+        }
+        Z[i] = R - L;
+        R--;
+      }
+    }
+  }
+}
 
 int main(int argc, char** argv) {
   int N;
   cin >> N;
 
+  string S;
   cin >> S;
 
-  // For Debug
-  // cout << N << endl;
-  // cout << S << endl;
-  rep(i, N) {
-    int c = S[i] - 'a';
-    chars[c].insert(i);
-  }
+  int ans = 0;
 
-  // For Debug
-  // rep(i, 26) {
-  //   cout << char('a' + i) << ": ";
-  //   for (auto e : chars[i]) {
-  //     cout << e << " ";
-  //   }
-  //   cout << endl;
-  // }
+  for (int i = 0; i < N-1; ++i) {  // str[i+1..N-1] + str[0..i]
+    string pre = S.substr(0, i+1);
+    string suf = S.substr(i+1, N-i-1);
+    string s = suf + "$" + pre;
 
-  vector<int> distance(N);
+    int Z[N+1];
+    getZarr(s, Z);
 
-  // Try search
-  rep(i, N) {
-    // search(i);
-    int c = S[i] - 'a';
-    auto next_it = chars[c].upper_bound(i);
-
-    for (auto it = next_it; it != chars[c].end(); ++it) {
-      int current_pos = i;
-      // *it is the next position.
-      int next_pos = *it;
-
-      // cout << "current_pos: " << current_pos << endl;
-      // cout << "next_pos: " << next_pos << endl;
-
-      int dist = 1;  // Now, S[current_pos] and S[next_pos] is same, wo distance is 1.
-      while ((next_pos + 1 < N) && (S[current_pos+1] == S[next_pos+1]) && (current_pos+1 < *it)) {
-        ++current_pos;
-        ++next_pos;
-        ++dist;
-      }
-      // cout << "[end] current_pos: " << current_pos << endl;
-      // cout << "[end] next_pos: " << next_pos << endl;
-      distance[i] = max(distance[i], dist);
+    rep(j, i+1) {
+      ans = max(ans, Z[N-j]);
     }
   }
 
-  // For Debug
-  // rep(i, N) {
-  //   cout << char('a' + i) << ": " << distance[i] << endl;
-  // }
-  int r = 0;
-  rep(i, N) {
-    r = max(r, distance[i]);
-  }
-  cout << r << endl;
+  cout << ans << endl;
 }
