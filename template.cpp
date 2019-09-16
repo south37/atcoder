@@ -18,8 +18,9 @@ int dy[] = { 0, 0, 1, -1 };
 
 typedef long long ll;
 typedef unsigned long long ull;
-typedef pair<int, int> P;
-typedef tuple<int, int, int> triple;
+typedef pair<ll, ll> P;
+typedef tuple<ll, ll, ll> triple;
+typedef double D;
 
 int gcd(int a, int b) {
   if (a < b) { swap(a, b); }
