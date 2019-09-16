@@ -6,7 +6,6 @@
 #include <queue>
 #include <unordered_map>
 #include <vector>
-#include <string.h>
 
 using namespace std;
 
@@ -74,8 +73,46 @@ ll PERM(ll n, ll k) {
 }
 
 int main(int argc, char** argv) {
-  int n;
-  cin >> n;
+  int N;
+  cin >> N;
+  vector<ull> A(N);
+  rep(i, N) {
+    cin >> A[i];
+  }
 
-  cout << n << endl;
+  ull allxor = 0;
+  rep(i, N) {
+    allxor ^= A[i];
+  }
+  // NOTE: leave only significant bits.
+  rep(i, N) {
+    A[i] &= ~allxor;
+  }
+
+  ull rank = 0;
+  for (int i = 59; i >= 0; --i) {
+    int j;
+    for (j = rank; j < N; ++j) {
+      if (A[j] & (1LL << i)) { break; }
+    }
+    if (j == N) { // No match
+      continue;
+    }
+    if (j > rank) {
+      A[rank] ^= A[j];  // Set 1 to i-bit of A[rank]
+    }
+
+    for (int k = rank + 1; k < N; ++k) {
+      A[k] = min(A[k], A[k] ^ A[rank]);  // Set 0 to i-bit of A[k].
+    }
+
+    ++rank;
+  }
+
+  ull x = 0;
+  rep(i, N) {
+    x = max(x, x ^ A[i]);
+  }
+
+  cout << (x * 2) + allxor << endl;
 }
