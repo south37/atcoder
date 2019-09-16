@@ -10,6 +10,8 @@
 
 using namespace std;
 
+#define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
+
 #define rep(i, n) for(int i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
