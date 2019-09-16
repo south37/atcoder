@@ -44,14 +44,14 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-ll powmod(ll x, ll y) {
+ll powmod(ll x, ll n) { // like pow(x, n)
   ll r = 1;
-  while (y) {
-    if (y & 1) {
+  while (n) {
+    if (n & 1) {
       r = r * x % MOD;
     }
     x = x * x % MOD;
-    y >>= 1;
+    n >>= 1;
   }
   return r;
 }
