@@ -2,6 +2,7 @@
 // http://drken1215.hatenablog.com/entry/2019/03/20/164100
 
 #include <algorithm>
+#include <bitset>
 #include <cassert>
 #include <cmath>
 #include <iostream>
