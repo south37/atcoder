@@ -1,6 +1,6 @@
 // Problem: http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_6_A&lang=jp
-// https://qiita.com/drken/items/2f56925972c1d34e05d8
-// https://qiita.com/drken/items/e805e3f514acceb87602
+// Ari-hon: https://qiita.com/drken/items/2f56925972c1d34e05d8
+// Dinic's Algorighm: https://qiita.com/drken/items/e805e3f514acceb87602
 
 #include <algorithm>
 #include <bitset>
