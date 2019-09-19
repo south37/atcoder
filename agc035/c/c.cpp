@@ -41,7 +41,11 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+// 1 << MSB(n) is the most significant set bit of n.
+// e.g. (1 << 3) = 1000 is the most significant set bit of 10 = 1010
 int MSB(int n) {
+  if (n == 0) { return 0; }
+
   int r = -1;
   for (; n > 0; n >>= 1) {
     ++r;
