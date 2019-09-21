@@ -1,0 +1,66 @@
+## ex1.
+3x3 matrix
+0 or 1
+
+min(row) = 1
+min(column) = 1
+
+...
+...
+...
+
+## ex2.
+H: 1, W: 5, A(row): 2, B(column): 0
+1x5
+xxxxx
+
+11000 or (other case).
+
+## brute-force
+- 行を順番にみていく
+  - 行ごとに、「0 が少ない方」or「1が少ない方」として埋める
+  - 埋め方は W_C_A
+  - それぞれの埋め方ごとに、「列(column) の条件を満たすか」を判定する
+
+
+これは、2**N * 各行での W_C_A なので極めて遅い
+
+## Next.
+簡単のため、「少ないのは必ず1」としてみる。
+
+- row[h], column[w] を考えてみる
+- row[h] は「行hの1の数」、column[w]は「列wの1の数」とする
+
+その場合、M[h][w] に1を set することは row[h] +=1, column[w] += 1 を意味する
+最初、row[h], column[w] はそれぞれ 0 として、全てを all h: row[h] = A, all w: column[w] = B と出来れば良い
+
+position を1つ増やすたびに、必ず row, column のどれかが +1 される。つまり、「A(h) * H」と「B(w) * W」は一致する必要がある。
+あるいは、A + A + (W - A) + ... = summed A と summed B は一致する必要がある。
+
+
+summed A, summed B が取りうる値は限定的。
+
+A: minW
+B: minH
+
+- minW * H <= summed(minW) <= (W - minW) * H
+  - (W-minW) - minW = (W - 2 * minW) ずつ取りうる値が分布
+- minH * W <= summed(minH) <= (H - minH) * W
+  - (H-minH) - minH = (H - 2 * minH) ずつ取りうる値が分布
+
+## ex 1
+A(minW): 1
+B(minH): 1
+H: 3
+W: 3
+
+1 * 3 <= summed(minW) <= 2 * 3
+  - 1 ずつ取り得る値が分布
+1 * 3 <= summed(minW) <= 2 * 3
+  - 1 ずつ取り得る値が分布
+
+一致するケースがあれば、その時の「何個が 1 が min, 何個が 0 が min」が分かるはず。それを剽げsんすれば良い。
+
+
+## ex 2
+
