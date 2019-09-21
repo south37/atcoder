@@ -248,7 +248,7 @@ int RMQUtil(int *st, int ss, int se, int qs, int qe, int index)
     // If segment of this node
     // is outside the given range
     if (se < qs || ss > qe)
-        return INT_MAX;
+        return 1e9;
 
     // If a part of this segment
     // overlaps with the given range
@@ -343,10 +343,51 @@ int main(int argc, char** argv) {
   int* st_min = constructSTForMin(arr, N);
   // cout << getMin(st_min, N, 0, 2) << endl;
 
+  int same_count = 0;
   for(int i = 1; i + K - 2 < N - 1; ++i) {
     // For Debug
-    cout << i << "-" << i + K - 2 << endl ;
-    cout << "max:" << getMax(st_max, N, i, i + K - 2) << endl;
-    cout << "min:" << getMin(st_max, N, i, i + K - 2) << endl;
+    // cout << i << "-" << i + K - 2 << endl ;
+    // cout << "max:" << getMax(st_max, N, i, i + K - 2) << endl;
+    // cout << "min:" << getMin(st_max, N, i, i + K - 2) << endl;
+    int max_x = getMax(st_max, N, i, i + K - 2);
+    int min_x = getMin(st_max, N, i, i + K - 2);
+    int left  = P[i-1];
+    int right = P[i + K - 1];
+    if ((left < min_x) && (right > max_x)) {
+      // For Debug
+      // cout << i << "-" << i + K - 2 << endl ;
+      // cout << "same" << endl;
+      ++same_count;
+    } else {
+      // For Debug
+      // cout << i << "-" << i + K - 2 << endl ;
+      // cout << "not same" << endl;
+    }
   }
+
+  int increasing_count = 1;
+  vector<int> max_increased(N);
+  int unchanged_count = 0; // If this is larger than 2, then it should be decreased
+  for (int i = 1; i < N; ++i) {
+    if (P[i-1] < P[i]) {
+      ++increasing_count;
+      max_increased[i] = increasing_count;
+      if (max_increased[i] >= K) {
+        ++unchanged_count;
+      }
+    } else {
+      increasing_count = 1;
+      max_increased[i] = increasing_count;
+    }
+  }
+
+  // For Debug
+  // cout << "max_increased:" << endl;
+  // for(int i = 1; i < N; ++i) {
+  //   cout << max_increased[i] << " ";
+  // }
+  // cout << endl;
+  // cout << "unchanged_count:" << unchanged_count << endl;
+
+  cout << (N - K + 1) - same_count - max(unchanged_count - 1, 0) << endl;
 }
