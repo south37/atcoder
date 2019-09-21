@@ -2,6 +2,7 @@
 #include <bitset>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <map>
