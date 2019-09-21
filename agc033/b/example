@@ -1,0 +1,15 @@
+## ex. 1
+- init
+...
+.s.
+
+## consideration
+- S can go max-R, max-L, max-U, max-D
+  - we can calculate each value in Step-i.
+  - sr[i], sl[i], su[i], sd[i]
+- We cancaluculate same values of T.
+  - tr[i], tl[i], tu[i], td[i]
+
+- limit is calculated from W, H and start.
+
+- If (sr[i] - tl[i]) > limit-r or other case, Takahashi win. In other case, Aoki win.
