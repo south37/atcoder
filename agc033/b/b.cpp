@@ -62,12 +62,12 @@ int main(int argc, char** argv) {
   int up = 0, down = H-1;  // If piece is in [up, down] before the step, it is ok.
   if (S[N-1] == 'U') { ++up; }   // shrink
   if (S[N-1] == 'D') { --down; } // shrink
-  // W >= 2, so it is ok here.
+  // H >= 2, so it is ok here.
   for (int i = N - 2; i >= 0; --i) {
     if (T[i] == 'U') { down = min(down + 1, H-1); } // expand
-    if (T[i] == 'D') { up = max(up - 1, 0); }     // expand
-    if (S[i] == 'U') { ++up; }                    // shrink
-    if (S[i] == 'D') { --down; }                  // shrink
+    if (T[i] == 'D') { up = max(up - 1, 0); }       // expand
+    if (S[i] == 'U') { ++up; }                      // shrink
+    if (S[i] == 'D') { --down; }                    // shrink
     if (up > down) { // Bad
       cout << "NO" << endl;
       return 0;
