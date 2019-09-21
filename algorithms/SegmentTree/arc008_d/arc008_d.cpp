@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <queue>
@@ -100,10 +101,10 @@ int main(int argc, char** argv) {
   pls.erase(unique(pls.begin(), pls.end()), pls.end());
   int NN = (int)pls.size();
 
-  SegTree< pair<double, double> >seg(
+  SegTree< pair<double, double> > seg(
     NN,
     [](pair<double, double> a, pair<double, double> b) {
-      return make_pair(a.first * b.first, a.second * b.first + b.second); // (a, b), (c, d) -> (ac, bc + d)
+      return make_pair(a.first * b.first, a.second * b.first + b.second);  // (a, b), (c, d) -> (ac, bc + d)
     },
     make_pair(1.0, 0)
   );
@@ -116,7 +117,5 @@ int main(int argc, char** argv) {
     Min = min(Min, res.first + res.second);
     Max = max(Max, res.first + res.second);
   }
-
-  cout << Min << endl;
-  cout << Max << endl;
+  cout << fixed << setprecision(10) << Min << endl << Max << endl;
 }
