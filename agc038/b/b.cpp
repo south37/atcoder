@@ -328,10 +328,6 @@ int main(int argc, char** argv) {
     cin >> P[i];
   }
 
-  // Cl
-  for(int i = 1; i < N; ++i) {
-    if ((i + K-1) >= N) { continue; } // Over limit.
-  }
 
   int arr[200010];
   memset(arr, 0, sizeof(arr));
@@ -341,9 +337,16 @@ int main(int argc, char** argv) {
 
   // Build segment tree from given array for max
   int* st_max = constructST(arr, N);
-  cout << getMax(st_max, N, 0, 2) << endl;
+  // cout << getMax(st_max, N, 0, 2) << endl;
 
   // Build segment tree from given array for min
   int* st_min = constructSTForMin(arr, N);
-  cout << getMin(st_min, N, 0, 2) << endl;
+  // cout << getMin(st_min, N, 0, 2) << endl;
+
+  for(int i = 1; i + K - 2 < N - 1; ++i) {
+    // For Debug
+    cout << i << "-" << i + K - 2 << endl ;
+    cout << "max:" << getMax(st_max, N, i, i + K - 2) << endl;
+    cout << "min:" << getMin(st_max, N, i, i + K - 2) << endl;
+  }
 }
