@@ -42,7 +42,7 @@ template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true
 template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
 
 const ll INF = 1e9;
-const ll MOD = 1000000007;  // 1e9 + 7
+const ll MOD = 998244353;
 
 ll powmod(ll x, ll n) { // like pow(x, n)
   ll r = 1;
@@ -56,7 +56,7 @@ ll powmod(ll x, ll n) { // like pow(x, n)
   return r;
 }
 
-const int COM_MAX = 500010;
+const int COM_MAX = 1000100;
 ll fac[COM_MAX], facinv[COM_MAX], inv[COM_MAX];
 void COMinit() {
   fac[0] = fac[1] = 1;
@@ -77,9 +77,58 @@ ll PERM(ll n, ll k) {
   return (fac[n] * facinv[k] % MOD);
 }
 
-int main(int argc, char** argv) {
-  int n;
-  cin >> n;
+#define MAX_A 1000100
 
-  cout << n << endl;
+int main(int argc, char** argv) {
+  int N;
+  cin >> N;
+  vector<ll> A(N);
+  rep(i, N) {
+    cin >> A[i];
+  }
+
+  COMinit();
+
+  // sigma_d/i w[d] = 1/i
+  vector<ll> w(MAX_A);
+  for (ll i = 1; i < MAX_A; ++i) {
+    w[i] += inv[i];
+    if (w[i] < 0) {
+      w[i] = w[i] % MOD + MOD; // w[i] >= 0
+    }
+    for (ll j = 2; i * j < MAX_A; ++j) {
+      w[i*j] -= w[i];
+    }
+  }
+
+  vector<ll> freq(MAX_A); // frequency of each A[i].
+  rep(i, N) {
+    ++freq[A[i]];
+  }
+
+  vector<ll> sumA(MAX_A);  // sumA[d] has the summension of A[i] (A[i] is the multiple of d).
+  vector<ll> sumA2(MAX_A); // sumA2[d] has the summension of A[i] ** 2 (A[i] is the multiple of d).
+
+  ll res = 0;
+  for (ll i = 1; i < MAX_A; ++i) {
+    for (ll j = 1; i * j < MAX_A; ++j) {
+      ll a = i * j;
+      sumA[i] += (a * freq[a]) % MOD;
+      sumA[i] %= MOD;
+      sumA2[i] += ((a * a % MOD) * freq[a]) % MOD;
+      sumA2[i] %= MOD;
+    }
+
+    // For Debug
+    // cout << sumA[i] << " -* " << sumA2[i] << "*" << w[i] << endl;
+    // cout << (((sumA[i] * sumA[i] - sumA2[i]) % MOD) * w[i] % MOD) * inv[2] % MOD << endl;
+
+    // (sumA[d] ** 2 - sumA2[d]) / 2 = summension of A[i]*A[j] (A[i], A[j] is the multiple of d, i < j)
+    res += (((((sumA[i] * sumA[i] - sumA2[i]) % MOD) * w[i]) % MOD) * inv[2]) % MOD;
+    res %= MOD;
+    if (res < 0) {
+      res = res % MOD + MOD; // res >= 0
+    }
+  }
+  cout << res << endl;
 }
