@@ -113,9 +113,9 @@ int main(int argc, char** argv) {
   for (ll i = 1; i < MAX_A; ++i) {
     for (ll j = 1; i * j < MAX_A; ++j) {
       ll a = i * j;
-      sumA[i] += (a * freq[a]) % MOD;
+      sumA[i] += a * freq[a] % MOD;
       sumA[i] %= MOD;
-      sumA2[i] += ((a * a % MOD) * freq[a]) % MOD;
+      sumA2[i] += (a * a % MOD) * freq[a] % MOD;
       sumA2[i] %= MOD;
     }
 
@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
     // cout << (((sumA[i] * sumA[i] - sumA2[i]) % MOD) * w[i] % MOD) * inv[2] % MOD << endl;
 
     // (sumA[d] ** 2 - sumA2[d]) / 2 = summension of A[i]*A[j] (A[i], A[j] is the multiple of d, i < j)
-    res += (((((sumA[i] * sumA[i] - sumA2[i]) % MOD) * w[i]) % MOD) * inv[2]) % MOD;
+    res += (((sumA[i] * sumA[i] - sumA2[i]) % MOD) * w[i] % MOD) * inv[2] % MOD;
     res %= MOD;
     if (res < 0) {
       res = res % MOD + MOD; // res >= 0
