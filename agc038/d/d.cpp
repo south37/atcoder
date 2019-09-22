@@ -80,7 +80,7 @@ ll PERM(ll n, ll k) {
 
 class UnionFind {
 public:
-  UnionFind(int size) : par(size, -1) {}
+  UnionFind(int size) : par(size, -1), rnk(size, 0) {}
 
   bool same(int x, int y) {
     return root(x) == root(y);
@@ -88,9 +88,13 @@ public:
   void unite(int x, int y) {
     x = root(x); y = root(y);
     if (x == y) return;
-    if (x > y) { swap(x, y); }
-    // here, x < y
-    par[y] = x;
+
+    if (rnk[x] < rnk[y]) {
+      par[x] = y;
+    } else {
+      par[y] = x;
+      if (rnk[x] == rnk[y]) { ++rnk[x]; }
+    }
   }
   int root(int x) {
     if (par[x] < 0) {
@@ -102,7 +106,9 @@ public:
 
 private:
   vector<int> par;
+  vector<int> rnk;
 };
+
 
 int main(int argc, char** argv) {
   ll N, M, Q;
