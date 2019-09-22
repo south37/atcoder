@@ -39,48 +39,12 @@ bool prime(int n) {
   return n != 1;
 }
 
-template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
-template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
-
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-ll powmod(ll x, ll n) { // like pow(x, n)
-  ll r = 1;
-  while (n) {
-    if (n & 1) {
-      r = r * x % MOD;
-    }
-    x = x * x % MOD;
-    n >>= 1;
-  }
-  return r;
-}
-
-const int COM_MAX = 500010;
-ll fac[COM_MAX], facinv[COM_MAX], inv[COM_MAX];
-void COMinit() {
-  fac[0] = fac[1] = 1;
-  facinv[0] = facinv[1] = 1;
-  inv[1] = 1;
-  for(int i = 2; i < COM_MAX; ++i) {
-    fac[i] = fac[i-1] * i % MOD;
-    inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
-    facinv[i] = facinv[i-1] * inv[i] % MOD;
-  }
-}
-
-ll COM(ll n, ll k) {
-  return (fac[n] * facinv[k] % MOD) * facinv[n-k] % MOD;
-}
-
-ll PERM(ll n, ll k) {
-  return (fac[n] * facinv[k] % MOD);
-}
-
 class UnionFind {
 public:
-  UnionFind(int size) : par(size, -1), rnk(size, 0) {}
+  UnionFind(int n) : par(n, -1), rnk(n, 0), _size(n) {}
 
   bool same(int x, int y) {
     return root(x) == root(y);
@@ -88,6 +52,8 @@ public:
   void unite(int x, int y) {
     x = root(x); y = root(y);
     if (x == y) return;
+
+    --_size;
 
     if (rnk[x] < rnk[y]) {
       par[x] = y;
@@ -103,10 +69,14 @@ public:
       return par[x] = root(par[x]);
     }
   }
+  int size() {
+    return _size;
+  }
 
 private:
   vector<int> par;
   vector<int> rnk;
+  int _size; // The number of connected components. Decreases by unite.
 };
 
 
@@ -144,12 +114,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  set<int> st;
-  rep(i, N) {
-    int r = tree.root(i);
-    st.insert(r);
-  }
-  ll K = st.size(); // the number of connected components.
+  ll K = tree.size(); // the number of connected components.
 
   // H must be lower than or equals to (N-K) + K*(K-1)/2 = N + K(K-3)/2
   if (M <= N + K * (K - 3) / 2) {
