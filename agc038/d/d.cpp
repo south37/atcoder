@@ -26,19 +26,6 @@ typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
-int gcd(int a, int b) {
-  if (a < b) { swap(a, b); }
-  if (b == 0) { return a; }
-  return gcd(b, a % b);
-}
-
-bool prime(int n) {
-  for (int i = 2; i <= sqrt(n); ++i) {
-    if (n % i == 0) { return false; }
-  }
-  return n != 1;
-}
-
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
@@ -78,7 +65,6 @@ private:
   vector<int> rnk;
   int _size; // The number of connected components. Decreases by unite.
 };
-
 
 int main(int argc, char** argv) {
   ll N, M, Q;

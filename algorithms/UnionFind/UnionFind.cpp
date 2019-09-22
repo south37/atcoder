@@ -32,7 +32,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 class UnionFind {
 public:
-  UnionFind(int size) : par(size, -1), rnk(size, 0) {}
+  UnionFind(int n) : par(n, -1), rnk(n, 0), _size(n) {}
 
   bool same(int x, int y) {
     return root(x) == root(y);
@@ -40,6 +40,8 @@ public:
   void unite(int x, int y) {
     x = root(x); y = root(y);
     if (x == y) return;
+
+    --_size;
 
     if (rnk[x] < rnk[y]) {
       par[x] = y;
@@ -55,10 +57,14 @@ public:
       return par[x] = root(par[x]);
     }
   }
+  int size() {
+    return _size;
+  }
 
 private:
   vector<int> par;
   vector<int> rnk;
+  int _size; // The number of connected components. Decreases by unite.
 };
 
 int main(int argc, char** argv) {
