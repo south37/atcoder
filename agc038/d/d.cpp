@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
     int r = tree.root(i);
     st.insert(r);
   }
-  int K = st.size(); // the number of connected components.
+  ll K = st.size(); // the number of connected components.
 
   // H must be lower than or equals to (N-K) + K*(K-1)/2 = N + K(K-3)/2
   if (M <= N + K * (K - 3) / 2) {
