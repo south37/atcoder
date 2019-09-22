@@ -58,11 +58,6 @@ int main(int argc, char** argv) {
     from_of_to[e.to].push_back(e.from);
   }
 
-  // For Debug
-  // rep(i, M) {
-  //   cout << edges[i].from << ", " << edges[i].to << ", " << edges[i].cost << endl;
-  // }
-
   dfsFromS(0);  // For initialization of reachable_from_s
   dfsFromG(N - 1);  // For initialization of reachable_to_g
   rep(i, N) {  // For initialization of reachable
