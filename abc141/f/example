@@ -12,6 +12,6 @@ If the number is even, it is divided to even-even or odd-odd. We should get odd-
 
 If we change A[i] -> A[i] xor A[j] (= A'[i]), it does not change the information. We can express A[i] by A'[i] xor A[j].
 
-We can use Gauss-Jordan to get the result.
+We can use GaussJordan to get the result.
 After the transformation to Jordan canonical form, the "picking up operaion" becomes very easy.
 We should focus only on lager bits in each step.
