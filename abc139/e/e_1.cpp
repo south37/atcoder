@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
       cin >> A[i][j];
       --A[i][j];
     }
-    reverse(all(A[i]));
+    reverse(all(A[i])); // Reverse to pop back in each step.
   }
 
   // Push first matches.
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
     q.erase(unique(all(q)), q.end());
 
     vector<P> prevQ;
-    swap(prevQ, q); // Set q to prevQ, set empty vector to q.
+    prevQ.swap(q); // Set q to prevQ, set empty vector to q.
     for (auto p : prevQ) {
       A[p.first].pop_back(); // pop match
       A[p.second].pop_back(); // pop match
