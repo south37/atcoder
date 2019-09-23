@@ -45,11 +45,11 @@ int main(int argc, char** argv) {
   st.insert(N); st.insert(N+1); // right guard
 
   ll ans = 0;
-  for (auto e : sorted) {  // Check value and index order by decreasing.
+  for (auto e : sorted) {  // Check value and index in decreasing order.
     ll v = e.first;
     ll i = e.second;
 
-    auto it = upper_bound(all(st), i);
+    auto it = st.upper_bound(i);
     --it; --it;
     ll l2 = *(it++);
     ll l1 = *(it++);
