@@ -1,0 +1,16 @@
+## Consideration
+- find the `larger` values in a < i and i < b.
+  - search the values around P[i] (in the search area, P[i] is the second largest value).
+  - Find l2, l1, r1, r2 such as P[l2], P[l1] > P[i] and l2 < l1 < L, and P[r1], P[r2] > P[i] and i < r1 < r2.
+    - find the effective x in ..l2..l1..i..r1..r2..
+      - If (l1 < L <= i) && (r1 <= R < r2), then X_LR = P[i]. The max is P[r1]. This contribution is:
+        - P[i] * (i - l1) * (r2 - r1)
+        - requirement: r1 < N (if r1 >= N, then [r1, r2) is in the out of range)
+      - If (l2 < L <= l1) && (i <= R < r1), then X_LR = P[i]. The max is P[l1]. This contribution is:
+        - P[i] * (l1 - l2) * (r1 - i)
+        - requirement: l1 >= 0 (if l1 < 0, then (l2, l1] is in the out of range)
+  - The contribution from P[i] is the summention of above.
+- If we can get l2, l1, r1, f2 of each i, then the result can be calculated.
+
+
+
