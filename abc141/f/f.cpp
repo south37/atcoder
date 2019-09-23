@@ -115,6 +115,29 @@ int main(int argc, char** argv) {
     A[i] &= ~allxor;
   }
 
+  // Do GaussJordan by myself.
+  //
+  // ull rank = 0;
+  // for (int i = 59; i >= 0; --i) {
+  //   int j;
+  //   for (j = rank; j < N; ++j) {
+  //     if (A[j] & (1LL << i)) { break; }
+  //   }
+  //   if (j == N) { // No match
+  //     continue;
+  //   }
+  //   if (j > rank) {
+  //     A[rank] ^= A[j];  // Set 1 to i-bit of A[rank]
+  //   }
+  //
+  //   for (int k = rank + 1; k < N; ++k) {
+  //     A[k] = min(A[k], A[k] ^ A[rank]);  // Set 0 to i-bit of A[k].
+  //   }
+  //
+  //   ++rank;
+  // }
+
+  // Do GaussJordan by library.
   BitMatrix matrix(N, 60);
   rep(i, N) {
     for (int j = 59; j >= 0; --j) { // j represents the bit of A[i]. e.g. The j of 1 in 100 is 2.
