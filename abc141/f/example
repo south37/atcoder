@@ -1,0 +1,17 @@
+## Consideration
+X + Y = (X xor Y) + 2 * (X and Y)
+
+0 <= A[i] <= 2**60 (~ 10**18)
+
+The most left bit of X and Y should be 1 to get larger value.
+
+We should consider the number 1 in each bit.
+
+If the number is odd, it is divided to even-odd. So it does not change.
+If the number is even, it is divided to even-even or odd-odd. We should get odd-odd in larger bit. (because it can generates 2 * 1 << (bit - 1)).
+
+If we change A[i] -> A[i] xor A[j] (= A'[i]), it does not change the information. We can express A[i] by A'[i] xor A[j].
+
+We can use Gauss-Jordan to get the result.
+After the transformation to Jordan canonical form, the "picking up operaion" becomes very easy.
+We should focus only on lager bits in each step.
