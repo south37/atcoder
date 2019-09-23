@@ -49,7 +49,7 @@ const int MAX_COL = 3010; // To be set appropriately.
 
 class BitMatrix {
 public:
-  BitMatrix(int m = 1, int n = 1) : H(m), W(n) {}
+  BitMatrix(int h = 1, int w = 1) : H(h), W(w) {}
   inline bitset<MAX_COL>& operator [] (int i) { return val[i]; }
 
   int H, W;
