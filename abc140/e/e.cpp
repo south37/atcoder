@@ -50,18 +50,11 @@ int main(int argc, char** argv) {
     ll i = e.second;
 
     auto it = upper_bound(all(st), i);
-    ll r1 = *it;
-    ++it;
-    ll r2 = *it;
     --it; --it;
-    ll l1 = *it;
-    --it;
-    ll l2 = *it;
-
-    // ll l2 = *(it - 2);
-    // ll l1 = *(it - 1);
-    // ll r1 = *it;
-    // ll r2 = *(it + 1);
+    ll l2 = *(it++);
+    ll l1 = *(it++);
+    ll r1 = *(it++);
+    ll r2 = *it;
 
     if (r1 < N) { // r1 must be in [0, N-1]
       ans += v * (i - l1) * (r2 - r1);
