@@ -183,7 +183,7 @@ int main(int argc, char** argv) {
   tie(r, b) = cmp(Q);
 
   int ans = N;
-  int V = 1 + l + r + 1;
+  int V = 1 + l + r + 1; // s(0), l vertices, r vertices, t(1 + l + r)
   Graph g(V);
   rep(i, N) {
     if (i == P[i] && i == Q[i]) {
