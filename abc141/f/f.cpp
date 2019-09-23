@@ -127,7 +127,9 @@ int main(int argc, char** argv) {
   rep(i, N) {
     ull x = 0;
     for (int j = 59; j >= 0; --j) {
-      x += matrix[i][59 - j] << j;
+      if (matrix[i][59 - j] > 0) {
+        x += 1LL << j;
+      }
     }
     B[i] = x;
   }
