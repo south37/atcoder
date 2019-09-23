@@ -158,7 +158,7 @@ pair< int, vector<int> > cmp(vector<int> p){
         res[x] = s;
         x = p[x];
       } while (x != i);
-      s++;
+      ++s;
     }
   }
 
