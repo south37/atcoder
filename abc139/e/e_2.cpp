@@ -86,9 +86,8 @@ int main(int argc, char** argv) {
   }
 
   int ans = 0;
+  memset(dp, -1, sizeof(dp));
   rep(i, V) {
-    memset(dp, -1, sizeof(dp));
-    memset(calculated, 0, sizeof(calculated));
     int res = dfs(i);
     if (res == -1) {
       cout << -1 << endl;
