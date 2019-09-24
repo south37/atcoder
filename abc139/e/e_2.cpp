@@ -40,6 +40,23 @@ int toId(int i, int j) {
   return id[i][j];
 }
 
+int dp[MAXV]; // Max length of path from v.
+bool calculated[MAXV];
+int dfs(int v) {
+  if (dp[v] >= 0) {
+    if (!calculated[v]) { return -1; } // If calculated[v] is false, loop exists.
+    return dp[v];
+  }
+  dp[v] = 0;
+  for (auto u : to[v]) {
+    int res = dfs(u);
+    if (res == -1) { return -1; } // Loop exists
+    dp[v] = max(dp[v], res + 1);
+  }
+  calculated[v] = true;
+  return dp[v];
+}
+
 int main(int argc, char** argv) {
   int N;
   cin >> N;
@@ -67,4 +84,18 @@ int main(int argc, char** argv) {
       to[p].push_back(n);
     }
   }
+
+  int ans = 0;
+  rep(i, V) {
+    memset(dp, -1, sizeof(dp));
+    memset(calculated, 0, sizeof(calculated));
+    int res = dfs(i);
+    if (res == -1) {
+      cout << -1 << endl;
+      return 0;
+    }
+    ans = max(ans, res);
+  }
+
+  cout << ans + 1 << endl;
 }
