@@ -33,26 +33,28 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 const int MAXN = 1005;
 const int MAXV = MAXN * MAXN; // The number of vectices is N*(N-1)/2
-vector< vector<int> > to; // Adjacency matrix
+vector< vector<int> > to; // edges
+
 int id[MAXN][MAXN];
-int toId(int i, int j) {
+int getId(int i, int j) {
   if (i > j) { swap(i, j); }
   return id[i][j];
 }
 
-int dp[MAXV]; // Max length of path from v. Initialized by -1.
+int dp[MAXV]; // Represents the distance from leaf or state (initizlied by -1, intermediate is -2).
 int dfs(int v) {
-  if (dp[v] >= 0) { return dp[v]; } // Already calculated.
-  if (dp[v] == -2) { return -1; } // Loop exists.
-  dp[v] = -2; // -2 represents the intermediate state.
+  if (dp[v] >= 0) { return dp[v]; }
+  if (dp[v] == -2) { return -1; } // v is in intermediate state. Loop exists.
 
-  int d = 1;
-  for (auto u : to[v]) {
-    int res = dfs(u);
-    if (res == -1) { return -1; } // Loop exists
-    d = max(d, res + 1);
+  dp[v] = -2;
+  int d = 0;
+  for (auto e : to[v]) {
+    int res = dfs(e);
+    if (res == -1) { return -1; }
+    d = max(d, res);
   }
-  return dp[v] = d;
+
+  return dp[v] = d + 1;
 }
 
 int main(int argc, char** argv) {
@@ -68,31 +70,33 @@ int main(int argc, char** argv) {
   }
 
   int V = 0;
-  for (int i = 0; i < N-1; ++i) {
-    for (int j = i + 1; j < N; ++j) {
-      id[i][j] = V++;
+  rep(i, N) {
+    rep(j, N) {
+      if (i < j) {
+        id[i][j] = V++;
+      }
     }
   }
 
   to.resize(V);
+
   rep(i, N) {
-    for (int j = 0; j < N - 2; ++j) {
-      int p = toId(i, A[i][j]);
-      int n = toId(i, A[i][j+1]);
-      to[p].push_back(n);
+    for (int j = 0; j <= N - 3; ++j) { // j is from 0 to N-3 (N-2)
+      int v = getId(i, A[i][j]);
+      int n = getId(i, A[i][j+1]);
+      to[v].push_back(n);
     }
   }
 
   int ans = 0;
   memset(dp, -1, sizeof(dp));
   rep(i, V) {
-    int res = dfs(i);
+    int res = dfs(i); // dfs calculate the maximum distance from i.
     if (res == -1) {
       cout << -1 << endl;
       return 0;
     }
     ans = max(ans, res);
   }
-
   cout << ans << endl;
 }
