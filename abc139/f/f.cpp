@@ -28,16 +28,33 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+// Vector Type.
 struct V {
   double x, y;
 
   V(double x = 0, double y = 0) : x(x), y(y) {}
+
   V& operator+=(const V& v) {
     x += v.x; y += v.y;
     return *this;
   }
-  V& operator+(const V& v) {
-    return V(*this) += v;
+  V& operator+(const V& v) const { return V(*this) += v; }
+  double dot(const V& v) const { return x*v.x + y*v.y; }
+  double cross(const V& v) const { return x*v.y - y*v.x; }
+  double norm() const { return sqrt(norm2()); }
+  double norm2() const { return x*x + y*y; }
+  int ort() const { // orchant
+    if (y > 0) {
+      return (x > 0) ? 1 : 2;
+    } else {
+      return (x > 0) ? 4 : 3;
+    }
+  }
+  bool operator<(const V& v) const {
+    int o = ort();
+    int vo = v.ort();
+    if (o != vo) { return o < vo; }
+    return cross(v) > 0;
   }
 };
 
@@ -57,8 +74,15 @@ int main(int argc, char** argv) {
   rep(i, N) {
     cin >> v[i];
   }
-  // For Debug
+
+  sort(all(v));
+  double ans = 0;
   rep(i, N) {
-    cout << v[i];
+    V now(0, 0); // Start from (0, 0)
+    rep(j, N) {
+      now += v[(i + j) % N];
+      ans = max(ans, now.norm());
+    }
   }
+  cout << fixed << setprecision(10) << ans << endl;
 }
