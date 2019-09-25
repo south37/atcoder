@@ -75,6 +75,9 @@ int main(int argc, char** argv) {
     l[59 - i] = ((L >> i) & 1) ? '1' : '0';
     r[59 - i] = ((R >> i) & 1) ? '1' : '0';
   }
+  // For Debug
+  cout << l << endl;
+  cout << r << endl;
 
   memset(dp, -1, sizeof(dp));
   ll ans = f(59, 0, 0, 0);
