@@ -36,7 +36,7 @@ vector<ll> ans;
 
 void dfs(int v, int p) {
   for (int u : to[v]) {
-    // if (u == p) { continue; }
+    if (u == p) { continue; }
     ans[u] += ans[v];
     dfs(u, v);
   }
@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     cin >> a >> b;
     --a; --b;
     to[a].push_back(b);
-    // to[b].push_back(a);
+    to[b].push_back(a);
   }
   ans.resize(N);
   rep(i, Q) {
