@@ -27,6 +27,7 @@ typedef double D;
 
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
+const double EPS = 1e-9;
 
 // Vector Type for sorting points by polar angle.
 struct V {
@@ -47,6 +48,8 @@ struct V {
   double norm() const { return sqrt(norm2()); }
   double norm2() const { return x*x + y*y; }
   int ort() const { // orchant
+    if (abs(x) < EPS && abs(y) < EPS) { return 0; } // Check (0, 0)
+
     if (y > 0) {
       return (x > 0) ? 1 : 2;
     } else {
