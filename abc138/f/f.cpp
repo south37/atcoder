@@ -72,8 +72,8 @@ int main(int argc, char** argv) {
   ll L, R;
   cin >> L >> R;
   for (ll i = 59; i >= 0; --i) {
-    l[59 - i] = ((L >> i) & 1) ? '1' : '0';
-    r[59 - i] = ((R >> i) & 1) ? '1' : '0';
+    l[i] = ((L >> i) & 1) ? '1' : '0';
+    r[i] = ((R >> i) & 1) ? '1' : '0';
   }
   // For Debug
   cout << l << endl;
