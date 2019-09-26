@@ -41,7 +41,8 @@ int main(int argc, char** argv) {
     revG[e.to].push_back(e);
   }
 
-  // Calculate the shortest path from 0 with dijkstra.
+  // Dijkstra
+  // Calculate the shortest path from 0 with Dijkstra.
   vector<int64_t> d(N, INF);
   d[0] = 0;
   priority_queue<P, vector<P>, greater<P> > q;
@@ -59,7 +60,8 @@ int main(int argc, char** argv) {
     }
   }
 
-  // Calculate the shortest path to 0 with dijkstra.
+  // Dijkstra
+  // Calculate the shortest path to 0 with Dijkstra.
   vector<int64_t> revD(N, INF);
   revD[0] = 0;
   priority_queue<P, vector<P>, greater<P> > revQ;
