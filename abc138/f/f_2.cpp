@@ -53,17 +53,16 @@ int main(int argc, char** argv) {
       rep(x, 2) rep(y, 2) {
         if (x && !y) { continue; } // x 1, y 0
 
-        int nj = j, nk = k, ns = s; // next state.
-
         // Calculate the next state.
         if (!s && x != y) { continue; }
-        if (x && y) { ns = 1; } // x = 1, y = 1, bit appeared
+        int ns = s || (x && y); // x = 1, y = 1, bit appeared
         // j: L <= x
         if (!j && !x && lb) { continue; } // x = 0, lb = 1, invalid
-        if (x && !lb) { nj = 1; } // x = 1, lb = 0, L <= x is satisfied
+        int nj = j || (x && !lb); // x = 1, lb = 0, L <= x is satisfied
         // k: y <= R
         if (!k && y && !rb) { continue; } // y = 1, rb = 0, invalid
-        if (!y && rb) { nk = 1; } // y = 0, rb = 1, y <= R is satisfied
+        int nk = k || (!y && rb); // y = 0, rb = 1, y <= R is satisfied
+
         dp[i+1][nj][nk][ns] += pre;
         dp[i+1][nj][nk][ns] %= MOD;
       }
