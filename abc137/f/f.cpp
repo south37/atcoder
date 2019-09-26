@@ -35,9 +35,7 @@ ll MOD;
 // cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
 struct mint {
   ll x;
-  mint(ll x = 0) : x(x % MOD) {
-    if (x < 0) { x += MOD; }
-  }
+  mint(ll x = 0) : x((x + MOD) % MOD) {}
   mint& operator+= (const mint a) {
     if ((x += a.x) >= MOD) x %= MOD;
     return *this;

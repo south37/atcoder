@@ -29,11 +29,12 @@ const ll INF = 1e9;
 ll MOD;
 
 // Mod int
+// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
 struct mint {
   ll x;
-  mint(ll x = 0) : x(x % MOD) {}
+  mint(ll x = 0) : x((x + MOD) % MOD) {}
   mint& operator+= (const mint a) {
-    if ((x += a.x) >= MOD) x -= MOD;
+    if ((x += a.x) >= MOD) x %= MOD;
     return *this;
   }
   mint operator+ (const mint a) const {
@@ -41,7 +42,7 @@ struct mint {
     return res += a;
   }
   mint& operator-= (const mint a) {
-    if ((x += MOD - a.x) >= MOD) x -= MOD;
+    if ((x += MOD - a.x) >= MOD) x %= MOD;
     return *this;
   }
   mint operator- (const mint a) const {
@@ -88,4 +89,7 @@ int main(int argc, char** argv) {
   cout << (p * 2).x << endl;    // 7  (20 % 13)
   cout << (p.pow(3)).x << endl; // 12 (1000 % 13)
   cout << (p / 3).x << endl;    // 12 (12 * 3 = 10 (36 % 13))
+
+  mint p2(-3);
+  cout << p2.x << endl; //
 }
