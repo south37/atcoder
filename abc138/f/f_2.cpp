@@ -48,10 +48,8 @@ int main(int argc, char** argv) {
   for (ll i = 59; i >= 0; --i) {
     ll lb = (L >> i) & 1;
     ll rb = (R >> i) & 1;
-
     rep(flagX, 2) rep(flagY, 2) rep(flagZ, 2) { // previous state
       ll pre = dp[i+1][flagX][flagY][flagZ];
-
       rep(x, 2) rep(y, 2) {
         if (x && !y) { continue; } // x 1, y 0
 
@@ -66,13 +64,12 @@ int main(int argc, char** argv) {
         // flagY: y <= R
         if (!flagY && y && !rb) { continue; } // y = 1, rb = 0, invalid
         if (!y && rb) { ny = 1; } // y = 0, rb = 1, y <= R is satisfied
-
         dp[i][nx][ny][nz] += pre;
         dp[i][nx][ny][nz] %= MOD;
       }
     }
   }
-  ll ans;
+  ll ans = 0;
   rep(flagX, 2) rep(flagY, 2) rep(flagZ, 2) {
     ans += dp[0][flagX][flagY][flagZ];
     ans %= MOD;
