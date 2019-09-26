@@ -44,12 +44,12 @@ int main(int argc, char** argv) {
   ll L, R;
   cin >> L >> R;
 
-  dp[60][0][0][0] = 1;
-  for (ll i = 59; i >= 0; --i) {
-    ll lb = (L >> i) & 1;
-    ll rb = (R >> i) & 1;
+  dp[0][0][0][0] = 1; // dp[i] represents the result of top-i digits. i-0 is initialized.
+  for (ll i = 0; i < 60; ++i) {
+    ll lb = (L >> (59-i)) & 1;
+    ll rb = (R >> (59-i)) & 1;
     rep(j, 2) rep(k, 2) rep(s, 2) { // previous state
-      ll pre = dp[i+1][j][k][s];
+      ll pre = dp[i][j][k][s];
       rep(x, 2) rep(y, 2) {
         if (x && !y) { continue; } // x 1, y 0
 
@@ -64,14 +64,14 @@ int main(int argc, char** argv) {
         // k: y <= R
         if (!k && y && !rb) { continue; } // y = 1, rb = 0, invalid
         if (!y && rb) { nk = 1; } // y = 0, rb = 1, y <= R is satisfied
-        dp[i][nj][nk][ns] += pre;
-        dp[i][nj][nk][ns] %= MOD;
+        dp[i+1][nj][nk][ns] += pre;
+        dp[i+1][nj][nk][ns] %= MOD;
       }
     }
   }
   ll ans = 0;
   rep(j, 2) rep(k, 2) rep(s, 2) {
-    ans += dp[0][j][k][s];
+    ans += dp[60][j][k][s];
     ans %= MOD;
   }
   cout << ans << endl;
