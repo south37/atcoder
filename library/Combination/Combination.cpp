@@ -96,32 +96,13 @@ struct Combination {
 };
 
 int main(int argc, char** argv) {
-  int p;
-  cin >> p;
-  MOD = p;
+  MOD = 13;
 
-  vector<int> a(p);
-  rep(i, p) {
-    cin >> a[i];
-  }
-
-  Combination c(p-1);
-  vector<mint> b(p);
-  rep(i, p) {
-    if (!a[i]) { continue; }
-    // 1 - (x-i) ** (p-1) = b[p-1] * x ** (p-1) + b[p-2] * x ** (p-2) + ... + b[0]
-    b[0] += 1;
-    mint pw = 1; // pw = (-i) ** (p - 1 - j) in each step.
-    for (int j = p - 1; j >= 0; --j) {
-      b[j] -= pw * c(p-1, j);
-      pw *= -i;
-    }
-  }
-  rep(i, p) {
-    cout << b[i].x;
-    if (i != p-1) {
-      cout << " ";
-    }
-  }
-  cout << endl;
+  Combination c(12);
+  cout << c(12, 0).x << endl;  // 1  = 1 % 13
+  cout << c(12, 1).x << endl;  // 12 = 12 % 13
+  cout << c(12, 2).x << endl;  // 1  = 66 % 13 = (12 * 11 / 2) % 13
+  cout << c(12, 3).x << endl;  // 12 = 220 % 13 = (12 * 11 * 10 / (3 * 2 * 1)) % 13
+  cout << c(12, 11).x << endl; // 12 = 12 % 13
+  cout << c(12, 12).x << endl; // 1  = 12 % 13
 }

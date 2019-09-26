@@ -91,5 +91,5 @@ int main(int argc, char** argv) {
   cout << (p / 3).x << endl;    // 12 (12 * 3 = 10 (36 % 13))
 
   mint p2(-3);
-  cout << p2.x << endl; //
+  cout << p2.x << endl; // 10 (-3 % 13)
 }
