@@ -38,7 +38,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 // (L <= x is already satisfied by the left bits)
 // (y <= R is already satisfied by the left bits)
 // (most significant bit already appeared)
-int dp[60][2][2][2];
+ll dp[60][2][2][2];
 
 char l[61];
 char r[61];
@@ -75,9 +75,6 @@ int main(int argc, char** argv) {
     l[i] = ((L >> i) & 1) ? '1' : '0';
     r[i] = ((R >> i) & 1) ? '1' : '0';
   }
-  // For Debug
-  cout << l << endl;
-  cout << r << endl;
 
   memset(dp, -1, sizeof(dp));
   ll ans = f(59, 0, 0, 0);
