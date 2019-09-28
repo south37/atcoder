@@ -43,23 +43,23 @@ int main(int argc, char** argv) {
   // For Debug
   // cout << "sum: " << S << endl;
 
-  set<ll> gcds;
-  for (ll i = 2; i <= sqrt(S); ++i) { // i is the divisor
-    if ((S % i) == 0) {
-      gcds.insert(i);
-      gcds.insert(S / i);
+  set<ll> candidates;
+  for (ll i = 2; i * i <= S; ++i) { // i is the divisor
+    if (S % i == 0) {
+      candidates.insert(i);
+      candidates.insert(S / i);
     }
   }
-  gcds.insert(S);
+  candidates.insert(S);
   // For Debug
-  // for (auto x : gcds) {
+  // for (auto x : candidates) {
   //   cout << x << " ";
   // }
   // cout << endl;
 
   ll ans = 0;
 
-  for (auto it = gcds.rbegin(); it != gcds.rend(); ++it) { // Try x in decreasing order.
+  for (auto it = candidates.rbegin(); it != candidates.rend(); ++it) { // Try x in decreasing order.
     ll x = *it;
 
     // a[i]: (A[i] % x) = d (-d). increasing order.
