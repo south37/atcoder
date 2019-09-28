@@ -40,66 +40,12 @@ ll powmod(ll x, ll n) { // like pow(x, n)
   return r;
 }
 
-// GaussJordan by Matrix(double)
-template<class T> struct Matrix {
-public:
-  Matrix(int n, int m, T x = 0) : val(n, vector<T>(m, x)) {}
+// d[i] .. bit representation of boxes opened by a[i].
+ll d[1005];
 
-  void init(int n, int m, T x = 0) {
-    val.assign(n, vector<T>(m, x));
-  }
-  size_t size() const {
-    return val.size();
-  }
-  inline vector<T>& operator [] (int i) {
-    return val[i];
-  }
-
-private:
-  vector< vector<T> > val;
-};
-
-template<class T> ostream& operator << (ostream& s, Matrix<T> A) {
-  s << endl;
-  rep(i, A.size()) {
-    rep(j, A[i].size()) {
-      s << A[i][j] << ", ";
-    }
-    s << endl;
-  }
-  return s;
-}
-
-template<class T> int GaussJordan(Matrix<T> &A, bool is_extended = false) {
-  int m = A.size(), n = A[0].size();
-  int rank = 0;
-  rep(col, n) {
-    if (is_extended && col == n - 1) { break; }
-    int pivot = -1;
-    int ma = INF; // Find a row with minimum A[row][n-1]
-    for (int row = rank; row < m; ++row) {
-      if ((A[row][col] == 1) && (A[row][n-1] < ma)) {
-        pivot = row;
-        ma = A[row][n-1];
-      }
-    }
-
-    if (pivot == -1) { continue; } // No match
-    swap(A[pivot], A[rank]);
-    // Now, A[rank][col] = 1
-    for (int row = rank + 1; row < m; ++row) {
-      if (A[row][col] == 1) {
-        rep(col2, n) {
-          A[row][col2] -= A[rank][col2];
-          A[row][col2] = max<T>(0, A[row][col2]);
-        }
-      }
-    }
-    // Now, A[row][col] = 0.0 (for row != rank).
-    ++rank;
-  }
-  return rank;
-}
+// dp[i+1][j] .. minimum const of state j by using a[0]..a[i]. j is the bit representation of state.
+// dp[i+1][j | d[i]] = min(dp[i][j | d[i]], dp[i][j] + a[i])
+ll dp[1005][5005]; // 2 ** 12 ~ 4e3
 
 int main(int argc, char** argv) {
   int N, M;
@@ -123,51 +69,45 @@ int main(int argc, char** argv) {
   //   cout << endl;
   // }
 
-  vector<P> pairs;
   rep(i, M) {
-    pairs.emplace_back(a[i], i);
+    rep(j, b[i]) {
+      d[i] |= 1LL << (N - 1 - c[i][j]); // c[i][j] is from 0 to N - 1.
+    }
   }
-  sort(all(pairs)); // pairs are sorted by a[i];
+  // For Debug
+  // cout << "d: " << endl;
   // rep(i, M) {
-  //   cout << pairs[i].first << ", " << pairs[i].second << endl;
+  //   cout << d[i] << endl;
   // }
 
-  Matrix<ll> A(M, N+1, 0);
-  rep(i, M) {
-    P p = pairs[i];
-    int cost = p.first;
-    int id = p.second;
+  ll max_s = (1LL << N) - 1; // If N is 3, max_s is 111. The max value of representatable state.
 
-    rep(j, b[id]) {
-      int k = c[id][j];
-      A[i][k] = 1;
+  // Initialize dp.
+  rep(i, M + 1) {
+    rep(j, max_s + 1) {
+      dp[i][j] = INF;
     }
-    A[i][N] = cost;
   }
-  // cout << A << endl;
+  // cout << dp[M-1][max_s] << endl;
 
-  int rank = GaussJordan(A, true);
-  // cout << A << endl;
-
-  set<int> has;
-  ll ans = 0;
-  rep(i, M) {
-    if (has.find(i) != has.end()) { // Already getting
-      continue;
+  // Initialize dp[0][j].
+  dp[0][0] = 0;
+  // cout << "dp["<<0<<"]["<< d[0] <<"]: " << dp[0][d[0]] << endl;
+  for (int i = 0; i < M; ++i) {
+    rep(j, max_s + 1) {
+      // cout << "prev:" << endl;
+      // cout << "dp["<<i<<"]["<< (j | d[i]) <<"]: " << dp[i][j | d[i]] << endl;
+      // cout << "dp["<<i<<"]["<<j<<"] + a["<<i<<"]: " << dp[i][j] + a[i] << endl;
+      dp[i+1][j | d[i]] = min(dp[i+1][j | d[i]], min(dp[i][j | d[i]], dp[i][j] + a[i]));
+      // cout << "post:" << endl;
+      // cout << "dp["<<i+1<<"]["<< (j | d[i]) <<"]: " << dp[i+1][j | d[i]] << endl;
     }
-
-    rep(j, N) {
-      if (A[i][j] > 0) {
-        has.insert(j);
-      }
-    }
-    ans += A[i][N]; // Add cost
-
-    if (has.size() == N) { break; } // Already getting all
   }
-  if (has.size() == N) {
-    cout << ans << endl;
-  } else {
+
+  ll ans = dp[M][max_s];
+  if (ans == INF) {
     cout << -1 << endl;
+  } else {
+    cout << ans << endl;
   }
 }
