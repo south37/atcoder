@@ -47,7 +47,7 @@ int gcd(int a, int b) {
 }
 
 int main(int argc, char** argv) {
-  int A, B;
+  ll A, B;
   cin >> A >> B;
 
   set<ll> a_candidates;
