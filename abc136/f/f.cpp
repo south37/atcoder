@@ -137,14 +137,14 @@ int main(int argc, char** argv) {
   reverse(all(right_lowers));
 
   // For Debug
-  reverse(all(p));
-  rep(i, N) {
-    cout << "(" << p[i].first << ", " << p[i].second << ")" << endl;
-    cout << "left upper: " << left_uppers[i] << endl;
-    cout << "left lower: " << left_lowers[i] << endl;
-    cout << "right upper: " << right_uppers[i] << endl;
-    cout << "right lower: " << right_lowers[i] << endl;
-  }
+  // reverse(all(p));
+  // rep(i, N) {
+  //   cout << "(" << p[i].first << ", " << p[i].second << ")" << endl;
+  //   cout << "left upper: " << left_uppers[i] << endl;
+  //   cout << "left lower: " << left_lowers[i] << endl;
+  //   cout << "right upper: " << right_uppers[i] << endl;
+  //   cout << "right lower: " << right_lowers[i] << endl;
+  // }
 
   ll ans = 0;
   rep(i, N) {
