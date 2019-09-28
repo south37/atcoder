@@ -149,6 +149,7 @@ int main(int argc, char** argv) {
   ll ans = 0;
   rep(i, N) {
     ans += f(left_uppers[i], left_lowers[i], right_uppers[i], right_lowers[i]);
+    ans %= MOD;
   }
   cout << ans << endl;
 }
