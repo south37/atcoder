@@ -90,15 +90,18 @@ int main(int argc, char** argv) {
   }
   // cout << dp[M-1][max_s] << endl;
 
-  // Initialize dp[0][j].
+  // Initialize dp.
   dp[0][0] = 0;
   // cout << "dp["<<0<<"]["<< d[0] <<"]: " << dp[0][d[0]] << endl;
   for (int i = 0; i < M; ++i) {
     rep(j, max_s + 1) {
+      dp[i+1][j] = dp[i][j];
+    }
+    rep(j, max_s + 1) {
       // cout << "prev:" << endl;
       // cout << "dp["<<i<<"]["<< (j | d[i]) <<"]: " << dp[i][j | d[i]] << endl;
       // cout << "dp["<<i<<"]["<<j<<"] + a["<<i<<"]: " << dp[i][j] + a[i] << endl;
-      dp[i+1][j | d[i]] = min(dp[i+1][j | d[i]], min(dp[i][j | d[i]], dp[i][j] + a[i]));
+      dp[i+1][j | d[i]] = min(dp[i+1][j | d[i]], dp[i][j] + a[i]);
       // cout << "post:" << endl;
       // cout << "dp["<<i+1<<"]["<< (j | d[i]) <<"]: " << dp[i+1][j | d[i]] << endl;
     }
