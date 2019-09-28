@@ -116,21 +116,21 @@ int main(int argc, char** argv) {
       --c[i][j]; // 0-indexed
     }
   }
-  rep(i, M) {
-    rep(j, b[i]) {
-      cout << c[i][j] << " ";
-    }
-    cout << endl;
-  }
+  // rep(i, M) {
+  //   rep(j, b[i]) {
+  //     cout << c[i][j] << " ";
+  //   }
+  //   cout << endl;
+  // }
 
   vector<P> pairs;
   rep(i, M) {
     pairs.emplace_back(a[i], i);
   }
   sort(all(pairs)); // pairs are sorted by a[i];
-  rep(i, M) {
-    cout << pairs[i].first << ", " << pairs[i].second << endl;
-  }
+  // rep(i, M) {
+  //   cout << pairs[i].first << ", " << pairs[i].second << endl;
+  // }
 
   Matrix<ll> A(M, N+1, 0);
   rep(i, M) {
@@ -144,11 +144,32 @@ int main(int argc, char** argv) {
     }
     A[i][N] = cost;
   }
-  cout << A << endl;
+  // cout << A << endl;
 
   int rank = GaussJordan(A, true);
-  cout << A << endl;
+  // cout << A << endl;
 
+  set<int> has;
+  ll ans = 0;
+  rep(i, M) {
+    if (has.find(i) != has.end()) { // Already getting
+      continue;
+    }
+
+    rep(j, N) {
+      if (A[i][j] > 0) {
+        has.insert(j);
+      }
+    }
+    ans += A[i][N]; // Add cost
+
+    if (has.size() == N) { break; } // Already getting all
+  }
+  if (has.size() == N) {
+    cout << ans << endl;
+  } else {
+    cout << -1 << endl;
+  }
 
   // Do GaussJordan by myself.
   //
