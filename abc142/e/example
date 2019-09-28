@@ -1,0 +1,26 @@
+## e.g.1
+
+- a[i] -> can open ci1..cibi
+
+- GaussJordan..?
+
+## requirements.
+- box[i] must be opened.
+  - sum of a can open it.
+  - union of (A)
+- U(A for B[0]) && U(A for B[1]) && ...
+  - we need at least one A[i] for each B[i].
+- we want to minimize the "summention of cost" of A.
+
+ a - b[0]
+  - b[1]
+
+## considefation
+- a is 0 or 1
+  - if a is 0, then each B of A must be covered by others.
+  - if a is 1, then others (other B of A) must be covered by others.
+
+2 ** 12 = (10 ** 3) * 4
+
+##
+- We want to consider "a[i] should be used or not"
