@@ -90,7 +90,6 @@ int main(int argc, char** argv) {
   rep(i, N) {
     ll x, y;
     cin >> x >> y;
-    x += offset;
     y += offset;
     p.emplace_back(x, y);
   }
@@ -130,7 +129,7 @@ int main(int argc, char** argv) {
   // For Debug
   // reverse(all(p));
   // rep(i, N) {
-  //   cout << "(" << p[i].first - offset << ", " << p[i].second - offset << ")" << endl;
+  //   cout << "(" << p[i].first << ", " << p[i].second - offset << ")" << endl;
   //   cout << "left upper: " << left_uppers[i] << endl;
   //   cout << "left lower: " << left_lowers[i] << endl;
   //   cout << "right upper: " << right_uppers[i] << endl;
