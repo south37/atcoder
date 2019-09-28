@@ -57,6 +57,32 @@ ll sum(ll a) {
 
 const ll offset = 1e9 + 1;
 
+// target point is not included
+// + o|x + x|o - o|o
+//   x|o   o|x   o|o
+// target point is included
+// + x|x
+//   x|x
+ll f(ll left_upper, ll left_lower, ll right_upper, ll right_lower) {
+  vector<ll> num = { left_upper, left_lower, right_upper, right_lower };
+  vector<ll> o(4), ox(4);
+  rep(i, 4) {
+    ox[i] = powmod(2, num[i]);
+    o[i] = ox[i] - 1;
+  }
+  ll res = 0;
+  res += ((o[0]*ox[1] % MOD)*ox[2] % MOD)*o[3] % MOD;
+  res %= MOD;
+  res += ((ox[0]*o[1] % MOD)*o[2] % MOD)*ox[3] % MOD;
+  res %= MOD;
+  res -= ((o[0]*o[1] % MOD)*o[2] % MOD)*o[3] % MOD;
+  res %= MOD;
+  res += ((ox[0]*ox[1] % MOD)*ox[2] % MOD)*ox[3] % MOD;
+  res %= MOD;
+
+  return res;
+}
+
 int main(int argc, char** argv) {
   int N;
   cin >> N;
@@ -102,30 +128,18 @@ int main(int argc, char** argv) {
   reverse(all(right_lowers));
 
   // For Debug
-  rep(i, N) {
-    cout << "(" << p[N - 1 - i].first - offset << ", " << p[N - 1 - i].second - offset << ")" << endl;
-    cout << "left upper: " << left_uppers[i] << endl;
-    cout << "left lower: " << left_lowers[i] << endl;
-    cout << "right upper: " << right_uppers[i] << endl;
-    cout << "right lower: " << right_lowers[i] << endl;
-  }
+  // reverse(all(p));
+  // rep(i, N) {
+  //   cout << "(" << p[i].first - offset << ", " << p[i].second - offset << ")" << endl;
+  //   cout << "left upper: " << left_uppers[i] << endl;
+  //   cout << "left lower: " << left_lowers[i] << endl;
+  //   cout << "right upper: " << right_uppers[i] << endl;
+  //   cout << "right lower: " << right_lowers[i] << endl;
+  // }
 
   ll ans = 0;
   rep(i, N) {
-    // ans += (left_uppers[i] + 1) * (left_lowers[i] + 1) * (right_uppers[i] + 1) * (right_lowers[i] + 1);
-    ll cnt = 1;
-    cnt *= left_uppers[i] + 1;
-    cnt %= MOD;
-    cnt *= left_lowers[i] + 1;
-    cnt %= MOD;
-    cnt *= right_uppers[i] + 1;
-    cnt %= MOD;
-    cnt *= right_lowers[i] + 1;
-    cnt %= MOD;
-
-    ans += cnt;
-    ans %= MOD;
+    ans += f(left_uppers[i], left_lowers[i], right_uppers[i], right_lowers[i]);
   }
-
   cout << ans << endl;
 }
