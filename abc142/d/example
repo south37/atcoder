@@ -1,0 +1,23 @@
+## ex.1
+- 12 .. 1 2 3 4 6 12
+- 18 .. 1 2 3 6 9 18
+
+- A&B .. 1 2 3 6
+
+## prime
+- 12 .. 1 2 3
+- 18 .. 1 2 3
+- A&B .. 1 2 3
+
+## consideration
+if only consider prime, we.
+
+- 6 .. 3 6
+- 12 .. 4 6
+
+- 6
+
+## consideration 2
+- if not prime, it is divided to primes
+  - 6 = 2x3
+- so it primes
