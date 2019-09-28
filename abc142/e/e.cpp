@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
   //   cout << d[i] << endl;
   // }
 
-  ll max_s = (1LL << N) - 1; // If N is 3, max_s is 111. The max value of representatable state.
+  ll max_s = (1LL << N) - 1; // If N is 3, max_s is 111. The max value of representable state.
 
   // Initialize dp.
   rep(i, M + 1) {
