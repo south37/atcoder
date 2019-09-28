@@ -170,26 +170,4 @@ int main(int argc, char** argv) {
   } else {
     cout << -1 << endl;
   }
-
-  // Do GaussJordan by myself.
-  //
-  // ull rank = 0;
-  // for (int i = 59; i >= 0; --i) {
-  //   int j;
-  //   for (j = rank; j < N; ++j) {
-  //     if (A[j] & (1LL << i)) { break; }
-  //   }
-  //   if (j == N) { // No match
-  //     continue;
-  //   }
-  //   if (j > rank) {
-  //     A[rank] ^= A[j];  // Set 1 to i-bit of A[rank]
-  //   }
-  //
-  //   for (int k = rank + 1; k < N; ++k) {
-  //     A[k] = min(A[k], A[k] ^ A[rank]);  // Set 0 to i-bit of A[k].
-  //   }
-  //
-  //   ++rank;
-  // }
 }
