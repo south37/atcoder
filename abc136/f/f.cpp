@@ -40,8 +40,8 @@ ll powmod(ll x, ll n) { // like pow(x, n)
   return r;
 }
 
-ll BIT_MAX_N = 2000100100;
-ll bit[2000100105]; // bit[0] is dummy.
+ll BIT_MAX_N = 200010;
+ll bit[200020]; // bit[0] is dummy.
 void add(ll a, ll w) {
   for (ll x = a; x <= BIT_MAX_N; x += x & -x) {
     bit[x] += w;
@@ -54,8 +54,6 @@ ll sum(ll a) {
   }
   return ret;
 }
-
-const ll offset = 1e9 + 1;
 
 // target point is not included
 // + o|x + x|o - o|o
@@ -90,10 +88,22 @@ int main(int argc, char** argv) {
   rep(i, N) {
     ll x, y;
     cin >> x >> y;
-    y += offset;
     p.emplace_back(x, y);
   }
   sort(all(p)); // increasing order by x
+
+  // Compress y
+  map<ll, ll> mp;
+  vector<ll> ys(N);
+  rep(i, N) { ys[i] = p[i].second; }
+  sort(all(ys));
+  rep(i, N) { mp[ys[i]] = i + 1; } // y must be larger than 0
+  rep(i, N) { p[i].second = mp[p[i].second]; }
+
+  // For Debug
+  // rep(i, N) {
+  //   cout << "(" << p[i].first << ", " << p[i].second << ")" << endl;
+  // }
 
   vector<ll> left_uppers(N); // Stores the count in upper left.
   vector<ll> left_lowers(N); // Stores the count in lower left.
@@ -127,14 +137,14 @@ int main(int argc, char** argv) {
   reverse(all(right_lowers));
 
   // For Debug
-  // reverse(all(p));
-  // rep(i, N) {
-  //   cout << "(" << p[i].first << ", " << p[i].second - offset << ")" << endl;
-  //   cout << "left upper: " << left_uppers[i] << endl;
-  //   cout << "left lower: " << left_lowers[i] << endl;
-  //   cout << "right upper: " << right_uppers[i] << endl;
-  //   cout << "right lower: " << right_lowers[i] << endl;
-  // }
+  reverse(all(p));
+  rep(i, N) {
+    cout << "(" << p[i].first << ", " << p[i].second << ")" << endl;
+    cout << "left upper: " << left_uppers[i] << endl;
+    cout << "left lower: " << left_lowers[i] << endl;
+    cout << "right upper: " << right_uppers[i] << endl;
+    cout << "right lower: " << right_lowers[i] << endl;
+  }
 
   ll ans = 0;
   rep(i, N) {
