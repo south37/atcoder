@@ -40,20 +40,28 @@ ll powmod(ll x, ll n) { // like pow(x, n)
   return r;
 }
 
-ll BIT_MAX_N = 200010;
-ll bit[200020]; // bit[0] is dummy.
-void add(ll a, ll w) {
-  for (ll x = a; x <= BIT_MAX_N; x += x & -x) {
-    bit[x] += w;
+// BIT (Fenwick Tree) with 0-indexed query
+// https://youtu.be/lyHk98daDJo?t=7960
+template<typename T>
+struct BIT {
+  int n;
+  vector<T> d;
+  BIT(int n=0) : n(n), d(n+1) {}
+  void add(int i, T x=1) {
+    i++; // 0-indexed to 1-indexed
+    for (; i <= n; i += i&-i) {
+      d[i] += x;
+    }
   }
-}
-ll sum(ll a) {
-  ll ret = 0;
-  for (ll x = a; x > 0; x -= x & -x) {
-    ret += bit[x];
+  T sum(int i) {
+    i++; // 0-indexed to 1-indexed
+    T x = 0;
+    for (; i; i -= i&-i) {
+      x += d[i];
+    }
+    return x;
   }
-  return ret;
-}
+};
 
 // target point is not included
 // + o|x + x|o - o|o
@@ -97,7 +105,7 @@ int main(int argc, char** argv) {
   vector<ll> ys(N);
   rep(i, N) { ys[i] = p[i].second; }
   sort(all(ys));
-  rep(i, N) { mp[ys[i]] = i + 1; } // y must be larger than 0
+  rep(i, N) { mp[ys[i]] = i; }
   rep(i, N) { p[i].second = mp[p[i].second]; }
 
   // For Debug
@@ -105,30 +113,26 @@ int main(int argc, char** argv) {
   //   cout << "(" << p[i].first << ", " << p[i].second << ")" << endl;
   // }
 
+  BIT<ll> bit(N);
   vector<ll> left_uppers(N); // Stores the count in upper left.
   vector<ll> left_lowers(N); // Stores the count in lower left.
   rep(i, N) { // i is also the number of points already appeared
     ll y = p[i].second;
-    ll lower_cnt = sum(y);
-    add(y, 1);
+    ll lower_cnt = bit.sum(y);
+    bit.add(y, 1);
 
     left_lowers[i] = lower_cnt;
     left_uppers[i] = i - lower_cnt;
   }
 
-  // Clear
-  rep(i, N) {
-    ll y = p[i].second;
-    add(y, -1);
-  }
-
+  BIT<ll> bit2(N);
   reverse(all(p)); // decreasing order by x
   vector<ll> right_uppers(N); // Stores the count in upper right.
   vector<ll> right_lowers(N); // Stores the count in lower left.
   rep(i, N) { // i is also the number of points already appeared
     ll y = p[i].second;
-    ll lower_cnt = sum(y);
-    add(y, 1);
+    ll lower_cnt = bit2.sum(y);
+    bit2.add(y, 1);
 
     right_lowers[i] = lower_cnt;
     right_uppers[i] = i - lower_cnt;
