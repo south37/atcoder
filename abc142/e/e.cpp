@@ -91,6 +91,7 @@ template<class T> int GaussJordan(Matrix<T> &A, bool is_extended = false) {
       if (A[row][col] == 1) {
         rep(col2, n) {
           A[row][col2] -= A[rank][col2];
+          A[row][col2] = max<T>(0, A[row][col2]);
         }
       }
     }
