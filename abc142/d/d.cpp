@@ -61,10 +61,10 @@ int main(int argc, char** argv) {
   if (A > 1) {
     a_candidates.insert(A);
   }
-  cout << "a_candidates: " << endl;
-  for (auto x : a_candidates) {
-    cout << x << endl;
-  }
+  // cout << "a_candidates: " << endl;
+  // for (auto x : a_candidates) {
+  //   cout << x << endl;
+  // }
   set<ll> b_candidates;
   b_candidates.insert(1);
   for (ll i = 2; i * i <= B; ++i) { // i is the divisor
@@ -76,10 +76,10 @@ int main(int argc, char** argv) {
   if (B > 1) {
     b_candidates.insert(B);
   }
-  cout << "b_candidates: " << endl;
-  for (auto x : b_candidates) {
-    cout << x << endl;
-  }
+  // cout << "b_candidates: " << endl;
+  // for (auto x : b_candidates) {
+  //   cout << x << endl;
+  // }
 
   set<ll> candidates;
   for (auto x : a_candidates) {
@@ -87,11 +87,11 @@ int main(int argc, char** argv) {
       candidates.insert(x);
     }
   }
-  cout << "candidates: " << endl;
-  for (auto x : candidates) {
-    cout << x << endl;
-  }
-  cout << "answer:" << endl;
+  // cout << "candidates: " << endl;
+  // for (auto x : candidates) {
+  //   cout << x << endl;
+  // }
+  // cout << "answer:" << endl;
 
   cout << candidates.size() << endl;
 }
