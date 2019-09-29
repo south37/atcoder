@@ -80,10 +80,10 @@ void solve() {
   while (!visited[v]) {
     for (int u : graph[v]) {
       if (erased[u]) { continue; }
-      int nv = v;
-      while (nxt[nv] != u) {
-        nv = nxt[nv];
+      int nv = nxt[v];
+      while (nv != u) {
         erased[nv] = 1;
+        nv = nxt[nv];
       }
       nxt[v] = u;
     }
