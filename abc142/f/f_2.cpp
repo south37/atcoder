@@ -44,16 +44,19 @@ ll powmod(ll x, ll n) { // like pow(x, n)
 }
 
 vector< vector<int> > graph;
+vector< vector<int> > revGraph;
 
 int main(int argc, char** argv) {
   int N, M;
   cin >> N >> M;
   graph.resize(N);
+  revGraph.resize(N);
   rep(i, M) {
     int A, B;
     cin >> A >> B;
     --A; --B; // 0-indexed
     graph[A].push_back(B);
+    revGraph[B].push_back(A);
   }
 
   int shortest = INF;
@@ -74,26 +77,20 @@ int main(int argc, char** argv) {
         }
       }
     }
-    rep(t, N) {
-      if (t == s) { continue; } // t is not s
+    for (auto t : revGraph[s]) {
       if (dist[t] == -1) { continue; } // t is not reachable
 
-      for (auto nt : graph[t]) {
-        if (nt != s) { continue; }
-
-        // Now, nt = s
-        int d = dist[t] + 1; // cycle length
-        if (d < shortest) {
-          shortest = d;
-          // Update res to the found shortest path.
-          res.clear();
-          int cur = t;
-          while (cur != s) {
-            res.push_back(cur);
-            cur = prev[cur];
-          }
-          res.push_back(s);
+      int d = dist[t] + 1; // cycle length
+      if (d < shortest) {
+        shortest = d;
+        // Update res to the found shortest path.
+        res.clear();
+        int cur = t;
+        while (cur != s) {
+          res.push_back(cur);
+          cur = prev[cur];
         }
+        res.push_back(s);
       }
     }
   }
