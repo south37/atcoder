@@ -47,6 +47,7 @@ vector< vector<int> > graph;
 vector<int> state;
 vector<int> vs;
 
+// Detect cycle
 bool dfs(int v) {
   if (state[v] == 1) { // intermediate
     vs.erase(vs.begin(), find(all(vs), v)); // remove all elements before v.
@@ -68,6 +69,7 @@ bool dfs(int v) {
 
 int N, M;
 
+// Shorten cycle
 void solve() {
   vector<int> nxt(N), visited(N), erased(N, 1);
   rep(i, vs.size()) {
