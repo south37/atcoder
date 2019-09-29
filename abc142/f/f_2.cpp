@@ -77,18 +77,22 @@ int main(int argc, char** argv) {
     rep(t, N) {
       if (t == s) { continue; } // t is not s
       if (dist[t] == -1) { continue; } // t is not reachable
+
       for (auto nt : graph[t]) {
-        if (nt == s) {
-          vector<int> tmp({s});
+        if (nt != s) { continue; }
+
+        // Now, nt = s
+        int d = dist[t] + 1; // cycle length
+        if (d < shortest) {
+          shortest = d;
+          // Update res to the found shortest path.
+          res.clear();
           int cur = t;
           while (cur != s) {
-            tmp.push_back(cur);
+            res.push_back(cur);
             cur = prev[cur];
           }
-          if (shortest > tmp.size()) {
-            shortest = tmp.size();
-            res = tmp;
-          }
+          res.push_back(s);
         }
       }
     }
