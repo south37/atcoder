@@ -41,7 +41,6 @@ ll powmod(ll x, ll n) { // like pow(x, n)
 }
 
 vector< vector<int> > graph;
-vector< vector<int> > revG; // reverse of graph.
 int dist[1005]; // distance from s.
 
 int dfs(int v, int s) { // v is current, s is start. returns the shortest cycle length of s -> s. If does not found, it returns INF.
@@ -65,13 +64,11 @@ int main(int argc, char** argv) {
   int N, M;
   cin >> N >> M;
   graph.resize(N);
-  revG.resize(N);
   rep(i, M) {
     int A, B;
     cin >> A >> B;
     --A; --B; // 0-indexed
     graph[A].push_back(B);
-    revG[B].push_back(A);
   }
   // For Debug
   // rep(i, N) {
