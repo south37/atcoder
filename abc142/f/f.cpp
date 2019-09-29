@@ -41,24 +41,6 @@ ll powmod(ll x, ll n) { // like pow(x, n)
 }
 
 vector< vector<int> > graph;
-int dist[1005]; // distance from s.
-
-int dfs(int v, int s) { // v is current, s is start. returns the shortest cycle length of s -> s. If does not found, it returns INF.
-  int res = INF;
-  for (int u : graph[v]) {
-    if (u == s) { // cycle found.
-      return dist[v] + 1; // the length of cycle.
-      // cout << "cycle found: " << u << "->" << s << endl;
-    }
-    dist[u] = dist[v] + 1;  // set the current distance
-    // cout << v << "->" << u << endl;
-    int d = dfs(u, s);
-    if (d < res) { // shorter path is found.
-      res = d;
-    }
-  }
-  return res;
-}
 
 int main(int argc, char** argv) {
   int N, M;
@@ -82,12 +64,27 @@ int main(int argc, char** argv) {
   rep(s, N) { // s: start point
     // cout << "start from " << s << endl;
 
-    memset(dist, 0, sizeof(dist));
-    dist[s] = 0;
-    int candidate = dfs(s, s); // search the cycle from s -> s and returns the shortest path. If cycle does not found, it returns INF.
-    if (candidate < ans) {
-      ans = candidate;
-      ans_s = s;
+    // We find shortest cycle s -> s by bfs
+    queue<P> q; // q contains the queue of pair. pair is (vertex, distance from s).
+    P p(s, 0);
+    q.push(p);
+    while (!q.empty()) {
+      P p = q.front(); q.pop();
+      int v = p.first;
+      int d = p.second;
+      for (auto u : graph[v]) {
+        if (u == s) { // cycle found.
+          int candidate = d + 1;
+          if (candidate < ans) {
+            ans = candidate;
+            ans_s = s;
+          }
+          break;
+        }
+        // u is not s
+        P p2(u, d + 1);
+        q.push(p2);
+      }
     }
   }
 
