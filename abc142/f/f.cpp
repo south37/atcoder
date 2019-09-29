@@ -68,17 +68,21 @@ int main(int argc, char** argv) {
     queue<P> q; // q contains the queue of pair. pair is (vertex, distance from s).
     P p(s, 0);
     q.push(p);
+    bool cycle_found = false;
     while (!q.empty()) {
+      if (cycle_found) { break; } // cycle is already found.
+
       P p = q.front(); q.pop();
       int v = p.first;
       int d = p.second;
       for (auto u : graph[v]) {
         if (u == s) { // cycle found.
-          int candidate = d + 1; // The distance from s to s.
+          int candidate = d + 1;
           if (candidate < ans) {
             ans = candidate;
             ans_s = s;
           }
+          cycle_found = true;
           break;
         }
         // u is not s
