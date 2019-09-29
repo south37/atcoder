@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
       int d = p.second;
       for (auto u : graph[v]) {
         if (u == s) { // cycle found.
-          int candidate = d + 1;
+          int candidate = d + 1; // The distance from s to s.
           if (candidate < ans) {
             ans = candidate;
             ans_s = s;
