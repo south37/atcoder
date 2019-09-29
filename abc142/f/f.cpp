@@ -40,6 +40,7 @@ ll powmod(ll x, ll n) { // like pow(x, n)
   return r;
 }
 
+bool visited[1005];
 vector< vector<int> > graph;
 
 int main(int argc, char** argv) {
@@ -66,8 +67,10 @@ int main(int argc, char** argv) {
 
     // We find shortest cycle s -> s by bfs
     queue<P> q; // q contains the queue of pair. pair is (vertex, distance from s).
+    memset(visited, 0, sizeof(visited));
     P p(s, 0);
     q.push(p);
+    visited[s] = true;
     bool cycle_found = false;
     while (!q.empty()) {
       if (cycle_found) { break; } // cycle is already found.
@@ -85,6 +88,10 @@ int main(int argc, char** argv) {
           cycle_found = true;
           break;
         }
+
+        if (visited[u]) { continue; } // Skip if already visited and not s
+        visited[u] = true;
+
         // u is not s
         P p2(u, d + 1);
         q.push(p2);
