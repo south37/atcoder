@@ -126,7 +126,7 @@ mint dfs(int v, int p) {
     j  = tree[v].size() + 1; // We must paint the root. This is +1.
   } else {
     nk = K - 2;
-    j  = tree[v].size() - 1; // Extract parent. This is -1.
+    j  = tree[v].size() - 1; // Skip parent. This is -1.
   }
   // cout << "v: "<<v<<", p: "<<p << endl;
   // cout << "nk: "<<nk<<", j: "<<j << endl;
