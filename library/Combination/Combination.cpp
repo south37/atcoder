@@ -93,6 +93,10 @@ struct Combination {
     if (k < 0 || k > n) { return 0; }
     return fact[n] * ifact[k] * ifact[n-k];
   }
+  mint perm(int n, int k) {
+    if (k < 0 || k > n) { return 0; }
+    return fact[n] * ifact[n-k];
+  }
 };
 
 int main(int argc, char** argv) {
@@ -105,4 +109,6 @@ int main(int argc, char** argv) {
   cout << c(12, 3).x << endl;  // 12 = 220 % 13 = (12 * 11 * 10 / (3 * 2 * 1)) % 13
   cout << c(12, 11).x << endl; // 12 = 12 % 13
   cout << c(12, 12).x << endl; // 1  = 12 % 13
+
+  cout << c.perm(12, 3).x << endl; // 7 = 12 * 11 * 10 % 13
 }
