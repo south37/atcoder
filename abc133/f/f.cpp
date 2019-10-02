@@ -52,7 +52,7 @@ struct lca {
   lca(int n) : n(n), to(n), co(n), dep(n), costs(n) {
     l = 0;
     while ((1<<l) < n) { ++l; }
-    par = vector< vector<int> >(n, vector<int>(l, -1));
+    par = vector< vector<int> >(n+1, vector<int>(l, n));
   }
   void addedge(int a, int b, T c) {
     to[a].push_back(b);
@@ -65,20 +65,29 @@ struct lca {
     dfs(root);
     rep(i, l-1) {
       rep(v, n) {
-        if (par[v][i] != -1) {
-          par[v][i+1] = par[par[v][i]][i];
-        }
+        par[v][i+1] = par[par[v][i]][i];
       }
     }
   }
   void dfs(int v, int d = 0, T c = 0, int p = -1) {
-    par[v][0] = p;
+    if (p != -1) { par[v][0] = p; }
     dep[v] = d;
     costs[v] = c;
     rep(i, to[v].size()) {
       int u = to[v][i];
       if (u == p) { continue; }
       dfs(u, d + 1, c + co[v][i], v)
+    }
+  }
+  int operator()(int a, int b) { // lca between a and b
+    if (dep[a] > dep[b]) { swap(a, b); }
+    int gap = dep[b] - dep[a];
+    for (int i = l-1; i >= 0; --i) {
+      int len = 1<<i;
+      if (gap >= len) {
+        gap -= len;
+        b = par[b][i];
+      }
     }
   }
 }
