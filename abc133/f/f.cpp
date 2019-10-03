@@ -130,7 +130,7 @@ vector<ll> sum;
 
 void dfs(int v, int p = -1) {
   for (auto q : qs[v]) {
-    ll x = (ll)cnt[q.col] * q.y - sum[v];
+    ll x = (ll)cnt[q.col] * q.y - sum[q.col];
     ans[q.qid] += x * q.coeff;
   }
   for (auto e : es[v]) {
