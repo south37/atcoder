@@ -117,8 +117,8 @@ int main(int argc, char** argv) {
     int a, b;
     cin >> a >> b;
     --a; --b;
-    int c = g(a, b);
-    int ans = g.costs[a] + g.costs[b] - g.costs[c] * 2;
-    cout << a + 1 << "-" << b + 1 << ": " << ans << endl;
+    int c = g(a, b); // c is the lowest common ancestor of a and b.
+    int ans = g.costs[a] + g.costs[b] - g.costs[c] * 2; // The distance between a and b.
+    cout << a + 1 << "-" << b + 1 << ": " << ans << endl; // e.g. 1-4: 40
   }
 }
