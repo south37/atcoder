@@ -77,7 +77,7 @@ struct lca {
     rep(i, to[v].size()) {
       int u = to[v][i];
       if (u == p) { continue; }
-      dfs(u, d + 1, c + co[v][i], v)
+      dfs(u, d + 1, c + co[v][i], v);
     }
   }
   int operator()(int a, int b) { // lca between a and b
@@ -109,12 +109,12 @@ struct lca {
     int c = lca(a, b);
     return costs[a] + costs[b] - costs[c]*2;
   }
-}
+};
 
 struct Edge {
   int to, co, col;
   Edge(int to, int co, int col) : to(to), co(co), col(col) {}
-}
+};
 
 vector< vector<Edge> > es;
 vector<ll> ans;
@@ -122,7 +122,7 @@ vector<ll> ans;
 struct Query {
   int col, y, qid, coeff;
   Query(int col, int y, int qid, int coeff) : col(col), y(y), qid(qid), coeff(coeff) {}
-}
+};
 vector< vector<Query> > qs;
 
 vector<int> cnt;
@@ -152,14 +152,14 @@ int main(int argc, char** argv) {
   qs.resize(N);
   cnt.resize(N);
   sum.resize(N);
-  struct lca g(N);
+  lca<ll> g(N);
 
   rep(i, N-1) {
     int a, b, c, d;
     cin >> a >> b >> c >> d;
     --a; --b;
-    e[a].emblace_back(b, d, c);
-    e[b].emblace_back(a, d, c);
+    es[a].emplace_back(b, d, c);
+    es[b].emplace_back(a, d, c);
 
     g.addedge(a, b, d);
   }
@@ -169,7 +169,7 @@ int main(int argc, char** argv) {
     int x, y, a, b;
     cin >> x >> y >> a >> b;
     --a; --b;
-    int c = g.lca(a, b);
+    int c = g(a, b);
     ans[i] = g.costs[a]+g.costs[b]-g.costs[c]*2;
     qs[a].emplace_back(x, y, i, 1);
     qs[b].emplace_back(x, y, i, 1);
