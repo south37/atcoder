@@ -35,7 +35,6 @@ void getZarr(string& str, int Z[]) {
   }
 }
 
-
 void search(string& text, string& pattern, vector<int> *result) {
   string s = pattern + "$" + text;
   int l = s.length();
