@@ -40,6 +40,7 @@ ll powmod(ll x, ll n) { // like pow(x, n)
   return r;
 }
 
+// LCA
 template<typename T>
 struct lca {
   int n, root, l;
@@ -89,20 +90,69 @@ struct lca {
         b = par[b][i];
       }
     }
+    if (a == b) { return a; }
+    for (int i = l-1; i>=0; --i) {
+      int na = par[a][i];
+      int nb = par[b][i];
+      if (na != nb) {
+        a = na;
+        b = nb;
+      }
+    }
+    return par[a][0];
+  }
+  int length(int a, int b) {
+    int c = lca(a, b);
+    return dep[a] + dep[b] - dep[c]*2;
+  }
+  int cost(int a, int b) {
+    int c = lca(a, b);
+    return costs[a] + costs[b] - costs[c]*2;
   }
 }
 
-vector< vector<int> > tree;
+struct Edge {
+  int to, co, col;
+  Edge(int to, int co, int col) : to(to), co(co), col(col) {}
+}
+
+vector< vector<Edge> > e;
+vector<ll> ans;
+
+struct Query {
+  int col, qid, coeff;
+  Query(int col, int qid, int coeff) : col(col), qid(qid), coeff(coeff) {}
+}
+vector< vector<Query> > qs;
 
 int main(int argc, char** argv) {
   int N, Q;
   cin >> N >> Q;
-  tree.resize(N);
+
+  e.resize(N);
+  ans.resize(Q);
+  qs.resize(N);
+  struct lca g(N);
+
   rep(i, N-1) {
     int a, b, c, d;
     cin >> a >> b >> c >> d;
-    int
-  }
+    --a; --b;
+    e[a].emblace_back(b, d, c);
+    e[b].emblace_back(a, d, c);
 
-  cout << n << endl;
+    g.addedge(a, b, d);
+  }
+  g.init(0);
+
+  rep(i, Q) {
+    int x, y, a, b;
+    cin >> x >> y >> a >> b;
+    --a; --b;
+    int c = g.lca(a, b);
+    ans[i] = g.costs[a]+g.costs[b]-g.costs[c]*2;
+    qs[a].push_back(x, i, 1);
+    qs[b].push_back(x, i, 1);
+    qs[c].push_back(x, i, -2);
+  }
 }
