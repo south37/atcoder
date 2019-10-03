@@ -116,22 +116,42 @@ struct Edge {
   Edge(int to, int co, int col) : to(to), co(co), col(col) {}
 }
 
-vector< vector<Edge> > e;
+vector< vector<Edge> > es;
 vector<ll> ans;
 
 struct Query {
-  int col, qid, coeff;
-  Query(int col, int qid, int coeff) : col(col), qid(qid), coeff(coeff) {}
+  int col, y, qid, coeff;
+  Query(int col, int y, int qid, int coeff) : col(col), y(y), qid(qid), coeff(coeff) {}
 }
 vector< vector<Query> > qs;
+
+vector<int> cnt;
+vector<ll> sum;
+
+void dfs(int v, int p = -1) {
+  for (auto q : qs[v]) {
+    ll x = (ll)cnt[q.col] * q.y - sum[v];
+    ans[q.qid] += x * q.coeff;
+  }
+  for (auto e : es[v]) {
+    if (e.to == p) { continue; }
+    ++cnt[e.col];
+    sum[e.col] += e.co;
+    dfs(e.to, v);
+    --cnt[e.col];
+    sum[e.col] -= e.co;
+  }
+}
 
 int main(int argc, char** argv) {
   int N, Q;
   cin >> N >> Q;
 
-  e.resize(N);
+  es.resize(N);
   ans.resize(Q);
   qs.resize(N);
+  cnt.resize(N);
+  sum.resize(N);
   struct lca g(N);
 
   rep(i, N-1) {
@@ -151,8 +171,12 @@ int main(int argc, char** argv) {
     --a; --b;
     int c = g.lca(a, b);
     ans[i] = g.costs[a]+g.costs[b]-g.costs[c]*2;
-    qs[a].push_back(x, i, 1);
-    qs[b].push_back(x, i, 1);
-    qs[c].push_back(x, i, -2);
+    qs[a].emplace_back(x, y, i, 1);
+    qs[b].emplace_back(x, y, i, 1);
+    qs[c].emplace_back(x, y, i, -2);
+  }
+  dfs(0);
+  rep(i, Q) {
+    cout << ans[i] << endl;
   }
 }
