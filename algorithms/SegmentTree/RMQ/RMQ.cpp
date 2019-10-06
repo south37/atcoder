@@ -71,8 +71,8 @@ public:
   }
 
 private:
-  int n;
-  vector<T> dat;
+  int n; // The size of source data. The power of 2.
+  vector<T> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
 };
 
 int main(int argc, char** argv) {
