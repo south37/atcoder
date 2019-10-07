@@ -41,8 +41,8 @@ ll powmod(ll x, ll n) { // like pow(x, n)
 }
 
 int main(int argc, char** argv) {
-  int n;
-  cin >> n;
+  int N;
+  cin >> N;
 
-  cout << n << endl;
+  cout << N << endl;
 }
