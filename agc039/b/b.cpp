@@ -71,17 +71,44 @@ int main(int argc, char** argv) {
   }
 
   // For Debug
-  rep(i, N) {
-    for (auto x : tree[i]) {
-      cout << x << ",";
+  // rep(i, N) {
+  //   for (auto x : tree[i]) {
+  //     cout << x << ",";
+  //   }
+  //   cout << endl;
+  // }
+
+  ll ans = 0;
+
+  // bfs from all points. The largest length is answer. If different distance is detected, then answer is -1 (odd cycle exists).
+  rep(s, N) {
+    vector<int> d(N, -1);
+    queue<P> q; // A queue of pairs. A pair is (vertex, prev).
+    d[s] = 0;
+    q.emplace(s, -1); // start from s.
+    while (!q.empty()) {
+      P p = q.front(); q.pop();
+      for (int u : tree[p.first]) {
+        if (u == p.second) { continue; } // skip prev
+
+        if (d[u] == -1) { // u is not visited
+          d[u] = d[p.first] + 1;
+          q.emplace(u, p.first);
+          if (d[u] > ans) { ans = d[u]; } // ans is max distance
+          continue;
+        }
+
+        // Here, d[u] is already calculated
+        if ((d[u] != d[p.first] + 1) && (d[u] != d[p.first] - 1)) { // different distance!
+          // For Debug
+          // cout << "s: "<<s << endl;
+          // cout << "d["<<u<<"]: "<<d[u]<<", d["<<p.first<<"]: "<<d[p.first] << endl;
+          cout << -1 << endl;
+          return 0;
+        }
+      }
     }
-    cout << endl;
   }
 
-  // Double-Sweep for calculating the diameter of a tree.
-  // cf. https://www.slideshare.net/chokudai/arc022 C
-  // dfs(0, -1);  // At first, start dfs from a random position.
-  // dst[r] = 0;
-  // dfs(r, -1);  // Next, start dfs from the farthest position.
-  // int diameter = dst[r];
+  cout << ans + 1 << endl;
 }
