@@ -142,6 +142,7 @@ int main(int argc, char** argv) {
         }
       }
 
+      // Calculate cnt with inclusion-exclusion principle.
       for(int i = k * 2; i <= N2; i += k) {
         cnt[i] -= cnt[k];
       }
