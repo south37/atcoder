@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
     rep(j, 26) {
       if (j == cur) { continue; } // current char must not be multiplied.
 
-      c *= (cnts[j] + 1);
+      c *= (cnts[j] + 1); // Each chars or nothing.
       c %= MOD;
     }
     ans += c;
