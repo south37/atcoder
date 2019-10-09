@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
   // If B[i] > B[i-1] + B[i+1], then we update B[i] -> B[i] % (B[i-1] + B[i+1])
   priority_queue<P> q; // The queue of pairs. The pair is [B[i], i].
 
-  ll cnt = 0;
+  ll cnt = 0; // The count of operation.
   rep(i, N) {
     ll b = B[i];
     ll a = B[(i-1+N)%N];
@@ -71,9 +71,10 @@ int main(int argc, char** argv) {
     ll b = B[i];
     ll a = B[(i-1+N)%N];
     ll c = B[(i+1)%N];
-    if ((b > a + c) && b != A[i]) {
-      B[i] = b % (a + c);
-      cnt += b / (a + c); // cnt is the count of "B[i] = B[i] - (a + c)"
+    if ((b > a + c) && b > A[i]) {
+      ll diff = (b - A[i]) / (a + c);
+      B[i] -= diff * (a + c);
+      cnt += diff; // cnt is the count of "B[i] = B[i] - (a + c)".
       q.emplace(a, (i-1+N)%N);
       q.emplace(c, (i+1)%N);
     }
