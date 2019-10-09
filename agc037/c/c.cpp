@@ -43,6 +43,58 @@ ll powmod(ll x, ll n) { // like pow(x, n)
 int main(int argc, char** argv) {
   int N;
   cin >> N;
+  vector<ll> A(N);
+  rep(i, N) {
+    cin >> A[i];
+  }
+  vector<ll> B(N);
+  rep(i, N) {
+    cin >> B[i];
+  }
 
-  cout << N << endl;
+  // If B[i] > B[i-1] + B[i+1], then we update B[i] -> B[i] % (B[i-1] + B[i+1])
+  priority_queue<P> q; // The queue of pairs. The pair is [B[i], i].
+
+  ll cnt = 0;
+  rep(i, N) {
+    ll b = B[i];
+    ll a = B[(i-1+N)%N];
+    ll c = B[(i+1)%N];
+    if ((b > a + c) && b != A[i]) {
+      q.emplace(b, i);
+    }
+  }
+  while (!q.empty()) {
+    P p = q.top(); q.pop();
+    int i = p.second;
+
+    ll b = B[i];
+    ll a = B[(i-1+N)%N];
+    ll c = B[(i+1)%N];
+    if ((b > a + c) && b != A[i]) {
+      B[i] = b % (a + c);
+      cnt += b / (a + c); // cnt is the count of "B[i] = B[i] - (a + c)"
+      q.emplace(a, (i-1+N)%N);
+      q.emplace(c, (i+1)%N);
+    }
+  }
+  // For Debug
+  // cout << "after:" << endl;
+  // rep(i, N) {
+  //   cout << B[i] << " ";
+  // }
+  // cout << endl;
+
+  bool ans = true;
+  rep(i, N) {
+    if (A[i] != B[i]) {
+      ans = false;
+      break;
+    }
+  }
+  if (ans) {
+    cout << cnt << endl;
+  } else {
+    cout << -1 << endl;
+  }
 }
