@@ -54,18 +54,26 @@ ll solve(const vector<ll>& x) {
   ll res = 0;
   rep(i, N) {  // i: starting point of turn.
     int mid = i + (N - i) / 2;  // The last index. e.g. If N = 10 and i = 0, then mid = 5.
-    if ((N - i) % 2 == 0) {  // The number of remaining is odd. e.g. 0, 1, ... 9 exist, and i = 0. remaining is 1, 2, ... 9.
-      // The result is (X[i]) + (X[i] + revX[N-1]) + (revX[N-1] + X[i+1]) + ... = (X[i]*2 + X[i+1]*2 + ... X[mid-1]*2) + ((L-X[mid+1])*2 + (L-X[mid+2])*2 + ... + (L-X[N-1])*2) + (L - X[mid])
+    if ((N - i) % 2 == 0) {  // The number of remaining is odd. e.g. 0, 1, ... 9 exist, and i = 0. remaining is 1, 2, ... 9. mid is 5.
+      // The result is (X[i]) + (X[i] + revX[N-1]) + (revX[N-1] + X[i+1]) + ... + (X[mid-1] + revX[mid]) = (X[i]*2 + X[i+1]*2 + ... X[mid-1]*2) + ((L-X[mid+1])*2 + (L-X[mid+2])*2 + ... + (L-X[N-1])*2) + (L - X[mid])
+      // = (X[i] + X[i+1] + ... + X[mid-1])*2 + (L-X[mid]) + (L-X[mid+1] + L-X[mid+2] + ... + L-X[N-1])*2
 
       // [i, mid-1]
       ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0));
-      // [mid + 1, N-1]
-      val += 2 * (N - 1 - mid) * L - 2 * (sumx[N - 1] - sumx[mid]);
       // [mid]
       val += L - x[mid];
+      // [mid + 1, N-1]
+      val += 2 * (N - 1 - mid) * L - 2 * (sumx[N - 1] - sumx[mid]);
       res = max(res, val);
-    } else {
-      ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0)) + x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
+    } else {  // The number of remaining is even. e.g. 0, 1, ... 8 exist, and i = 0. remaining is 1, 2, ... 8. mid is 4.
+      // (X[i] + X[i+1] + ... + X[mid-1])*2 + X[mid] + (L-X[mid+1] + L-X[mid+2] + ... + L-X[N-1])*2
+
+      // [i, mid-1]
+      ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0));
+      // [mid]
+      val += x[mid];
+      // [mid + 1, N-1]
+      val += 2 * (N - 1 - mid) * L - 2 * (sumx[N - 1] - sumx[mid]);
       res = max(res, val);
     }
   }
