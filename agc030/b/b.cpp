@@ -1,4 +1,5 @@
 // base: https://atcoder.jp/contests/agc030/submissions/7566849#
+// cf. https://ferin-tech.hatenablog.com/entry/2019/01/04/052343
 
 #include <algorithm>
 #include <bitset>
@@ -52,9 +53,16 @@ ll solve(const vector<ll>& x) {
 
   ll res = 0;
   rep(i, N) {  // i: starting point of turn.
-    int mid = i + (N - i) / 2;  // The last index
-    if ((N - i) % 2 == 0) {  // The number of remaining is even.
-      ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0)) - x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
+    int mid = i + (N - i) / 2;  // The last index. e.g. If N = 10 and i = 0, then mid = 5.
+    if ((N - i) % 2 == 0) {  // The number of remaining is odd. e.g. 0, 1, ... 9 exist, and i = 0. remaining is 1, 2, ... 9.
+      // The result is (X[i]) + (X[i] + revX[N-1]) + (revX[N-1] + X[i+1]) + ... = (X[i]*2 + X[i+1]*2 + ... X[mid-1]*2) + ((L-X[mid+1])*2 + (L-X[mid+2])*2 + ... + (L-X[N-1])*2) + (L - X[mid])
+
+      // [i, mid-1]
+      ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0));
+      // [mid + 1, N-1]
+      val += 2 * (N - 1 - mid) * L - 2 * (sumx[N - 1] - sumx[mid]);
+      // [mid]
+      val += L - x[mid];
       res = max(res, val);
     } else {
       ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0)) + x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
