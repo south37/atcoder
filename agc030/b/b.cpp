@@ -54,10 +54,10 @@ ll solve(const vector<ll>& x) {
   rep(i, N) {  // i: starting point of turn.
     int mid = i + (N - i) / 2;  // The last index
     if ((N - i) % 2 == 0) {  // The number of remaining is even.
-      ll val = 2 * (sumx[mid] - sumx[i] - x[mid] + x[i]) - x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
+      ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0)) - x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
       res = max(res, val);
     } else {
-      ll val = 2 * (sumx[mid] - sumx[i] - x[mid] + x[i]) + x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
+      ll val = 2 * (sumx[mid-1] - (i > 0 ? sumx[i-1] : 0)) + x[mid] - 2 * (sumx[N - 1] - sumx[mid]) + (N - 1 - i) * L;
       res = max(res, val);
     }
   }
