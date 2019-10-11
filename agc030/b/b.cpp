@@ -52,7 +52,7 @@ ll solve(const vector<ll>& x) {
   }
 
   ll res = 0;
-  rep(i, N) {  // i: starting point of turn.
+  for (int i = 0; i < N-1; ++i) {  // i: starting point of turn.
     int mid = i + (N - i) / 2;  // The last index. e.g. If N = 10 and i = 0, then mid = 5.
     if ((N - i) % 2 == 0) {  // The number of remaining is odd. e.g. 0, 1, ... 9 exist, and i = 0. remaining is 1, 2, ... 9. mid is 5.
       // The result is (X[i]) + (X[i] + revX[N-1]) + (revX[N-1] + X[i+1]) + ... + (X[mid-1] + revX[mid]) = (X[i]*2 + X[i+1]*2 + ... X[mid-1]*2) + ((L-X[mid+1])*2 + (L-X[mid+2])*2 + ... + (L-X[N-1])*2) + (L - X[mid])
