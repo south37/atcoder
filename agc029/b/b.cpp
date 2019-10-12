@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     --m[A[i]];
 
     ll t = 1LL; // The summed value of A[i] + A[j] where j < i and A[i] + A[j] == 2 ** k.
-    while (t < A[i]) { t <<= 1; }
+    while (t <= A[i]) { t <<= 1; }
 
     if (m[t-A[i]] > 0) {
       ++ans;
