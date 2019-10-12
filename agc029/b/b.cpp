@@ -50,26 +50,22 @@ int main(int argc, char** argv) {
   sort(all(A));
   reverse(all(A));
 
-  multiset<ll> s;
+  map<ll, int> m;
   rep(i, N) {
-    s.insert(A[i]);
+    ++m[A[i]];
   }
 
   ll ans = 0;
   rep(i, N) {
-    auto cur = s.find(A[i]);
-    if (cur == s.end()) { // already erased
-      continue;
-    }
-    s.erase(cur);
+    if (m[A[i]] == 0) { continue; }  // already erased
+    --m[A[i]];
 
     ll t = 1LL; // The summed value of A[i] + A[j] where j < i and A[i] + A[j] == 2 ** k.
     while (t < A[i]) { t <<= 1; }
 
-    auto it = s.find(t - A[i]);
-    if (it != s.end()) {
+    if (m[t-A[i]] > 0) {
       ++ans;
-      s.erase(it);
+      --m[t-A[i]];
     }
   }
   cout << ans << endl;
