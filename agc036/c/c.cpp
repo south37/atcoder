@@ -129,6 +129,6 @@ int main(int argc, char** argv) {
 
   Combination c(3 * M + N); // initilization
 
-  mint ans = f(N, 3 * M, M, c) - (f(N, M, M, c) - f(N-1, M, M, c) * N);
+  mint ans = f(N, 3 * M, M, c) - (f(N, M, M, c) - f(N-1, M, M, c)) * N;
   cout << ans.x << endl;
 }
