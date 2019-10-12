@@ -97,8 +97,13 @@ struct mint {
 // cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
 struct Combination {
   vector<mint> fact, ifact;
-  Combination(int n) : fact(n + 1), ifact(n + 1) {
+  Combination(int n) { init(n); }
+  void init(int n) {
     assert(n < MOD); // n must be lower than MOD.
+
+    fact.resize(n + 1);
+    ifact.resize(n + 1);
+
     fact[0] = 1;
     for (int i = 1; i <= n; ++i) { fact[i] = fact[i-1] * i; }
     ifact[n] = fact[n].inv();
@@ -114,8 +119,10 @@ struct Combination {
   }
 };
 
+Combination c(0);
+
 // The number of even is n, the sum is m, the variaety of the number of odd is 0..k.
-mint f(ll n, ll m, ll k, const Combination& c) {
+mint f(ll n, ll m, ll k) {
   mint res = 0;
   for (int a = m % 2; a <= k; a += 2) {
     res += c(n, a) * c((m-a)/2+n-1, n-1);
@@ -127,8 +134,8 @@ int main(int argc, char** argv) {
   int N, M;
   cin >> N >> M;
 
-  Combination c(3 * M + N); // initilization
+  c.init(3 * M + N);
 
-  mint ans = f(N, 3 * M, M, c) - (f(N, M, M, c) - f(N-1, M, M, c)) * N;
+  mint ans = f(N, 3 * M, M) - (f(N, M, M) - f(N-1, M, M)) * N;
   cout << ans.x << endl;
 }
