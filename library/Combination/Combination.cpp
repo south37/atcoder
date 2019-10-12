@@ -82,18 +82,23 @@ struct mint {
 // cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
 struct Combination {
   vector<mint> fact, ifact;
-  Combination(int n) : fact(n + 1), ifact(n + 1) {
+  Combination(int n) { init(n); }
+  void init(int n) {
     assert(n < MOD); // n must be lower than MOD.
+
+    fact.resize(n + 1);
+    ifact.resize(n + 1);
+
     fact[0] = 1;
     for (int i = 1; i <= n; ++i) { fact[i] = fact[i-1] * i; }
     ifact[n] = fact[n].inv();
     for (int i = n; i >= 1; --i) { ifact[i-1] = ifact[i] * i; }
   }
-  mint operator() (int n, int k) {
+  mint operator() (int n, int k) const {
     if (k < 0 || k > n) { return 0; }
     return fact[n] * ifact[k] * ifact[n-k];
   }
-  mint perm(int n, int k) {
+  mint perm(int n, int k) const {
     if (k < 0 || k > n) { return 0; }
     return fact[n] * ifact[n-k];
   }
