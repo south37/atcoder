@@ -104,11 +104,11 @@ struct Combination {
     ifact[n] = fact[n].inv();
     for (int i = n; i >= 1; --i) { ifact[i-1] = ifact[i] * i; }
   }
-  mint operator() (int n, int k) {
+  mint operator() (int n, int k) const {
     if (k < 0 || k > n) { return 0; }
     return fact[n] * ifact[k] * ifact[n-k];
   }
-  mint perm(int n, int k) {
+  mint perm(int n, int k) const {
     if (k < 0 || k > n) { return 0; }
     return fact[n] * ifact[n-k];
   }
@@ -118,7 +118,7 @@ struct Combination {
 mint f(ll n, ll m, ll k, const Combination& c) {
   mint res = 0;
   for (int a = m % 2; a <= k; a += 2) {
-    res += c(n, a) * c((m-i)/2+n-1, n-1);
+    res += c(n, a) * c((m-a)/2+n-1, n-1);
   }
   return res;
 }
@@ -127,8 +127,8 @@ int main(int argc, char** argv) {
   int N, M;
   cin >> N >> M;
 
-  Combination c(2 * M + N); // initilization
+  Combination c(3 * M + N); // initilization
 
-  mint ans = f(N, 3 * M, M, c) - N * (f(N, M, M, c) - f(N-1, M, M, c));
+  mint ans = f(N, 3 * M, M, c) - (f(N, M, M, c) - f(N-1, M, M, c) * N);
   cout << ans.x << endl;
 }
