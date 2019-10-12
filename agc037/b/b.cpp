@@ -1,4 +1,5 @@
-// base: https://www.youtube.com/watch?v=68Z88ttiuUg
+// base: https://atcoder.jp/contests/agc037/submissions/7895840
+// hint: https://www.youtube.com/watch?v=68Z88ttiuUg
 
 #include <algorithm>
 #include <bitset>
@@ -51,6 +52,7 @@ int main(int argc, char** argv) {
   cin >> S;
 
   ll ans = 1;
+  ll tmp = 0; // the count of mid color. e.g. The count of G in (BBB)(GG)
   rep(i, 3 * N) {
     int c;
     if (S[i] == 'R') {
@@ -61,17 +63,25 @@ int main(int argc, char** argv) {
       c = 2;
     }
 
-    if (cnts[c] == 0) {
-      if ((cnts[(c+1)%3] > 0) && (cnts[(c+2)%3] > 0)) { // we can make triple
-        ans *= (cnts[(c+1)%3] * cnts[(c+2)%3]) % MOD;
+    int a = (c + 1) % 3;
+    int b = (c + 2) % 3;
+
+    if ((cnts[a] > 0) && (cnts[b] > 0)) { // we can make triple
+      ans *= tmp;
+      ans %= MOD;
+      --cnts[a];
+      --cnts[b];
+      --tmp;
+    } else if ((cnts[a] > 0) || (cnts[b] > 0)) {
+      if (cnts[a] == 0) { swap(a, b); }
+      // Now, cnts[a] > 0 and cnts[b] == 0
+      if (cnts[a] > tmp) { // cnts[a] is the largest. e.g. a is B in (BBB)(GG)
+        ans *= cnts[a] - tmp;
         ans %= MOD;
-        --cnts[(c+1)%3];
-        --cnts[(c+2)%3];
-        continue;
+        ++tmp;
       }
-      // Now, cnts[(c+1)%3] == 0 or cnts[(c+2)%3] == 0
       ++cnts[c];
-    } else {
+    } else { // both are 0
       ++cnts[c];
     }
   }
