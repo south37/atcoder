@@ -51,18 +51,22 @@ int main(int argc, char** argv) {
   vector< vector<int> > w_blocks(H);
   vector< vector<int> > h_blocks(W);
   rep(i, H) {
+    w_blocks[i].push_back(-1);
     rep(j, W) {
       if (S[i][j] == '#') {
         w_blocks[i].push_back(j);
       }
     }
+    w_blocks[i].push_back(W);
   }
   rep(j, W) {
+    h_blocks[j].push_back(-1);
     rep(i, H) {
       if (S[i][j] == '#') {
         h_blocks[j].push_back(i);
       }
     }
+    h_blocks[j].push_back(H);
   }
 
   // For Debug
@@ -90,38 +94,19 @@ int main(int argc, char** argv) {
       if (S[i][j] == '#') { continue; }
 
       int w, h;
-      if (w_blocks[i].size() > 0) {
+      {
         auto w_i = upper_bound(all(w_blocks[i]), j);
-        if (w_i == w_blocks[i].end()) { // j is the end
-          --w_i;
-          w = W-1 - *w_i;
-        } else if (w_i == w_blocks[i].begin()) { // j is the first
-          w = *w_i;
-        } else {
-          int r = *w_i;
-          --w_i;
-          int l = *w_i;
-          w = r - l - 1;
-        }
-      } else {
-        w = W;
+        int r = *w_i;
+        --w_i;
+        int l = *w_i;
+        w = r - l - 1;
       }
-
-      if (h_blocks[j].size() > 0) {
+      {
         auto h_i = upper_bound(all(h_blocks[j]), i);
-        if (h_i == h_blocks[j].end()) { // j is the end
-          --h_i;
-          h = H-1 - *h_i;
-        } else if (h_i == h_blocks[j].begin()) { // j is the fi
-          h = *h_i;
-        } else {
-          int r = *h_i;
-          --h_i;
-          int l = *h_i;
-          h = r - l - 1;
-        }
-      } else {
-        h = H;
+        int r = *h_i;
+        --h_i;
+        int l = *h_i;
+        h = r - l - 1;
       }
 
       ans = max(ans, h + w - 1);
