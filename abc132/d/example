@@ -1,0 +1,56 @@
+111|00|11|0000|1
+
+blue is K ... splitted by K * 2
+ if k is 1, then 1|00|1 or |0000| or 1|000|
+
+Answer is (N+K*2)C(K*2) ?
+
+## consideration
+- if k is 1
+  - (N+2)C(2) - (N+1)
+    -
+
+## e.g. 1
+N: 5
+K: 3
+- r: N - K = 2
+- b: K = 3
+
+if k is 1, then
+- b:
+  - remain: K - 1 = 2
+  - position: k = 1
+- r:
+  - remain: (N-K) = 2
+  - position: k+1 = 2
+
+if k is 2, then
+- b:
+  - remain: K - k = 1
+  - position: k = 2
+- r:
+  - remain: (N-K - (k-1)) = 1
+  - position: k+1 = 3
+
+## consideration
+we should not distinguish below case.
+1||11 and ||111
+(4+2)C(2) - 4
+
+||||111 and ||a
+
+- (r)b(r)
+  - b: remain 2, posicion 1 -> 1 (2C0) = 1
+  - r: remain 2, posicion 2 -> 3 (2-0, 0-2, 1-1) (3C1 = 3)
+    - if remain is i and position is j, then (i+j-1)C(j-1) is the result.
+  - ans: 3
+
+- (r)brb(r)
+  - b: remain 1, posicion 2 -> 2 (2C1 = 2)
+  - r: remain 1, posicion 3 -> 3 (2 + 1 C 2 = 3C2 = 3)
+  - ans: 6
+
+- brbrb
+  - b: remain 0, posicion 3 -> 1
+  - r: remain 0, posicion 2 -> 1
+  - ans: 1
