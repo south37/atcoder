@@ -71,5 +71,5 @@ int main(int argc, char** argv) {
     }
   }
 
-  cout << dp[N][0] + dp[N][1] << endl;
+  cout << (dp[N][0] + dp[N][1]) % MOD << endl;
 }
