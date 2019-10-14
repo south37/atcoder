@@ -41,7 +41,8 @@ struct RollingHash {
   static const int mod1 = 1000000007, mod2 = 1000000009;
   vector<ll> hash1, hash2, power1, power2;
 
-  RollingHash(const string& S) {
+  RollingHash(const string& S) { init(S); }
+  void init(const string& S) {
     int n = S.size();
     hash1.resize(n+1);
     hash2.resize(n+1);
@@ -63,36 +64,44 @@ struct RollingHash {
     if (res2 < 0) res2 += mod2;
     return {res1, res2};
   }
-
-  // get lcp of S[a:] and T[b:]
-  inline int getLCP(int a, int b) const {
-    int len = min((int)hash1.size()-a, (int)hash1.size()-b);
-    int low = 0, high = len;
-    while (high - low > 1) {
-      int mid = (low + high) >> 1;
-      if (get(a, a+mid) != get(b, b+mid)) high = mid;
-      else low = mid;
-    }
-    return low;
-  }
 };
 
+int N;
+RollingHash rh("");
+
+bool check(int d) {
+  map< pair<ll,ll>, int> ma;
+  for (int i = 0; i + d <= N; ++i) {
+    auto p = rh.get(i, i + d);
+    if (ma.count(p)) {
+      if (i - ma[p] >= d) { // no overlap
+        return true;
+      }
+    } else {
+      ma[p] = i; // set first i.
+    }
+  }
+  return false;
+}
+
 int main(int argc, char** argv) {
-  int N;
   cin >> N;
   string S;
   cin >> S;
 
-  RollingHash rh(S);
+  rh.init(S);
 
-  int ans = 0;
-  rep(i, N) {
-    for (int j = i + 1; j < N; ++j) {
-      int lcp = rh.getLCP(i, j);
-      lcp = min(lcp, j - i);
-      ans = max(ans, lcp);
+  // Find the largest left by binary search.
+  int left = 0;
+  int right = N/2 + 1;
+  while (right - left > 1) {
+    int mid = (left + right) / 2;
+    if (check(mid)) {
+      left = mid;
+    } else {
+      right = mid;
     }
   }
 
-  cout << ans << endl;
+  cout << left << endl;
 }

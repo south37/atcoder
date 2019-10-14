@@ -1,3 +1,5 @@
+// base: http://drken1215.hatenablog.com/entry/2019/09/16/014600
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
