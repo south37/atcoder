@@ -37,13 +37,14 @@ ll powmod(ll x, ll y) {
   return r;
 }
 
-// Rolling Hash
+// RollingHash with mod(2**64)
 struct RollingHash {
   // Mod is 2**64 (max of ull + 1)
   static const ull base1 = 1000000007;
   vector<ull> _hash, _power;
 
-  RollingHash(const string& S) {
+  RollingHash(const string& S) { init(S); }
+  void init(const string& S) {
     int n = S.size();
     _hash.resize(n+1);
     _power.assign(n+1, 1);

@@ -17,8 +17,10 @@ using namespace std;
 #define all(s) s.begin(), s.end()
 
 typedef long long ll;
-typedef pair<int, int> P;
-typedef tuple<int, int, int> triple;
+typedef unsigned long long ull;
+typedef pair<ll, ll> P;
+typedef tuple<ll, ll, ll> triple;
+typedef double D;
 
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
@@ -35,34 +37,27 @@ ll powmod(ll x, ll y) {
   return r;
 }
 
-// Rolling Hash
+// RollingHash with mod(2**64)
 struct RollingHash {
-  static const int base1 = 1007, base2 = 2009;
-  static const int mod1 = 1000000007, mod2 = 1000000009;
-  vector<ll> hash1, hash2, power1, power2;
+  // Mod is 2**64 (max of ull + 1)
+  static const ull base1 = 1000000007;
+  vector<ull> _hash, _power;
 
   RollingHash(const string& S) { init(S); }
   void init(const string& S) {
     int n = S.size();
-    hash1.resize(n+1);
-    hash2.resize(n+1);
-    power1.assign(n+1, 1);
-    power2.assign(n+1, 1);
+    _hash.resize(n+1);
+    _power.assign(n+1, 1);
     rep(i, n) {
-      hash1[i+1] = (hash1[i] * base1 + S[i]) % mod1;
-      hash2[i+1] = (hash2[i] * base2 + S[i]) % mod2;
-      power1[i+1] = (power1[i] * base1) % mod1;
-      power2[i+1] = (power2[i] * base2) % mod2;
+      _hash[i+1] = _hash[i] * base1 + S[i];
+      _power[i+1] = _power[i] * base1;
     }
   }
 
   // get hash of S[left:right]
-  inline pair<ll, ll> get(int l, int r) const {
-    ll res1 = hash1[r] - hash1[l] * power1[r-l] % mod1;
-    if (res1 < 0) res1 += mod1;
-    ll res2 = hash2[r] - hash2[l] * power2[r-l] % mod2;
-    if (res2 < 0) res2 += mod2;
-    return {res1, res2};
+  inline ull get(int l, int r) const {
+    ull res1 = _hash[r] - _hash[l] * _power[r-l];
+    return res1;
   }
 };
 
@@ -70,9 +65,9 @@ int N;
 RollingHash rh("");
 
 bool check(int d) {
-  map< pair<ll,ll>, int> ma;
+  map<ull, int> ma;
   for (int i = 0; i + d <= N; ++i) {
-    auto p = rh.get(i, i + d);
+    ull p = rh.get(i, i + d);
     if (ma.count(p)) {
       if (i - ma[p] >= d) { // no overlap
         return true;

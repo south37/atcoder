@@ -35,13 +35,14 @@ ll powmod(ll x, ll y) {
   return r;
 }
 
-// Rolling Hash
+// RollingHash with mod1 and mod2
 struct RollingHash {
   static const int base1 = 1007, base2 = 2009;
   static const int mod1 = 1000000007, mod2 = 1000000009;
   vector<ll> hash1, hash2, power1, power2;
 
-  RollingHash(const string& S) {
+  RollingHash(const string& S) { init(S); }
+  void init(const string& S) {
     int n = S.size();
     hash1.resize(n+1);
     hash2.resize(n+1);
