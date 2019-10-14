@@ -21,7 +21,7 @@ vector<int> Zalgo(const string &S) {
   return res;
 }
 
-void search(string& text, string& pattern, vector<int>& result) {
+void search(const string& text, const string& pattern, vector<int>& result) {
   string s = pattern + "$" + text;
   int p = pattern.length();
 
