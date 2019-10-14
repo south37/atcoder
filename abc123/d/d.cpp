@@ -48,8 +48,7 @@ int main(int argc, char** argv) {
   sort(all(B), greater<ll>());
   sort(all(C), greater<ll>());
 
-  // priority_queue<quad, vector<quad>, greater<quad> > q;
-  priority_queue<quad> q;
+  priority_queue<quad> q; // decreasing order
   q.emplace(A[0] + B[0] + C[0], 0, 0, 0);
   set<triple> s;
   s.emplace(0, 0, 0);
