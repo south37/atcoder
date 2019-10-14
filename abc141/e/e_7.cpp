@@ -135,20 +135,6 @@ private:
   vector<T> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
 };
 
-// int main(int argc, char** argv) {
-//   int arr[] = { 1, 3, 2, 7, 9, 11 };
-//   int n = 6;
-//
-//   SegTree<int> st(n);
-//   rep(i, n) {
-//     st.update(i, arr[i]);
-//   }
-//
-//   cout << st.query(1, 5) << endl;
-//   cout << st.query(0, 4) << endl;
-//   cout << st.query(3, 5) << endl;
-// }
-
 int main(int argc, char** argv) {
   int N;
   cin >> N;
