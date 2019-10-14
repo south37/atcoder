@@ -92,6 +92,7 @@ struct SuffixArray {
   }
 };
 
+// RMQ by SegTree (SegmentTree)
 template <typename T>
 class SegTree {
 public:
