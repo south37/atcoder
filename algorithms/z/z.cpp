@@ -5,48 +5,30 @@ using namespace std;
 
 #define rep(i, n) for (int i = 0; i < n; ++i)
 
-void getZarr(string& str, int Z[]) {
-  int n = str.length();
-  int L, R, k;
-
-  L = R = 0;
-  for (int i = 1; i < n; ++i) {
-    if (i > R) {
-      L = R = i;
-      while (R < n && str[R - L] == str[R]) {
-        R++;
-      }
-      Z[i] = R - L;
-      R--;
-    } else {
-      k = i - L;
-
-      if (Z[k] < R - i + 1) {
-        Z[i] = Z[k];
-      } else {
-        L = i;
-        while (R < n && str[R - L] == str[R]) {
-          R++;
-        }
-        Z[i] = R - L;
-        R--;
-      }
-    }
+vector<int> Zalgo(const string &S) {
+  int N = (int)S.size();
+  vector<int> res(N);
+  res[0] = N;
+  int i = 1, j = 0;
+  while (i < N) {
+    while (i+j < N && S[j] == S[i+j]) ++j;
+    res[i] = j;
+    if (j == 0) {++i; continue;}
+    int k = 1;
+    while (i+k < N && k+res[k] < j) res[i+k] = res[k], ++k;
+    i += k, j -= k;
   }
+  return res;
 }
 
-void search(string& text, string& pattern, vector<int> *result) {
+void search(string& text, string& pattern, vector<int>& result) {
   string s = pattern + "$" + text;
-  int l = s.length();
-
-  int Z[l];
-  getZarr(s, Z);
-
   int p = pattern.length();
 
-  for (int i = 0; i < l; ++i) {
+  vector<int> Z = Zalgo(s);
+  for (int i = p + 1; i < Z.size(); ++i) {
     if (Z[i] == p) {
-      result->push_back(i - p - 1);
+      result.push_back(i-p-1);
     }
   }
 }
@@ -57,7 +39,7 @@ int main(int argc, char** argv) {
   cin >> t;
 
   vector<int> matches;
-  search(s, t, &matches);
+  search(s, t, matches);
 
   for (auto e : matches) {
     cout << e << endl;
