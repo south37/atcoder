@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
       rep(l, 2) rep(r, 2) {
         if (l == 1 && r == 1) { continue; }
 
-        int ns = s || (L[i] == '1' && l == 0 && r == 0);
+        int ns = s | (L[i] == '1' && l == 0 && r == 0);
         if (L[i] == '1') {
           dp[i+1][ns] += dp[i][s];
           dp[i+1][ns] %= MOD;
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
             dp[i+1][ns] += dp[i][s];
             dp[i+1][ns] %= MOD;
           } else {
-            if (l == 0 && r == 0) { // if s == 0,
+            if (l == 0 && r == 0) { // if s == 0 and L[i] == '0', then l and r must be 0.
               dp[i+1][ns] += dp[i][s];
               dp[i+1][ns] %= MOD;
             }
