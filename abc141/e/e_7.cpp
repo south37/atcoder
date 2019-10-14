@@ -153,9 +153,7 @@ int main(int argc, char** argv) {
   int ans = 0;
   rep(i, N) {
     for (int j = i + 1; j < N; ++j) {
-      int k = sa.rsa[i], l = sa.rsa[j];
-      if (k > l) { swap(k, l); }
-      int lcp = st.query(k, l);
+      int lcp = st.query(min(sa.rsa[i], sa.rsa[j]), max(sa.rsa[i], sa.rsa[j]));
       ans = max(ans, min(lcp, j - i));
     }
   }
