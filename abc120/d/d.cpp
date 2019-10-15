@@ -85,11 +85,11 @@ private:
 // }
 
 int main(int argc, char** argv) {
-  int N, M;
+  ll N, M;
   cin >> N >> M;
   vector<P> pairs;
   rep(i, M) {
-    int A, B;
+    ll A, B;
     cin >> A >> B;
     --A; --B;
     pairs.emplace_back(A, B);
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
   ll cost = N * (N-1) / 2; // The initial cost. This is the final state.
   ans.push_back(cost);
 
-  map<int, int> mp; // The united count.
+  map<ll, ll> mp; // The united count.
   rep(i, M-1) {
     P p = pairs[i];
 
@@ -112,23 +112,23 @@ int main(int argc, char** argv) {
     if (tree.same(p.first, p.second)) { // if already united, the cost does not change.
       ans.push_back(cost);
     } else {
-      int x = tree.root(p.first);
-      int y = tree.root(p.second);
-      int c1 = mp[x]; mp.erase(x);
-      int c2 = mp[y]; mp.erase(y);
+      ll x = tree.root(p.first);
+      ll y = tree.root(p.second);
+      ll c1 = mp[x]; mp.erase(x);
+      ll c2 = mp[y]; mp.erase(y);
       if (c1 == 0) { c1 = 1; }
       if (c2 == 0) { c2 = 1; }
 
       // For Debug
       // cout << x << ": " << c1 << ", " << y << ": " << c2 << endl;
 
-      int c = c1 + c2; // new size
+      ll c = c1 + c2; // new size
       ll diff = c*(c-1)/2 - c1*(c1-1)/2 - c2*(c2-1)/2; // cost changes by diff.
       cost -= diff;
       ans.push_back(cost);
 
       tree.unite(p.first, p.second);
-      int nx = tree.root(p.first);
+      ll nx = tree.root(p.first);
       mp[nx] = c;
     }
   }
