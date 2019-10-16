@@ -32,39 +32,37 @@ const ll MOD = 1000000007;  // 1e9 + 7
 // C -> 1
 // G -> 2
 // T -> 3
-// prohibited: AGC, GAC, ACG
-// prohibited: 021, 201, 012
+// prohibited: ?AGC, ?GAC, ?ACG, A?GC, AG?C
+// prohibited: ?021, ?201, ?012, 0?21, 02?1
 
-// dp[i][j][k] .. the count in position i with suffix j,k.
-// dp[i+1][j][k] = sum dp[i][x][j] where (S[x,j,k] is not in [AGC, GAC, ACG])
-ll dp[105][4][4];
+// dp[i][j][k][l] .. the count in position i with suffix j,k,l.
+// dp[i+1][j][k][l] = sum dp[i][x][j][k] where (S[x,j,k,l] is not in [?AGC, ?GAC, ?ACG, A?GC, AG?C])
+ll dp[105][4][4][4];
 
 int main(int argc, char** argv) {
   int N;
   cin >> N;
   rep(j, 4) {
     rep(k, 4) {
-      dp[1][j][k] = 1;
+      rep(l, 4) {
+        if ((j == 0) && (k == 2) && (l == 1)) { continue; }
+        if ((j == 2) && (k == 0) && (l == 1)) { continue; }
+        if ((j == 0) && (k == 1) && (l == 2)) { continue; }
+        dp[2][j][k][l] = 1;
+      }
     }
   }
 
-  for (int i = 1; i < N-1; ++i) {
-    rep(j, 4) {
-      rep(k, 4) {
-        rep(x, 4) {
-          if ((x == 0) && (j == 2) && (k == 1)) {
-            continue;
-          }
-          if ((x == 2) && (j == 0) && (k == 1)) {
-            continue;
-          }
-          if ((x == 0) && (j == 1) && (k == 2)) {
-            continue;
-          }
-          // Now, x,j,k is OK.
-          dp[i+1][j][k] += dp[i][x][j];
-          dp[i+1][j][k] %= MOD;
-        }
+  for (int i = 2; i < N-1; ++i) {
+    rep(j, 4) rep(k, 4) rep(l, 4) {
+      rep(x, 4) {
+        if ((j == 0) && (k == 2) && (l == 1)) { continue; }
+        if ((j == 2) && (k == 0) && (l == 1)) { continue; }
+        if ((j == 0) && (k == 1) && (l == 2)) { continue; }
+        if ((x == 0) && (k == 2) && (l == 1)) { continue; }
+        if ((x == 0) && (j == 2) && (l == 1)) { continue; }
+        dp[i+1][j][k][l] += dp[i][x][j][k];
+        dp[i+1][j][k][l] %= MOD;
       }
     }
   }
@@ -72,8 +70,10 @@ int main(int argc, char** argv) {
   ll ans = 0;
   rep(j, 4) {
     rep(k, 4) {
-      ans += dp[N-1][j][k];
-      ans %= MOD;
+      rep(l, 4) {
+        ans += dp[N-1][j][k][l];
+        ans %= MOD;
+      }
     }
   }
   cout << ans << endl;
