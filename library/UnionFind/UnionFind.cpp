@@ -29,7 +29,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 class UnionFind {
 public:
-  UnionFind(int n) : par(n, -1), rnk(n, 0), _size(n) {}
+  UnionFind(int n) : par(n, -1), rnk(n, 0), cnt(n, 1), _size(n) {}
 
   bool same(int x, int y) {
     return root(x) == root(y);
@@ -40,12 +40,10 @@ public:
 
     --_size;
 
-    if (rnk[x] < rnk[y]) {
-      par[x] = y;
-    } else {
-      par[y] = x;
-      if (rnk[x] == rnk[y]) { ++rnk[x]; }
-    }
+    if (rnk[x] < rnk[y]) { swap(x, y); }
+    par[y] = x;
+    cnt[x] += cnt[y];
+    if (rnk[x] == rnk[y]) { ++rnk[x]; }
   }
   int root(int x) {
     if (par[x] < 0) {
@@ -54,6 +52,9 @@ public:
       return par[x] = root(par[x]);
     }
   }
+  int count(int x) {
+    return cnt[root(x)];
+  }
   int size() {
     return _size;
   }
@@ -61,6 +62,7 @@ public:
 private:
   vector<int> par;
   vector<int> rnk;
+  vector<int> cnt; // The number of vertices in each connected components.
   int _size; // The number of connected components. Decreases by unite.
 };
 
@@ -76,8 +78,14 @@ int main(int argc, char** argv) {
     } else { // Judge
       if (tree.same(a, b)) {
         cout << "Yes" << endl;
+        cout << "size: " << tree.size() << endl;
+        cout << "count(" << a << "): " << tree.count(a) << endl;
+        cout << "count(" << b << "): " << tree.count(b) << endl;
       } else {
         cout << "No" << endl;
+        cout << "size: " << tree.size() << endl;
+        cout << "count(" << a << "): " << tree.count(a) << endl;
+        cout << "count(" << b << "): " << tree.count(b) << endl;
       }
     }
   }
