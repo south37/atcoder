@@ -30,7 +30,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 class UnionFind {
 public:
-  UnionFind(int n) : par(n, -1), rnk(n, 0), _size(n) {}
+  UnionFind(int n) : par(n, -1), rnk(n, 0), cnt(n, 1), _size(n) {}
 
   bool same(int x, int y) {
     return root(x) == root(y);
@@ -41,12 +41,10 @@ public:
 
     --_size;
 
-    if (rnk[x] < rnk[y]) {
-      par[x] = y;
-    } else {
-      par[y] = x;
-      if (rnk[x] == rnk[y]) { ++rnk[x]; }
-    }
+    if (rnk[x] < rnk[y]) { swap(x, y); }
+    par[y] = x;
+    cnt[x] += cnt[y];
+    if (rnk[x] == rnk[y]) { ++rnk[x]; }
   }
   int root(int x) {
     if (par[x] < 0) {
@@ -55,6 +53,9 @@ public:
       return par[x] = root(par[x]);
     }
   }
+  int count(int x) {
+    return cnt[root(x)];
+  }
   int size() {
     return _size;
   }
@@ -62,27 +63,9 @@ public:
 private:
   vector<int> par;
   vector<int> rnk;
+  vector<int> cnt; // The number of vertices in each connected components.
   int _size; // The number of connected components. Decreases by unite.
 };
-
-// int main(int argc, char** argv) {
-//   int N, M;
-//   cin >> N >> M;
-//   UnionFind tree(N);
-//   rep(i, M) {
-//     int p, a, b;
-//     cin >> p >> a >> b;
-//     if (p == 0) { // Connect
-//       tree.unite(a, b);
-//     } else { // Judge
-//       if (tree.same(a, b)) {
-//         cout << "Yes" << endl;
-//       } else {
-//         cout << "No" << endl;
-//       }
-//     }
-//   }
-// }
 
 int main(int argc, char** argv) {
   ll N, M;
@@ -100,7 +83,6 @@ int main(int argc, char** argv) {
   ll cost = N * (N-1) / 2; // The initial cost. This is the final state.
   ans.push_back(cost);
 
-  map<ll, ll> mp; // The united count.
   rep(i, M-1) {
     P p = pairs[i];
 
@@ -114,10 +96,8 @@ int main(int argc, char** argv) {
     } else {
       ll x = tree.root(p.first);
       ll y = tree.root(p.second);
-      ll c1 = mp[x]; mp.erase(x);
-      ll c2 = mp[y]; mp.erase(y);
-      if (c1 == 0) { c1 = 1; }
-      if (c2 == 0) { c2 = 1; }
+      ll c1 = tree.count(x);
+      ll c2 = tree.count(y);
 
       // For Debug
       // cout << x << ": " << c1 << ", " << y << ": " << c2 << endl;
@@ -128,8 +108,6 @@ int main(int argc, char** argv) {
       ans.push_back(cost);
 
       tree.unite(p.first, p.second);
-      ll nx = tree.root(p.first);
-      mp[nx] = c;
     }
   }
 
