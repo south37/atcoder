@@ -77,30 +77,6 @@ int GaussJordan(BitMatrix* A, bool is_extended = false) {
   return rank;
 }
 
-int linear_equation(BitMatrix* A, vector<int>& b, vector<int> &res) {
-  int m = (*A).H, n = (*A).W;
-  BitMatrix* M = new BitMatrix(m, n + 1);
-  rep(i, m) {
-    rep(j, n) {
-      (*M)[i][j] = (*A)[i][j];
-    }
-    (*M)[i][n] = b[i];
-  }
-  int rank = GaussJordan(M, true);
-
-  // check if it has no solution
-  for (int row = rank; row < m; ++row) {
-    if ((*M)[row][n]) { return -1; }
-  }
-
-  // answer
-  res.assign(n, 0);
-  rep(i, rank) {
-    res[i] = (*M)[i][n];
-  }
-  return rank;
-}
-
 // We want to calculate the count of answers for M equations.
 // A[Xi] + A[Yi] = Zi MOD 2
 // If Zi is odd, then A[Xi] + A[Yi] is odd (same with even).
@@ -111,16 +87,14 @@ int main(int argc, char** argv) {
   int N, M;
   cin >> N >> M;
 
-  BitMatrix* matrix = new BitMatrix(M, N);
-  vector<int> b(M);
-
+  BitMatrix* A = new BitMatrix(M, N + 1);
   rep(i, M) {
     int X, Y, Z;
     cin >> X >> Y >> Z;
     --X; --Y; // 0-indexied.
-    (*matrix)[i][X] = 1;
-    (*matrix)[i][Y] = 1;
-    b[i] = Z % 2;
+    (*A)[i][X] = 1;
+    (*A)[i][Y] = 1;
+    (*A)[i][N] = Z % 2;
   }
   // rep(i, M) {
   //   rep(j, N) {
@@ -129,7 +103,7 @@ int main(int argc, char** argv) {
   //   cout << endl;
   // }
 
-  vector<int> res;
-  int rnk = linear_equation(matrix, b, res);
+  int rnk = GaussJordan(A, true);
+
   cout << N - rnk << endl;
 }
