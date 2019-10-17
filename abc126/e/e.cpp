@@ -28,84 +28,56 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-// GaussJordan by BitMatrix
-const int MAX_ROW = 100010; // To be set appropriately.
-const int MAX_COL = 100010; // To be set appropriately.
-
-class BitMatrix {
+class UnionFind {
 public:
-  BitMatrix(int h = 1, int w = 1) : H(h), W(w) {
-    val.resize(H);
-  }
-  inline bitset<MAX_COL>& operator [] (int i) { return val[i]; }
+  UnionFind(ll n) : par(n, -1), rnk(n, 0), cnt(n, 1), _size(n) {}
 
-  int H, W;
+  bool same(ll x, ll y) {
+    return root(x) == root(y);
+  }
+  void unite(ll x, ll y) {
+    x = root(x); y = root(y);
+    if (x == y) return;
+
+    --_size;
+
+    if (rnk[x] < rnk[y]) { swap(x, y); }
+    par[y] = x;
+    cnt[x] += cnt[y];
+    if (rnk[x] == rnk[y]) { ++rnk[x]; }
+  }
+  ll root(ll x) {
+    if (par[x] < 0) {
+      return x;
+    } else {
+      return par[x] = root(par[x]);
+    }
+  }
+  ll count(ll x) {
+    return cnt[root(x)];
+  }
+  ll size() {
+    return _size;
+  }
 
 private:
-  vector< bitset<MAX_COL> > val;
+  vector<ll> par;
+  vector<ll> rnk;
+  vector<ll> cnt; // The number of vertices in each connected components.
+  ll _size; // The number of connected components. Decreases by unite.
 };
 
-ostream& operator << (ostream& s, BitMatrix A) {
-  s << endl;
-  rep(i, A.H) {
-    rep(j, A.W) {
-      s << A[i][j] << ", ";
-    }
-    s << endl;
-  }
-  return s;
-}
-
-int GaussJordan(BitMatrix* A, bool is_extended = false) {
-  int rank = 0;
-  rep(col, (*A).W) {
-    if (is_extended && col == (*A).W - 1) { break; }
-    int pivot = -1;
-    for (int row = rank; row < (*A).H; ++row) {
-      if ((*A)[row][col]) {
-        pivot = row;
-        break;
-      }
-    }
-    if (pivot == -1) continue;
-    swap((*A)[pivot], (*A)[rank]);
-    rep(row, (*A).H) {
-      if (row != rank && (*A)[row][col]) {
-        (*A)[row] ^= (*A)[rank];
-      }
-    }
-    ++rank;
-  }
-  return rank;
-}
-
-// We want to calculate the count of answers for M equations.
-// A[Xi] + A[Yi] = Zi MOD 2
-// If Zi is odd, then A[Xi] + A[Yi] is odd (same with even).
-//
-// This is represented as a matrix. By GaussJordan, we can calculate the count of answers
-
 int main(int argc, char** argv) {
-  int N, M;
+  ll N, M;
   cin >> N >> M;
 
-  BitMatrix* A = new BitMatrix(M, N + 1);
+  UnionFind tree(N);
   rep(i, M) {
-    int X, Y, Z;
+    ll X, Y, Z;
     cin >> X >> Y >> Z;
     --X; --Y; // 0-indexied.
-    (*A)[i][X] = 1;
-    (*A)[i][Y] = 1;
-    (*A)[i][N] = Z % 2;
+    tree.unite(X, Y);
   }
-  // rep(i, M) {
-  //   rep(j, N) {
-  //     cout << (*matrix)[i][j] << " ";
-  //   }
-  //   cout << endl;
-  // }
 
-  int rnk = GaussJordan(A, true);
-
-  cout << N - rnk << endl;
+  cout << tree.size() << endl;
 }
