@@ -29,8 +29,8 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 // GaussJordan by BitMatrix
-const int MAX_ROW = 100000; // To be set appropriately.
-const int MAX_COL = 100; // To be set appropriately.
+const int MAX_ROW = 100010; // To be set appropriately.
+const int MAX_COL = 100010; // To be set appropriately.
 
 class BitMatrix {
 public:
@@ -54,22 +54,22 @@ ostream& operator << (ostream& s, BitMatrix A) {
   return s;
 }
 
-int GaussJordan(BitMatrix &A, bool is_extended = false) {
+int GaussJordan(BitMatrix* A, bool is_extended = false) {
   int rank = 0;
-  rep(col, A.W) {
-    if (is_extended && col == A.W - 1) { break; }
+  rep(col, (*A).W) {
+    if (is_extended && col == (*A).W - 1) { break; }
     int pivot = -1;
-    for (int row = rank; row < A.H; ++row) {
-      if (A[row][col]) {
+    for (int row = rank; row < (*A).H; ++row) {
+      if ((*A)[row][col]) {
         pivot = row;
         break;
       }
     }
     if (pivot == -1) continue;
-    swap(A[pivot], A[rank]);
-    rep(row, A.H) {
-      if (row != rank && A[row][col]) {
-        A[row] ^= A[rank];
+    swap((*A)[pivot], (*A)[rank]);
+    rep(row, (*A).H) {
+      if (row != rank && (*A)[row][col]) {
+        (*A)[row] ^= (*A)[rank];
       }
     }
     ++rank;
@@ -77,26 +77,26 @@ int GaussJordan(BitMatrix &A, bool is_extended = false) {
   return rank;
 }
 
-int linear_equation(BitMatrix A, vector<int> b, vector<int> &res) {
-  int m = A.H, n = A.W;
-  BitMatrix M(m, n + 1);
+int linear_equation(BitMatrix* A, vector<int>& b, vector<int> &res) {
+  int m = (*A).H, n = (*A).W;
+  BitMatrix* M = new BitMatrix(m, n + 1);
   rep(i, m) {
     rep(j, n) {
-      M[i][j] = A[i][j];
+      (*M)[i][j] = (*A)[i][j];
     }
-    M[i][n] = b[i];
+    (*M)[i][n] = b[i];
   }
   int rank = GaussJordan(M, true);
 
   // check if it has no solution
   for (int row = rank; row < m; ++row) {
-    if (M[row][n]) { return -1; }
+    if ((*M)[row][n]) { return -1; }
   }
 
   // answer
   res.assign(n, 0);
   rep(i, rank) {
-    res[i] = M[i][n];
+    res[i] = (*M)[i][n];
   }
   return rank;
 }
@@ -111,18 +111,23 @@ int main(int argc, char** argv) {
   int N, M;
   cin >> N >> M;
 
-  BitMatrix matrix(M, N);
+  BitMatrix* matrix = new BitMatrix(M, N);
   vector<int> b(M);
 
   rep(i, M) {
     int X, Y, Z;
     cin >> X >> Y >> Z;
     --X; --Y; // 0-indexied.
-    matrix[i][X] = 1;
-    matrix[i][Y] = 1;
+    (*matrix)[i][X] = 1;
+    (*matrix)[i][Y] = 1;
     b[i] = Z % 2;
   }
-  // COUT(matrix);
+  // rep(i, M) {
+  //   rep(j, N) {
+  //     cout << (*matrix)[i][j] << " ";
+  //   }
+  //   cout << endl;
+  // }
 
   vector<int> res;
   int rnk = linear_equation(matrix, b, res);
