@@ -34,13 +34,15 @@ const int MAX_COL = 100010; // To be set appropriately.
 
 class BitMatrix {
 public:
-  BitMatrix(int h = 1, int w = 1) : H(h), W(w) {}
+  BitMatrix(int h = 1, int w = 1) : H(h), W(w) {
+    val.resize(H);
+  }
   inline bitset<MAX_COL>& operator [] (int i) { return val[i]; }
 
   int H, W;
 
 private:
-  bitset<MAX_COL> val[MAX_ROW];
+  vector< bitset<MAX_COL> > val;
 };
 
 ostream& operator << (ostream& s, BitMatrix A) {
