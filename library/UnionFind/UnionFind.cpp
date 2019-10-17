@@ -29,12 +29,12 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 class UnionFind {
 public:
-  UnionFind(int n) : par(n, -1), rnk(n, 0), cnt(n, 1), _size(n) {}
+  UnionFind(ll n) : par(n, -1), rnk(n, 0), cnt(n, 1), _size(n) {}
 
-  bool same(int x, int y) {
+  bool same(ll x, ll y) {
     return root(x) == root(y);
   }
-  void unite(int x, int y) {
+  void unite(ll x, ll y) {
     x = root(x); y = root(y);
     if (x == y) return;
 
@@ -45,33 +45,33 @@ public:
     cnt[x] += cnt[y];
     if (rnk[x] == rnk[y]) { ++rnk[x]; }
   }
-  int root(int x) {
+  ll root(ll x) {
     if (par[x] < 0) {
       return x;
     } else {
       return par[x] = root(par[x]);
     }
   }
-  int count(int x) {
+  ll count(ll x) {
     return cnt[root(x)];
   }
-  int size() {
+  ll size() {
     return _size;
   }
 
 private:
-  vector<int> par;
-  vector<int> rnk;
-  vector<int> cnt; // The number of vertices in each connected components.
-  int _size; // The number of connected components. Decreases by unite.
+  vector<ll> par;
+  vector<ll> rnk;
+  vector<ll> cnt; // The number of vertices in each connected components.
+  ll _size; // The number of connected components. Decreases by unite.
 };
 
 int main(int argc, char** argv) {
-  int N, M;
+  ll N, M;
   cin >> N >> M;
   UnionFind tree(N);
   rep(i, M) {
-    int p, a, b;
+    ll p, a, b;
     cin >> p >> a >> b;
     if (p == 0) { // Connect
       tree.unite(a, b);
