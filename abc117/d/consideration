@@ -1,0 +1,10 @@
+## consideration
+## e.g.## consideration
+3 7
+
+1 6 3 = 001, 110, 011
+xor .. 1 xor 0 = 1, 0 xor 1 = 1, 0 xor 0 = 0, 1 xor 1 = 0
+so, if the counf of 0 is larger, then x xhould be 1. If the counf of 1 is larger, then x should be 0.
+
+so, the X should be 100.
+Then, the answer is 100 * 2 + 010 * 2 + 001 * 2 = 4 * 2 + 2 * 2 + 2 = 14
