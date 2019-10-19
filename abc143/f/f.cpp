@@ -31,6 +31,28 @@ const ll MOD = 1000000007;  // 1e9 + 7
 int main(int argc, char** argv) {
   int N;
   cin >> N;
+  vector<int> A(N);
+  rep(i, N) {
+    cin >> A[i];
+  }
 
-  cout << N << endl;
+  map<int, int> mp; // The count of each A.
+  rep(i, N) {
+    ++mp[A[i]];
+  }
+
+  vector<P> cnts;
+  for (auto x : mp) {
+    cnts.emplace_back(x.second, x.first);
+  }
+  sort(all(cnts));
+  reverse(all(cnts));
+  // Here, cnts has the <count, A> pair in decreasing order.
+
+  for (int t = 1; t <= N; ++t) {
+    if (mp.size() < t) {
+      cout << 0 << endl;
+      continue;
+    }
+  }
 }
