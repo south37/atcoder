@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
   // add(a+b, 1).
   // sum(MAXA + MAXB) - sum(c).
 
-  int ans = 0;
+  ll ans = 0;
   BIT<int> bit(2010);
   bit.add(L[0] + L[1], 1);
   for (int i = 2; i < N; ++i) {
