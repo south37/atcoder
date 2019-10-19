@@ -32,16 +32,16 @@ const ll MOD = 1000000007;  // 1e9 + 7
 // https://youtu.be/lyHk98daDJo?t=7960
 template<typename T>
 struct BIT {
-  ll n;
+  int n;
   vector<T> d;
-  BIT(ll n=0) : n(n), d(n+1) {}
-  void add(ll i, T x=1) {
+  BIT(int n=0) : n(n), d(n+1) {}
+  void add(int i, T x=1) {
     i++; // 0-indexed to 1-indexed
     for (; i <= n; i += i&-i) {
       d[i] += x;
     }
   }
-  T sum(ll i) {
+  T sum(int i) {
     i++; // 0-indexed to 1-indexed
     T x = 0;
     for (; i; i -= i&-i) {
@@ -69,9 +69,9 @@ struct BIT {
 // }
 
 int main(int argc, char** argv) {
-  ll N;
+  int N;
   cin >> N;
-  vector<ll> L(N);
+  vector<int> L(N);
   rep(i, N) {
     cin >> L[i];
   }
@@ -87,11 +87,11 @@ int main(int argc, char** argv) {
   // add(a+b, 1).
   // sum(MAXA + MAXB) - sum(c).
 
-  ll ans = 0;
-  BIT<ll> bit(2010);
+  int ans = 0;
+  BIT<int> bit(2010);
   bit.add(L[0] + L[1], 1);
-  for (ll i = 2; i < N; ++i) {
-    ll c = L[i];
+  for (int i = 2; i < N; ++i) {
+    int c = L[i];
     // For Debug
     // cout << "L["<<i<<"]: "<< L[i] << endl;
     // cout << bit.sum(2005) - bit.sum(c) << endl;
