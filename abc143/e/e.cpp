@@ -16,7 +16,7 @@ using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
+#define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
 typedef long long ll;
@@ -25,18 +25,17 @@ typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
-const ll INF = 1e8;
+const ll INF = 1e12;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-
 int main(int argc, char** argv) {
-  int N, M, L;
+  ll N, M, L;
   cin >> N >> M >> L;
   // d[u][v] .. The cost between u .. v.
-  vector< vector<int> > d(N, vector<int>(N, INF));
+  vector< vector<ll> > d(N, vector<ll>(N, INF));
 
   rep(i, M) {
-    int a, b, c;
+    ll a, b, c;
     cin >> a >> b >> c;
     --a; --b;
     // cout << i << endl;
@@ -67,7 +66,7 @@ int main(int argc, char** argv) {
 
   // d2[u][v] .. The hopping cost between u .. v.
   // init: d2[u][v] = 1 if d[u][v] <= L.
-  vector< vector<int> > d2(N, vector<int>(N, INF));
+  vector< vector<ll> > d2(N, vector<ll>(N, INF));
   rep(i, N) {
     rep(j, N) {
       if (d[i][j] <= L) {
@@ -84,10 +83,10 @@ int main(int argc, char** argv) {
     }
   }
 
-  int Q;
+  ll Q;
   cin >> Q;
   rep(i, Q) {
-    int s, t;
+    ll s, t;
     cin >> s >> t;
     --s; -- t;
     if (d2[s][t] == INF) {
