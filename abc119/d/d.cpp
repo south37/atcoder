@@ -50,16 +50,6 @@ tuple<ll, ll> nearest_pair(vector<ll>& t, ll x) {
   return make_tuple(left, right);
 }
 
-ll nearest(vector<ll>& t, ll x) {
-  ll left, right;
-  tie(left, right) = nearest_pair(t, x);
-  if (abs(left - x) < abs(right - x)) {
-    return left;
-  } else {
-    return right;
-  }
-}
-
 int main(int argc, char** argv) {
   ll A, B, Q;
   cin >> A >> B >> Q;
@@ -75,18 +65,22 @@ int main(int argc, char** argv) {
     ll x;
     cin >> x;
 
-    // Try s->t case.
     ll sl, sr;
     tie(sl, sr) = nearest_pair(s, x);
-    ll c1 = abs(x - sl) + abs(sl - nearest(t, sl));
-    ll c2 = abs(x - sr) + abs(sr - nearest(t, sr));
 
-    // Try t->s case.
     ll tl, tr;
     tie(tl, tr) = nearest_pair(t, x);
-    ll c3 = abs(x - tl) + abs(tl - nearest(s, tl));
-    ll c4 = abs(x - tr) + abs(tr - nearest(s, tr));
 
-    cout << min(min(c1, c2), min(c3, c4)) << endl;
+    ll ans = INF;
+    ans = min(ans, abs(x-sl) + abs(sl-tl));
+    ans = min(ans, abs(x-sl) + abs(sl-tr));
+    ans = min(ans, abs(x-sr) + abs(sr-tl));
+    ans = min(ans, abs(x-sr) + abs(sr-tr));
+    ans = min(ans, abs(x-tl) + abs(tl-sl));
+    ans = min(ans, abs(x-tl) + abs(tl-sr));
+    ans = min(ans, abs(x-tr) + abs(tr-sl));
+    ans = min(ans, abs(x-tr) + abs(tr-sr));
+
+    cout << ans << endl;
   }
 }
