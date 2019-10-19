@@ -38,12 +38,6 @@ int main(int argc, char** argv) {
     a.emplace_back(X, S, T);
   }
   sort(all(a)); // Sorted by X.
-  // For Debug
-  // rep(i, N) {
-  //   ll S, T, X;
-  //   tie(X, S, T) = a[i];
-  //   cout << "X: "<<X<<", S: "<<S<<", T: "<<T << endl;
-  // }
 
   set<P> D; // The set of pairs. The pair is (Di, i).
   rep(i, Q) {
@@ -52,9 +46,6 @@ int main(int argc, char** argv) {
     P p(d, i);
     D.emplace(p);
   }
-  // for (auto x : D) {
-  //   cout << x.first<<", "<<x.second << endl;
-  // }
 
   vector<ll> ans(Q, -1);
 
@@ -69,30 +60,10 @@ int main(int argc, char** argv) {
     P tp(T-X-1, INF); // the second is dummy.
     auto tit = D.upper_bound(tp);
 
-    // For Debug
-    // cout << i << ": " << endl;
-    // cout << "X: "<<X<<", S: "<<S<<", T: "<<T << endl;
-    // cout << "S-X-1: " << S-X-1 << ", T-X-1:" << T-X-1 << endl;
-    // if (sit != D.end()) {
-    //   cout << "*sit: (" << (*sit).first<<", "<<(*sit).second << ") " << endl;
-    // }
-    // if (tit != D.end()) {
-    //   cout << "*tit: (" << (*tit).first<<", "<<(*tit).second << ") " << endl;
-    // }
-    // for (auto it = sit; it != tit; ++it) {
-    //   cout << "(" << (*it).first<<", "<<(*it).second << ") " << endl;
-    // }
-
     for (auto it = sit; it != tit; ++it) {
       ans[(*it).second] = X; // Set distance
     }
     D.erase(sit, tit);
-
-    // cout << "D:" << endl;
-    // for (auto x : D) {
-    //   cout << x.first<<", "<<x.second << endl;
-    // }
-    // cout << endl;
   }
 
   rep(i, Q) {
