@@ -38,9 +38,18 @@ public:
     dat = vector<T>(2 * n - 1, 0);
   }
 
-  void update(int k, T a) {
+  // void update(int k, T a) {
+  //   k += n - 1;
+  //   dat[k] = a;
+  //   while (k > 0) {
+  //     k = (k - 1) / 2;
+  //     dat[k] = dat[k * 2 + 1] + dat[k * 2 + 2];
+  //   }
+  // }
+
+  void add(int k, T a) {
     k += n - 1;
-    dat[k] = a;
+    dat[k] += a;
     while (k > 0) {
       k = (k - 1) / 2;
       dat[k] = dat[k * 2 + 1] + dat[k * 2 + 2];
@@ -78,10 +87,13 @@ int main(int argc, char** argv) {
 
   SegTree<int> st(n);
   rep(i, n) {
-    st.update(i, arr[i]);
+    st.add(i, arr[i]);
   }
 
   cout << st.query(1, 5) << endl; // 21
   cout << st.query(0, 4) << endl; // 13
   cout << st.query(3, 5) << endl; // 16
+
+  st.add(4, 10);
+  cout << st.query(3, 5) << endl; // 26
 }
