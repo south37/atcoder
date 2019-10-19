@@ -50,15 +50,15 @@ int main(int argc, char** argv) {
   vector<ll> ans(Q, -1);
 
   // Here, D is sorted. We want to know the position of Si-0.5-Xi and Ti-0.5-X in D.
-  // We check [S-X-1, T-X-1] by upper_bound (S-X-1 < Q[i..j] <= T-X-1).
+  // We check [S-X, T-X) by lower_bound (S-X <= Q[i..j] < T-X).
   rep(i, N) {
     ll S, T, X;
     tie(X, S, T) = a[i];
 
-    P sp(S-X-1, INF); // the second is dummy.
-    auto sit = D.upper_bound(sp);
-    P tp(T-X-1, INF); // the second is dummy.
-    auto tit = D.upper_bound(tp);
+    P sp(S-X, 0); // the second is dummy.
+    auto sit = D.lower_bound(sp);
+    P tp(T-X, 0); // the second is dummy.
+    auto tit = D.lower_bound(tp);
 
     for (auto it = sit; it != tit; ++it) {
       ans[(*it).second] = X; // Set distance
