@@ -28,22 +28,12 @@ typedef double D;
 const ll INF = 1e8;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-// d[u][v] .. The cost between u .. v.
-vector< vector<int> > d;
-
-int nex[305][305];
 
 int main(int argc, char** argv) {
   int N, M, L;
   cin >> N >> M >> L;
-  d.assign(N, vector<int>(N, INF));
-  // For Debug
-  // rep(i, N) {
-  //   rep(j, N) {
-  //     cout << d[i][j] << " ";
-  //   }
-  //   cout << endl;
-  // }
+  // d[u][v] .. The cost between u .. v.
+  vector< vector<int> > d(N, vector<int>(N, INF));
 
   rep(i, M) {
     int a, b, c;
@@ -60,65 +50,50 @@ int main(int argc, char** argv) {
     }
   }
 
+  // Warshal-Floyd
+  rep(k, N) {
+    rep(i, N) {
+      rep(j, N) {
+        d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+      }
+    }
+  }
+  // For Debug
+  // rep(i, N) {
+  //   rep(j, N) {
+  //     cout << "d["<<i<<"]["<<j<<"]: " << d[i][j] << endl;
+  //   }
+  // }
+
+  // d2[u][v] .. The hopping cost between u .. v.
+  // init: d2[u][v] = 1 if d[u][v] <= L.
+  vector< vector<int> > d2(N, vector<int>(N, INF));
+  rep(i, N) {
+    rep(j, N) {
+      if (d[i][j] <= L) {
+        d2[i][j] = 1;
+      }
+    }
+  }
+  // Warshal-Floyd
+  rep(k, N) {
+    rep(i, N) {
+      rep(j, N) {
+        d2[i][j] = min(d2[i][j], d2[i][k] + d2[k][j]);
+      }
+    }
+  }
+
   int Q;
   cin >> Q;
-  vector<P> queries;
   rep(i, Q) {
     int s, t;
     cin >> s >> t;
     --s; -- t;
-    queries.emplace_back(s, t);
-  }
-
-  // initialization of nex
-  rep(i, N) {
-    rep(j, N) {
-      nex[i][j] = j;
-    }
-  }
-
-  // warshal-floyd
-  rep(k, N) {
-    rep(i, N) {
-      rep(j, N) {
-        if (d[i][k] + d[k][j] < d[i][j]) {
-          d[i][j] = d[i][k] + d[k][j];
-          nex[i][j] = nex[i][k];
-        }
-      }
-    }
-  }
-
-  // For Debug
-  // rep(i, N) {
-  //   rep(j, N) {
-  //     cout << "dp["<<i<<"]["<<j<<"]: " << d[i][j] << endl;
-  //   }
-  // }
-
-  rep(i, Q) {
-    int s = queries[i].first;
-    int t = queries[i].second;
-    int dist = d[s][t];
-    if (dist == INF) {
+    if (d2[s][t] == INF) {
       cout << -1 << endl;
     } else {
-      // Here, we can reach from s to t.
-      // Clculate the count in the greedy way.
-      int ans = 0;
-      int e = L; // energy
-
-      int cur;
-      for (cur = s; cur != t; cur = nex[cur][t]) {
-        int n = nex[cur][t];
-        if (e >= d[cur][n]) {
-          e -= d[cur][n];
-        } else {
-          e = L - d[cur][n];
-          ++ans;
-        }
-      }
-      cout << ans << endl;
+      cout << d2[s][t] - 1 << endl;
     }
   }
 }
