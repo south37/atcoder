@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     d[b][a] = c;
   }
 
-  // Warshal-Floyd
+  // WarshalFloyd
   rep(k, N) {
     rep(i, N) {
       rep(j, N) {
