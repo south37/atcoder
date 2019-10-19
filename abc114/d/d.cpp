@@ -79,18 +79,10 @@ int main(int argc, char** argv) {
   }
 
   ll ans = 0;
-  if (c74 > 0) {
-    ans += c74;
-  }
-  if ((c24 > 0) && (c2 > 1)) {
-    ans += c24 * (c2 - 1);
-  }
-  if ((c14 > 0) && (c4 > 1)) {
-    ans += c14 * (c4 - 1);
-  }
-  if ((c4 >= 2) && (c2 >= 3)) {
-    ans += c4*(c4-1)/2 * (c2-2);
-  }
+  ans += c74;
+  ans += c24 * max(0LL, c2-1);
+  ans += c14 * max(0LL, c4-1);
+  ans += c4 * max(0LL, c4-1) / 2 * max(0LL, c2-2);
 
   cout << ans << endl;
 }
