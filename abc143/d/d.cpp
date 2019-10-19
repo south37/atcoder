@@ -16,7 +16,7 @@ using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
+#define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
 typedef long long ll;
@@ -32,16 +32,16 @@ const ll MOD = 1000000007;  // 1e9 + 7
 // https://youtu.be/lyHk98daDJo?t=7960
 template<typename T>
 struct BIT {
-  int n;
+  ll n;
   vector<T> d;
-  BIT(int n=0) : n(n), d(n+1) {}
-  void add(int i, T x=1) {
+  BIT(ll n=0) : n(n), d(n+1) {}
+  void add(ll i, T x=1) {
     i++; // 0-indexed to 1-indexed
     for (; i <= n; i += i&-i) {
       d[i] += x;
     }
   }
-  T sum(int i) {
+  T sum(ll i) {
     i++; // 0-indexed to 1-indexed
     T x = 0;
     for (; i; i -= i&-i) {
@@ -88,15 +88,15 @@ int main(int argc, char** argv) {
   // sum(MAXA + MAXB) - sum(c).
 
   ll ans = 0;
-  BIT<int> bit(2005);
+  BIT<ll> bit(2010);
   bit.add(L[0] + L[1], 1);
-  for (int i = 2; i < N; ++i) {
+  for (ll i = 2; i < N; ++i) {
     ll c = L[i];
     // For Debug
     // cout << "L["<<i<<"]: "<< L[i] << endl;
     // cout << bit.sum(2005) - bit.sum(c) << endl;
 
-    ans += bit.sum(2005) - bit.sum(c); // The count of c < a + b
+    ans += bit.sum(2010) - bit.sum(c); // The count of c < a + b
     rep(j, i) { // 0, 1, .. i-1.
       bit.add(L[j] + c, 1);
     }
