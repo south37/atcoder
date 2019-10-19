@@ -32,13 +32,13 @@ const ll MOD = 1000000007;  // 1e9 + 7
 template <typename T>
 class SegTree {
 public:
-  SegTree(int _n) {
+  SegTree(ll _n) {
     n = 1;
     while (n < _n) { n *= 2; }
     dat = vector<T>(2 * n - 1, 0);
   }
 
-  // void update(int k, T a) {
+  // void update(ll k, T a) {
   //   k += n - 1;
   //   dat[k] = a;
   //   while (k > 0) {
@@ -47,7 +47,7 @@ public:
   //   }
   // }
 
-  void add(int k, T a) {
+  void add(ll k, T a) {
     k += n - 1;
     dat[k] += a;
     while (k > 0) {
@@ -57,27 +57,27 @@ public:
   }
 
   // Calculate the sum of [a, b)
-  T query(int a, int b) {
+  T query(ll a, ll b) {
     return _query(a, b, 0, 0, n);
   }
 
   // Calculate the sum of [a, b)
   // k is the index (dat[k]). This is matched to [l, r)
-  T _query(int a, int b, int k, int l, int r) {
+  T _query(ll a, ll b, ll k, ll l, ll r) {
     // The intersection of [a, b) and [r, l) is blank.
     if (r <= a || b <= l) { return 0; }
 
     if (a <= l && r <= b) {  // [r, l) is completely included in [a, b)
       return dat[k];
     } else {
-      int vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
-      int vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
+      ll vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
+      ll vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
       return vl + vr;
     }
   }
 
 private:
-  int n; // The size of source data. The power of 2.
+  ll n; // The size of source data. The power of 2.
   vector<T> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
 };
 
@@ -99,9 +99,9 @@ private:
 // }
 
 int main(int argc, char** argv) {
-  int N;
+  ll N;
   cin >> N;
-  vector<int> L(N);
+  vector<ll> L(N);
   rep(i, N) {
     cin >> L[i];
   }
@@ -113,11 +113,11 @@ int main(int argc, char** argv) {
   // sum(MAXA + MAXB) - sum(c).
 
   ll ans = 0;
-  SegTree<int> tree(2010);
+  SegTree<ll> tree(2010);
   tree.add(L[0] + L[1], 1);
 
-  for (int i = 2; i < N; ++i) {
-    int c = L[i];
+  for (ll i = 2; i < N; ++i) {
+    ll c = L[i];
     // For Debug
     // cout << "L["<<i<<"]: "<< L[i] << endl;
     // cout << tree.query(c+1, 2010) << endl;
