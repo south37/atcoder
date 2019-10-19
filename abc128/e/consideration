@@ -1,0 +1,13 @@
+## consideration
+- time[i]: (Si-0.5-Xi)..(Ti-0.5-Xi) = l[i]..r[i]
+  - If Q is in time[i], then the person is stopped by Xi.
+- We want to know "the lowest Xi that can stop the person.
+  - the lowest X[i] where Q >= l[i] and Q <= r[i] for all i.
+
+## idea
+- segment tree?
+
+## the other idea
+- first, make the list of Q.
+- second, check the position of l[i] and r[i] in the list of Q.
+  - If
