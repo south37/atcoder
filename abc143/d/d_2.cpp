@@ -2,6 +2,8 @@
 #include <bitset>
 #include <cassert>
 #include <cmath>
+#include <functional>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <queue>
@@ -14,7 +16,7 @@ using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
+#define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
 typedef long long ll;
@@ -22,6 +24,9 @@ typedef unsigned long long ull;
 typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
+
+const ll INF = 1e9;
+const ll MOD = 1000000007;  // 1e9 + 7
 
 // Segment Tree
 template <typename T>
@@ -76,19 +81,52 @@ private:
   vector<T> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
 };
 
-int main(int argc, char** argv) {
-  int arr[] = { 1, 3, 2, 7, 9, 11 };
-  int n = 6;
+// int main(int argc, char** argv) {
+//   int arr[] = { 1, 3, 2, 7, 9, 11 };
+//   int n = 6;
+//
+//   SegTree<int> st(n);
+//   rep(i, n) {
+//     st.add(i, arr[i]);
+//   }
+//
+//   cout << st.query(1, 5) << endl; // 21
+//   cout << st.query(0, 4) << endl; // 13
+//   cout << st.query(3, 5) << endl; // 16
+//
+//   st.add(4, 10);
+//   cout << st.query(3, 5) << endl; // 26
+// }
 
-  SegTree<int> st(n);
-  rep(i, n) {
-    st.add(i, arr[i]);
+int main(int argc, char** argv) {
+  int N;
+  cin >> N;
+  vector<int> L(N);
+  rep(i, N) {
+    cin >> L[i];
+  }
+  sort(all(L)); // Now, L is sorted
+
+  // Here, we want to calculate the count of c < a + b. c is the largest number.
+  // This is calculated by BIT.
+  // add(a+b, 1).
+  // sum(MAXA + MAXB) - sum(c).
+
+  ll ans = 0;
+  SegTree<int> tree(2010);
+  tree.add(L[0] + L[1], 1);
+
+  for (int i = 2; i < N; ++i) {
+    int c = L[i];
+    // For Debug
+    // cout << "L["<<i<<"]: "<< L[i] << endl;
+    // cout << tree.query(c+1, 2010) << endl;
+
+    ans += tree.query(c+1, 2010); // The count of c < a + b
+    rep(j, i) { // 0, 1, .. i-1.
+      tree.add(L[j] + c, 1);
+    }
   }
 
-  cout << st.query(1, 5) << endl; // 21
-  cout << st.query(0, 4) << endl; // 13
-  cout << st.query(3, 5) << endl; // 16
-
-  st.add(4, 10);
-  cout << st.query(3, 5) << endl; // 26
+  cout << ans << endl;
 }
