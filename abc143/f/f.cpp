@@ -29,30 +29,77 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
-  int N;
+  ll N;
   cin >> N;
-  vector<int> A(N);
+  vector<ll> A(N);
   rep(i, N) {
     cin >> A[i];
   }
 
-  map<int, int> mp; // The count of each A.
+  vector<ll> C(N+1); // The count of each A. C[0] is dummy.
   rep(i, N) {
-    ++mp[A[i]];
+    ++C[A[i]];
   }
-
-  vector<P> cnts;
-  for (auto x : mp) {
-    cnts.emplace_back(x.second, x.first);
+  // For Debug
+  // cout << "C[i]:" << endl;
+  // for (ll i = 1; i <= N; ++i) {
+  //   cout << C[i] << endl;
+  // }
+  vector<ll> D(N+1); // The count of each C.
+  for (ll i = 1; i <= N; ++i) {
+    ++D[C[i]];
   }
-  sort(all(cnts));
-  reverse(all(cnts));
-  // Here, cnts has the <count, A> pair in decreasing order.
+  // For Debug
+  // cout << "D[i]:" << endl;
+  // for (ll i = 1; i <= N; ++i) {
+  //   cout << D[i] << endl;
+  // }
 
-  for (int t = 1; t <= N; ++t) {
-    if (mp.size() < t) {
+  // Here, the count of k is represented as D[k].
+  // We want to calculate the f(X) = sum min(C[j], X) / X
+  // f(X) = (sum(k=1,X) kD[k] + X*sum(k=X+1,N) D[k])
+  vector<ll> ckD(N+1);
+  for (ll k = 1; k <= N; ++k) {
+    ckD[k] = ckD[k-1] + k * D[k];
+  }
+  // For Debug
+  // cout << "ckD[i]:" << endl;
+  // for (ll i = 1; i <= N; ++i) {
+  //   cout << ckD[i] << endl;
+  // }
+  vector<ll> cD(N+1);
+  for (ll k = 1; k <= N; ++k) {
+    cD[k] = cD[k-1] + D[k];
+  }
+  // For Debug
+  // cout << "cD[i]:" << endl;
+  // for (ll i = 1; i <= N; ++i) {
+  //   cout << cD[i] << endl;
+  // }
+
+  // f(X) .. The maximam length of sequence when X sequences can be extracted.
+  vector<ll> f(N+1);
+  for (ll i = 1; i <= N; ++i) {
+    f[i] = (ckD[i] + i*(cD[N] - cD[i])) / i;
+  }
+  // For Debug
+  // cout << "f[i]:" << endl;
+  // for (ll i = 1; i <= N; ++i) {
+  //   cout << f[i] << endl;
+  // }
+
+  // Here, the maximum X where K <= f(X) is the answer of each K.
+
+  reverse(all(f));
+  f.resize(N); // f[N] is thrown away.
+  // Now, f is increasing order.
+  for (int i = 1; i <= N; ++i) {
+    auto it = lower_bound(all(f), i);
+    if (it != f.end()) {
+      int j = it - f.begin(); // index
+      cout << (N - j) << endl;
+    } else { // not found
       cout << 0 << endl;
-      continue;
     }
   }
 }
