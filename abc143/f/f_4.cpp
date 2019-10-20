@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     // We want to find the boundary of ok and ng.
     while (1) {
       bool ok = [&](int c) {
-        while (i >= 0 && a[i-1] >= c) { --i; }
+        while (i > 0 && a[i-1] >= c) { --i; }
         int sum = c*(N-i) + s[i]; // (N-1)-(i-1) = N-i
         return sum >= c*k;
       }(ans);
