@@ -39,18 +39,18 @@ int main(int argc, char** argv) {
   }
   sort(all(a)); // a: frequencies in increasing order.
 
-  vector<int> s(N+1); // s[i]: sum of [0, i).
+  vector<int> s(N+1); // s[i]: sum of [0, i). s[0] = 0.
   rep(i, N) {
     s[i+1] = s[i] + a[i];
   }
 
   for (int k = 1; k <= N; ++k) {
     int l = 0, r = N/k + 1; // [l, r). l:ok r: ng. We want to find the boundary of ok, ng.
-    while (l+1 < r) {
-      int c = (l+r)/2;
+    while (l + 1 < r) { // or (r-l > 1)
+      int c = (l+r) >> 1;
       bool ok = [&](int c) {
         int i = lower_bound(all(a), c) - a.begin();
-        int sum = c*(N-i) + s[i];
+        int sum = c*(N-i) + s[i]; // (N-1)-(i-1) = N-i
         return sum >= c*k;
       }(c);
       if (ok) {
