@@ -16,7 +16,7 @@ using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
+#define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
 typedef long long ll;
@@ -67,39 +67,14 @@ private:
   ll _size; // The number of connected components. Decreases by unite.
 };
 
-// int main(int argc, char** argv) {
-//   ll N, M;
-//   cin >> N >> M;
-//   UnionFind tree(N);
-//   rep(i, M) {
-//     ll p, a, b;
-//     cin >> p >> a >> b;
-//     if (p == 0) { // Connect
-//       tree.unite(a, b);
-//     } else { // Judge
-//       if (tree.same(a, b)) {
-//         cout << "Yes" << endl;
-//         cout << "size: " << tree.size() << endl;
-//         cout << "count(" << a << "): " << tree.count(a) << endl;
-//         cout << "count(" << b << "): " << tree.count(b) << endl;
-//       } else {
-//         cout << "No" << endl;
-//         cout << "size: " << tree.size() << endl;
-//         cout << "count(" << a << "): " << tree.count(a) << endl;
-//         cout << "count(" << b << "): " << tree.count(b) << endl;
-//       }
-//     }
-//   }
-// }
-
 int main(int argc, char** argv) {
-  int N;
+  ll N;
   cin >> N;
   vector<P> vertices(N);
   map<ll, vector<ll> > X; // stores the group of vertices with same x
   map<ll, vector<ll> > Y; // stores the group of vertices with same y
   rep(i, N) {
-    int x, y;
+    ll x, y;
     cin >> x >> y;
     vertices[i].first = x;
     vertices[i].second = y;
@@ -147,22 +122,22 @@ int main(int argc, char** argv) {
   // 1: (connected componet id) => len(x)
   // 2: (connected componet id) => len(y)
   // 3: (connected componet id) => size(vertices)
-  map<int, set<int>> mp_x;
-  map<int, set<int>> mp_y;
+  map<ll, set<ll>> mp_x;
+  map<ll, set<ll>> mp_y;
   rep(i, N) {
-    int r = tree.root(i);
-    int x = vertices[i].first;
-    int y = vertices[i].second;
+    ll r = tree.root(i);
+    ll x = vertices[i].first;
+    ll y = vertices[i].second;
     mp_x[r].insert(x);
     mp_y[r].insert(y);
   }
 
   ll ans = 0;
   for (auto e : mp_x) {
-    int r = e.first; // root id
-    int len_x = e.second.size(); // len(x)
-    int len_y = mp_y[r].size(); // len(y)
-    int size_v = tree.count(r);
+    ll r = e.first; // root id
+    ll len_x = e.second.size(); // len(x)
+    ll len_y = mp_y[r].size(); // len(y)
+    ll size_v = tree.count(r);
     ans += len_x * len_y - size_v;
   }
 
