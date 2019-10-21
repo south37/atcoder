@@ -1,0 +1,11 @@
+## consideration
+- define a, b, c, d
+
+## what we should do
+- find the same group of same x, same y. The number of vertices in each group must be equal or larger than 2.
+  - X1(y=a), X2(y=b), ... X?(y=?)
+  - Y1(x=i), Y2(x=j), ... Y?(x=?)
+- If same point are in Xa and Yb, then vertices can be made.
+  - The ideal addition is (len(Xa) -1) * (len(Yb) -1)
+  - But, vertices may conflict.
+    - we can treat this by calculating "max" - "exists".
