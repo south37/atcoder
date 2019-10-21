@@ -1,0 +1,10 @@
+## consideration
+- answer
+  - x
+    - factor: (N-2)C(K-2)
+    - each d: (N-d) * M*2
+      - d: [1, N)
+  - y
+    - factor: (N-2)C(K-2)
+    - each d: (M-d) * N*2
+      - d: [1, M)
