@@ -31,7 +31,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 int main(int argc, char** argv) {
   ll M, K;
   cin >> M >> K;
-  // We can meke 0..(2**M-1).
+  // We can make only 0..(2**M-1).
   // So if K >= 2**M, it can't be made.
   if (K >= 1<<M) {
     cout << -1 << endl;
@@ -54,8 +54,8 @@ int main(int argc, char** argv) {
       tmp.push_back(i);
     }
   }
-  for (auto x : tmp) {
-    cout << x << " ";
+  rep(i, (1<<M)-1) {
+    cout << tmp[i] << " ";
   }
   cout << K << " ";
   rep(i, (1<<M)-1) {
