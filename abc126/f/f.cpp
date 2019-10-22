@@ -29,6 +29,37 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
-  ll N, K;
-  cin >> N >> K;
+  ll M, K;
+  cin >> M >> K;
+  // We can meke 0..(2**M-1).
+  // So if K >= 2**M, it can't be made.
+  if (K >= 1<<M) {
+    cout << -1 << endl;
+    return 0;
+  }
+
+  // Treat M=1
+  if ((M == 1) && (K == 1)) {
+    cout << -1 << endl;
+    return 0;
+  }
+  if ((M == 1) && (K == 0)) {
+    cout << "0 0 1 1" << endl;
+    return 0;
+  }
+
+  vector<ll> tmp;
+  rep(i, 1<<M) {
+    if (i != K) {
+      tmp.push_back(i);
+    }
+  }
+  for (auto x : tmp) {
+    cout << x << " ";
+  }
+  cout << K << " ";
+  rep(i, (1<<M)-1) {
+    cout << tmp[tmp.size() - 1 - i] << " ";
+  }
+  cout << K << endl;;
 }
