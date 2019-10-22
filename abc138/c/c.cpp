@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     cin >> v[i];
   }
 
-  priority_queue<double, vector<double>, greater<double> > q;
+  priority_queue<double, vector<double>, greater<double> > q; // increasing order
   rep(i, n) {
     q.push(v[i]);
   }
