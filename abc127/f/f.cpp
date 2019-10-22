@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
   cin >> Q;
 
   bool updated = false;
-  ll f_min = - INF; // The minimum f(x) of each step.
+  ll f_min = 0; // The minimum f(x) of each step.
 
   rep(i, Q) {
     int t;
@@ -106,10 +106,22 @@ int main(int argc, char** argv) {
         f_min = b;
         add(a);
       } else {
+        bool prev_balanced = (smaller.size() == larger.size());
         ll old_x = current();
         add(a);
         ll new_x = current();
-        f_min += b + abs(old_x - new_x) + abs(new_x - a);
+
+        // from prev
+        if (prev_balanced) {
+          if (new_x < old_x) {
+            f_min += abs(new_x - old_x);
+          } else {
+            // Do nothing.
+          }
+        } else { // old_x is an unique minimum point.
+          f_min += abs(new_x - old_x);
+        }
+        f_min += b + abs(new_x - a);
       }
     } else { // query
       cout << current() << " " << f_min << endl;
