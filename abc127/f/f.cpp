@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
           } else {
             // Do nothing.
           }
-        } else { // old_x is an unique minimum point.
+        } else { // old_x was an unique minimum point.
           f_min += abs(new_x - old_x);
         }
         f_min += b + abs(new_x - a);
