@@ -28,7 +28,7 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-int num2cost[10] = { 0, 2, 5, 5, 4, 5, 6, 3, 7, 6 };
+int num2cost[10] = { 0, 2, 5, 5, 4, 5, 6, 3, 7, 6 }; // 0 is dummy.
 
 // mapping: number => cost
 // 1->2
@@ -41,16 +41,7 @@ int num2cost[10] = { 0, 2, 5, 5, 4, 5, 6, 3, 7, 6 };
 // 8->7
 // 9->6
 
-// max: 99..9, 9*6=54
-// min: 1, 1*2=2
-
-// max digit: 11..1, 9*2=18
-
-// e.g.1
-// 3 7 8 4 -> 5 3 7 4
-// - 3 * 5 + 5 = 20
-
-// If all value are -1, return false.
+// If all value are -1, return false. In other case, return true.
 bool valid(const vector<ll>& v) {
   for (auto x : v) {
     if (x != -1) { return true; }
@@ -58,6 +49,7 @@ bool valid(const vector<ll>& v) {
   return false;
 }
 
+// larger > right
 bool larger(const vector<ll>& left, const vector<ll>& right) {
   if (!valid(left)) { return false; }
   if (!valid(right)) { return true; }
