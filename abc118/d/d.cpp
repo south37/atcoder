@@ -111,13 +111,15 @@ int main(int argc, char** argv) {
   dp[0] = vector<ll>(10, 0);
   rep(k, K) { // loop K times
     ll cost = costs[k];
+    ll num = cost2num[cost];
+
     rep(i, N+1) {
       if ((i-cost >= 0) && valid(dp[i-cost])) {
         vector<ll> nex(dp[i-cost]); // copy
-        if (nex[cost2num[cost]] >= 0) {
-          ++nex[cost2num[cost]];
+        if (nex[num] >= 0) {
+          ++nex[num];
         } else {
-          nex[cost2num[cost]] = 1;
+          nex[num] = 1;
         }
         if (larger(nex, dp[i])) { // dp[i-costs[k]] + cost2num[costs[k]] > dp[i]
           dp[i] = nex;
