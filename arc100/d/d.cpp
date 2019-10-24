@@ -56,8 +56,9 @@ int main(int argc, char** argv) {
     // Here, left is the index of minimum. summed - s[left] is minimum.
     l[i] = left;
   }
-  ll right = 1;
+  ll right = 0;
   for (int i = 1; i < N-2; ++i) { // calculate r in [1, N-3]
+    if (right < i+1) { right = i+1; } // right must be equal or larger than i+1.
     while ((right <= N) && abs((s[N]-s[right+1]) - (s[right+1]-s[i+1])) < abs((s[N]-s[right]) - (s[right]-s[i+1]))) {
       ++right;
     }
