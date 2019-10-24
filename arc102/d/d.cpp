@@ -68,6 +68,6 @@ int main(int argc, char** argv) {
   for (auto x : edges) {
     int i, j, c;
     tie(i, j, c) = x;
-    cout << i+1 << " " << j+1 << " " << c << endl;
+    cout << i+1 << " " << j+1 << " " << c << endl; // 1-indexed
   }
 }
