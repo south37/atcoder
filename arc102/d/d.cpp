@@ -46,20 +46,20 @@ int main(int argc, char** argv) {
   //   cout << x << endl;
   // }
 
-  ll N = ones[0]; // The length of vertices without root(1).
+  ll N = ones[0]; // The length of vertices without root(0).
   vector<triple> edges;
   rep(i, N) {
-    // i+2 is the target number.
-    edges.emplace_back(i+1, i+2, 0);
-    edges.emplace_back(i+1, i+2, 1LL << i);
+    // i+1 is the target number.
+    edges.emplace_back(i, i+1, 0);
+    edges.emplace_back(i, i+1, 1LL << i);
   }
-  // Now, N+1 is the last indice.
+  // Now, N is the last indice.
 
   ll summed = 1<<N;
   rep(i, ones.size()) {
     if (i == 0) { continue; }
     ll M = ones[i]; // The offset. e.g. 2 for 1 of 100
-    edges.emplace_back(M+1, N+1, summed);
+    edges.emplace_back(M, N, summed); // there are 2**M paths in [0, M]
     // Do somethinbg
     summed += 1<<M;
   }
@@ -68,6 +68,6 @@ int main(int argc, char** argv) {
   for (auto x : edges) {
     int i, j, c;
     tie(i, j, c) = x;
-    cout << i << " " << j << " " << c << endl;
+    cout << i+1 << " " << j+1 << " " << c << endl;
   }
 }
