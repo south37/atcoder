@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
   ll left = 0;
   for (int i = 1; i < N-2; ++i) { // calculate l in [1, N-3]
     ll summed = s[i+1]; // The sum of [0, i]
-    while ((left < i) && abs(summed - s[left+1]*2) < abs(summed - s[left]*2)) {
+    while ((left <= N) && abs(summed - s[left+1]*2) < abs(summed - s[left]*2)) {
       ++left;
     }
     // Here, left is the index of minimum. summed - s[left] is minimum.
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
   }
   ll right = 1;
   for (int i = 1; i < N-2; ++i) { // calculate r in [1, N-3]
-    while ((right < N) && abs((s[N]-s[right+1]) - (s[right+1]-s[i+1])) < abs((s[N]-s[right]) - (s[right]-s[i+1]))) {
+    while ((right <= N) && abs((s[N]-s[right+1]) - (s[right+1]-s[i+1])) < abs((s[N]-s[right]) - (s[right]-s[i+1]))) {
       ++right;
     }
     // Here, right is the index of minimum. s[N] - s[right] is minimum.
