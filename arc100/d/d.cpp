@@ -74,7 +74,8 @@ int main(int argc, char** argv) {
     ll l2 = s[i+1] - s[left];
     ll r1 = s[right] - s[i+1];
     ll r2 = s[N] - s[right];
-    cout << l1 << "," << l2 << "," << r1 << "," << r2 << endl;
+    // For Debug
+    // cout << l1 << "," << l2 << "," << r1 << "," << r2 << endl;
     ll min_v = min(min(l1, l2), min(r1, r2));
     ll max_v = max(max(l1, l2), max(r1, r2));
     ans = min(ans, abs(max_v - min_v));
