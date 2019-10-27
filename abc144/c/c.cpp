@@ -25,12 +25,34 @@ typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
-const ll INF = 1e9;
+const ll INF = 1e12;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
-  int N;
+  ll N;
   cin >> N;
+  ll i = 1;
+  vector<ll> candidates;
+  while (i * i <= N) {
+    if ((N % i) == 0) {
+      candidates.push_back(i);
+    }
+    ++i;
+  }
 
-  cout << N << endl;
+  // For Debug
+  // for (auto x : candidates) {
+  //   cout << x << endl;
+  // }
+  ll ans = INF;
+  for (auto i : candidates) {
+    ll cand = 0;
+    cand += i-1;
+    cand += (N/i) - 1;
+    if (cand < ans) {
+      ans = cand;
+    }
+  }
+
+  cout << ans << endl;
 }
