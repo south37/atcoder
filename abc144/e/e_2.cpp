@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
   //   summed += A[i] * F[i];
   // }
 
-  // We use binary search.
+  // We use binary search in (l, r].
   ll l = -1;
   ll r = INF;
   while (r - l > 1) {
