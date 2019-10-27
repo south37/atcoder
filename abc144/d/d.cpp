@@ -29,8 +29,28 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
-  int N;
-  cin >> N;
+  double a, b, x;
+  cin >> a >> b >> x;
 
-  cout << N << endl;
+  // atan2(h, x)
+  // h = 2 * x / (a * b);
+  double h = (double)x * 2 / a / b;
+
+  // For Debug
+  // cout << "h: " << h << endl;
+  // cout << "b: " << b << endl;
+
+  // double theta = atan2(h, b);
+  // theta = theta * 180 / M_PI;
+  // double ans = (double)90.0 - theta;
+  if (h <= a) {
+    double ans = atan2(b, h) * 180 / M_PI;
+    cout << fixed << setprecision(10) << ans << endl;
+    return 0;
+  } else {
+    double K = (double)x * 2 / a / a - b;
+    double ans = atan2(b-K, a) * 180 / M_PI;
+    cout << fixed << setprecision(10) << ans << endl;
+    return 0;
+  }
 }
