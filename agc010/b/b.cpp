@@ -68,11 +68,18 @@ int main(int argc, char** argv) {
   }
 
   // Check if diff[i] is dividable by N.
+  // Check if the summention of diff[i]/N is same with cnt.
+  ll n_cnt = 0;
   rep(i, N) {
     if ((diff[i] % N) != 0) {
       cout << "NO" << endl;
       return 0;
     }
+    n_cnt -= diff[i] / N; // diff[i] <= 0, so we use -=.
+  }
+  if (n_cnt != cnt) {
+    cout << "NO" << endl;
+    return 0;
   }
 
   cout << "YES" << endl;
