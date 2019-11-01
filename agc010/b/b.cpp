@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
   rep(i, N) {
     cin >> A[i];
   }
+
   ll unit = 0; // In each step, sum is decreased by unit. sum of [1, N]
   rep(i, N) {
     unit += i + 1;
@@ -66,12 +67,24 @@ int main(int argc, char** argv) {
   rep(i, N) {
     diff[i] -= cnt;
   }
+  // cout << "diff:" << endl;
+  // rep(i, N) {
+  //   cout << diff[i] << " ";
+  // }
+  // cout << endl;
+
+  // Now, diff[i] must be (-N)*k (k=0, 1, 2, ...)
 
   // Check if diff[i] is dividable by N.
+  // Check if diff[i] <= 0.
   // Check if the summention of diff[i]/N is same with cnt.
   ll n_cnt = 0;
   rep(i, N) {
     if ((diff[i] % N) != 0) {
+      cout << "NO" << endl;
+      return 0;
+    }
+    if (diff[i] > 0) {
       cout << "NO" << endl;
       return 0;
     }
