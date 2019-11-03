@@ -166,19 +166,68 @@ int main(int argc, char** argv) {
     }
   }
   // Now, (l, r) is the pair with longuest distance
-  cout << "dis: " << dis << endl;
-  cout << "u: " << u << endl;
+  // cout << "dis: " << dis << endl;
+  // cout << "u: " << u << endl;
+
+  // Check order by covered. decreasing order.
+  vector<triple> c_lrs; // candidates. (distance, l, r)
+  rep(i, N) {
+    if (i == u) { continue; }
+    ll l = max(lrs[i].first, lrs[u].first);
+    ll r = min(lrs[i].second, lrs[u].second);
+    ll dis = r - l + 1;
+    c_lrs.emplace_back(dis, lrs[i].first, lrs[i].second);
+  }
+  sort(all(c_lrs));
+  reverse(all(c_lrs)); // decreasing order
 
   SegTree<ll> min_r(N+1);
   SegTreeMax<ll> max_l(N+1);
-  rep(i, N) {
-    if (i == u) { continue; }
-    ll L, R;
-    tie(L, R) = lrs[i];
+  rep(i, c_lrs.size()) {
+    ll dis, L, R;
+    tie(dis, L, R) = c_lrs[i];
+    // cout << "i: " << i << endl;
+    // cout << "distance: " << dis << endl;
+    // cout << "(L, R): " << "("<<L<<", "<<R<<")" << endl;
     min_r.update(i, R);
     max_l.update(i, L);
   }
+  // cout << "max_l:" << max_l.query(0, N) << endl;
+  // cout << "min_r:" << min_r.query(0, N) << endl;
 
-  cout << "max_l:" << max_l.query(0, N) << endl;
-  cout << "min_r:" << min_r.query(0, N) << endl;
+  SegTree<ll> min_r2(N+1); // Includes u
+  SegTreeMax<ll> max_l2(N+1); // Includes u
+  min_r2.update(N-1, lrs[u].second);
+  max_l2.update(N-1, lrs[u].first);
+  // cout << "max_l2:" << max_l2.query(0, N) << endl;
+  // cout << "min_r2:" << min_r2.query(0, N) << endl;
+
+  ll ans = max(0LL, lrs[u].second - lrs[u].first + 1) + max(0LL, min_r.query(0, N) - max_l.query(0, N) + 1);
+
+  // Try each candidates.
+  rep(i, c_lrs.size()) {
+    ll dis, L, R;
+    tie(dis, L, R) = c_lrs[i];
+    min_r.update(i, INF); // erase
+    max_l.update(i, 0); // erase
+
+    ll l = max(L, lrs[u].first);
+    ll r = min(R, lrs[u].second);
+    ll c = max(0LL, (r - l + 1)) + max(0LL, min_r.query(0, N) - max_l.query(0, N) + 1);
+    // cout << "(L, R): " << "("<<L<<", "<<R<<")" << endl;
+    // cout << "large (l, r): " << "("<<l<<", "<<r<<")" << endl;
+    // cout << "small (l, r): " << "("<<l<<", "<<r<<")" << endl;
+    // cout << "c: " << c << endl;
+    if (ans < c) {
+      ans = c;
+      // i is added to min_r2 and max_l2
+      min_r2.update(i, R);
+      max_l2.update(i, L);
+    } else {
+      min_r.update(i, R);
+      max_l.update(i, L);
+    }
+  }
+
+  cout << ans << endl;
 }
