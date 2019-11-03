@@ -26,6 +26,9 @@ template<class T> void printtree(const vector< vector<T> >& tree) {
     printvec(tree[i]);
   }
 }
+template<class T, class U> void printmap(const map<T, U>& mp) {
+  for (auto x : mp) { cout << x.first << "=>" << x.second << endl; }
+}
 
 #define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
@@ -52,19 +55,17 @@ int main(int argc, char** argv) {
   rep(i, N) {
     ll x = P[i];
 
-    if (mp[x] > 0) {
+    if (mp.count(x) > 0) {
       ll cnt = mp[P[i]];
-      mp[x] = 0;
+      mp.erase(x);
       mp[x+1] = cnt+1;
     } else {
       mp[x+1] = 1;
     }
   }
 
-  // cout << "mp: " << endl;
-  // for (auto x : mp) {
-  //   cout << x.first << "=>" << x.second << endl;
-  // }
+  cout << "mp: " << endl;
+  printmap(mp);
 
   ll ma = 0;
   for (auto x : mp) {
