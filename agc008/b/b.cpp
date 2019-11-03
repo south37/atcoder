@@ -60,11 +60,9 @@ int main(int argc, char** argv) {
 
   ll ans = 0;
   for (int i = 0; i + K <= N; ++i) {
-    ll c = 0;
-    ll k = s[i+K] - s[i]; // sum of [0,i+K-1] - sum of [0,i-1] = sum of [i, i+K-1]
-    if (k > 0) { c += k; }
-    ll rest = p_s[i] + p_s[N] - p_s[i+K]; // sum of [0,i-1] + sum of [i+K, N-1]
-    c += rest;
+    ll k = s[i+K] - s[i]; // [i, i+K-1]
+    ll rest = p_s[i] + (p_s[N]-p_s[i+K]); // [0, i-1] + [i+K, N-1]
+    ll c = (k > 0 ? k : 0) + rest;
 
     if (ans < c) {
       ans = c;
