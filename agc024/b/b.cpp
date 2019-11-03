@@ -64,8 +64,8 @@ int main(int argc, char** argv) {
     }
   }
 
-  cout << "mp: " << endl;
-  printmap(mp);
+  // cout << "mp: " << endl;
+  // printmap(mp);
 
   ll ma = 0;
   for (auto x : mp) {
