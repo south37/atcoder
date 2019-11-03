@@ -1,7 +1,14 @@
-# N = gets.chomp.to_i
-# A, B, C = gets.chomp.split.map(&:to_i)
-S = gets.chomp.chars
-N = S.size + 1
+## e.g. 1
+- in the middle
+  - a[i] = 0 if (> a[i] <)
+  - a[i] = max(a[i-1], a[i+1]) + 1 if (a[i-1] < a[i] > a[i+1])
+  - a[i] = a[i-1] + 1 if (a[i-1] < a[i] < a[i+1])
+  - a[i] = a[i+1] + 1 if (a[i-1] > a[i] > a[i+1])
+
+# s[0] -> (a[0] s[0] a[1])
+# s[n-2] -> (a[n-1], s[n-2], a[n-1])
+#
+# a[i] -> (s[i-1], s[i])
 
 DP = Array.new(N, -1)
 def calc(i)
@@ -10,33 +17,33 @@ def calc(i)
   end
 
   if (i > 0 && i < N-1)
-    if (S[i-1] == '>' && S[i] == '<')
+    if (s[i-1] == '>' && s[i] == '<')
       return (DP[i] = 0)
     end
-    if (S[i-1] == '<' && S[i] == '>')
+    if (s[i-1] == '<' && s[i] == '>')
       m = [calc(i-1), calc(i+1)].max
       return (DP[i] = m + 1);
     end
-    if (S[i-1] == '<' && S[i] == '<')
+    if (s[i-1] == '<' && s[i] == '<')
       return (DP[i] = calc(i-1) + 1)
     end
-    if (S[i-1] == '>' && S[i] == '>')
+    if (s[i-1] == '>' && s[i] == '>')
       return (DP[i] = calc(i+1) + 1)
     end
   end
 
   if i == 0
-    if S[i] == '<'
+    if s[i] == '<'
       return (DP[i] = 0)
-    else # S[i] == '>'
+    else # s[i] == '>'
       return (DP[i] = calc(i+1) + 1)
     end
   end
 
   if i == N-1
-    if S[i-1] == '<'
+    if s[i-1] == '<'
       return (DP[i] = calc(i-1) + 1)
-    else # S[i-1] == '>'
+    else # s[i-1] == '>'
       return (DP[i] = 0)
     end
   end

@@ -1,0 +1,41 @@
+## consideration
+- the diff of len(<) and len(>) is important
+- the len(>) - len(<) on the right, len(<) - len(>) on the left
+
+## max case
+
+## e.g.1
+- ?<?>?>?
+- 0: left: 0, right: <>> = >(1)
+  = max 1
+- 1: left: <(1), right: >> = >(2)
+  = max 2
+- 2: left: 0, right: >(1)
+  = max 1
+- 3: left: >(1), right: 0
+  = max -1
+
+- ? < 2 > ? > ?
+
+## min case
+- left: >
+- right: <
+
+we define min as 0.
+
+## e.g.1
+? < 2 > ? > 0
+? < 2 > 1 > 0
+
+## consideration
+以下の2つを求める
+- left: max(0, len(<) - len(>))
+- right: max(0, len(>) - len(<))
+
+どちらも0 なら 0
+- 0:
+  - left: 0
+  - right: c
+- 1:
+- 2:
+- 3:
