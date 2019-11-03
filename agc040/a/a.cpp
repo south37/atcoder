@@ -42,9 +42,50 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-int main(int argc, char** argv) {
-  ll N;
-  cin >> N;
+string s;
+ll N;
+vector<ll> a;
 
-  cout << N << endl;
+ll calc(ll i) {
+  if (a[i] > 0) { return a[i]; }
+
+  if (i > 0 && i < N-1) {
+    if (s[i-1] == '>' && s[i] == '<') {
+      return a[i] = 0;
+    } else if (s[i-1] == '<' && s[i] == '>') {
+      ll m = max(calc(i-1), calc(i+1));
+      return a[i] = m+1;
+    } else if (s[i-1] == '<' && s[i] == '<') {
+      return a[i] = calc(i-1) + 1;
+    } else { // > >
+      return a[i] = calc(i+1) + 1;
+    }
+  } else if (i == 0) {
+    if (s[i] == '<') {
+      return a[i] = 0;
+    } else { // >
+      return a[i] = calc(i+1) + 1;
+    }
+  } else { // i == N-1
+    if (s[i-1] == '<') {
+      return a[i] = calc(i-1) + 1;
+    } else { // >
+      return a[i] = 0;
+    }
+  }
+}
+int main(int argc, char** argv) {
+  cin >> s;
+  N = s.size() + 1;
+  a.assign(N, -1);
+
+  rep(i, N) {
+    calc(i);
+  }
+  ll ans = 0;
+  rep(i, N) {
+    ans += a[i];
+  }
+
+  cout << ans << endl;
 }
