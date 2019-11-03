@@ -20,6 +20,12 @@ template<class T> void printvec(const vector<T>& v) {
   for (auto x : v) { cout << x << " "; }
   cout << endl;
 }
+template<class T> void printtree(const vector< vector<T> >& tree) {
+  for (int i = 0; i < tree.size(); ++i) {
+    cout << i + 1 << ": ";
+    printvec(tree[i]);
+  }
+}
 
 #define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
@@ -46,11 +52,7 @@ ll dfs(ll p) {
   }
   sort(all(d));
   reverse(all(d));
-  // cout << "d: ";
-  // rep(i, d.size()) {
-  //   cout << d[i] << " ";
-  // }
-  // cout << endl;
+  // cout << "d: "; printvec(d);
 
   ll res = 0;
   rep(i, d.size()) {
@@ -76,10 +78,7 @@ int main(int argc, char** argv) {
   }
 
   // For Debug
-  // rep(i, N) {
-  //   cout << i + 1 << ": ";
-  //   printvec(tree[i]);
-  // }
+  // printtree(tree);
 
   cout << dfs(0) << endl;
 }
