@@ -205,7 +205,7 @@ int main(int argc, char** argv) {
   ll ans = max(0LL, lrs[u].second - lrs[u].first + 1) + max(0LL, min_r.query(0, N) - max_l.query(0, N) + 1);
 
   // Try each candidates.
-  rep(i, c_lrs.size()) {
+  rep(i, c_lrs.size()-1) { // We check only N-2.
     ll dis, L, R;
     tie(dis, L, R) = c_lrs[i];
     min_r.update(i, INF); // erase
