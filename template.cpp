@@ -26,6 +26,9 @@ template<class T> void printtree(const vector< vector<T> >& tree) {
     printvec(tree[i]);
   }
 }
+template<class T, class U> void printmap(const map<T, U>& mp) {
+  for (auto x : mp) { cout << x.first << "=>" << x.second << endl; }
+}
 
 #define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
