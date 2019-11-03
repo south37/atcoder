@@ -64,12 +64,11 @@ int main(int argc, char** argv) {
     if (Q[i] < Q[i+1]) {
       ++cnt;
     } else {
-      if (cnt > ans) {
-        ans = cnt;
-      }
+      if (ans < cnt) { ans = cnt; }
       cnt = 1;
     }
   }
+  if (ans < cnt) { ans = cnt; }
 
   cout << N - ans << endl;
 }
