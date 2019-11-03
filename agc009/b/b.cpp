@@ -30,7 +30,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 vector< vector<ll> > tree;
 
-ll dfs(int p) {
+ll dfs(ll p) {
   if (tree[p].size() == 0) {
     return 0;
   }
@@ -47,9 +47,9 @@ ll dfs(int p) {
   // }
   // cout << endl;
 
-  int res = 0;
+  ll res = 0;
   rep(i, d.size()) {
-    int c = d[i] + i + 1;
+    ll c = d[i] + i + 1;
     if (res < c) {
       res = c;
     }
