@@ -16,6 +16,11 @@ using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
+template<class T> void printvec(const vector<T>& v) {
+  for (auto x : v) { cout << x << " "; }
+  cout << endl;
+}
+
 #define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 
@@ -73,10 +78,7 @@ int main(int argc, char** argv) {
   // For Debug
   // rep(i, N) {
   //   cout << i + 1 << ": ";
-  //   for (auto j : tree[i]) {
-  //     cout << j + 1 << " ";
-  //   }
-  //   cout << endl;
+  //   printvec(tree[i]);
   // }
 
   cout << dfs(0) << endl;
