@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
   // cout << "u: " << u << endl;
 
   // Check order by covered. decreasing order.
-  vector<triple> c_lrs; // candidates. (distance, l, r)
+  vector<triple> c_lrs; // candidates. (distance, l, r). contains N-1. [0, N-2].
   rep(i, N) {
     if (i == u) { continue; }
     ll l = max(lrs[i].first, lrs[u].first);
@@ -205,7 +205,7 @@ int main(int argc, char** argv) {
   ll ans = max(0LL, lrs[u].second - lrs[u].first + 1) + max(0LL, min_r.query(0, N) - max_l.query(0, N) + 1);
 
   // Try each candidates.
-  rep(i, c_lrs.size()-1) { // We check only N-2.
+  rep(i, c_lrs.size()-1) { // We check only N-2. [0, N-3]
     ll dis, L, R;
     tie(dis, L, R) = c_lrs[i];
     min_r.update(i, INF); // erase
