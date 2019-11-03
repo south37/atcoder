@@ -48,12 +48,8 @@ int main(int argc, char** argv) {
   ll N = s.size() + 1;
   vector<ll> a(N, -1);
 
-  if (s[0] == '<') {
-    a[0] = 0;
-  }
-  if (s[N-2] == '>') {
-    a[N-1] = 0;
-  }
+  if (s[0] == '<') { a[0] = 0; }
+  if (s[N-2] == '>') { a[N-1] = 0; }
 
   // Set 0 to > <
   for (int i = 1; i < N-1; ++i) {
@@ -79,12 +75,8 @@ int main(int argc, char** argv) {
       a[i] = max(a[i-1], a[i+1]) + 1;
     }
   }
-  if (s[0] == '>') {
-    a[0] = a[1] + 1;
-  }
-  if (s[N-2] == '<') {
-    a[N-1] = a[N-2] + 1;
-  }
+  if (s[0] == '>') { a[0] = a[1] + 1; }
+  if (s[N-2] == '<') { a[N-1] = a[N-2] + 1; }
 
   ll ans = 0;
   rep(i, N) {
