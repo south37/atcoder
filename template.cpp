@@ -21,7 +21,7 @@ template<class T> void printvec(const vector<T>& v) {
   cout << endl;
 }
 template<class T> void printtree(const vector< vector<T> >& tree) {
-  for (int i = 0; i < tree.size(); ++i) {
+  for (long long i = 0; i < tree.size(); ++i) {
     cout << i + 1 << ": ";
     printvec(tree[i]);
   }
@@ -29,6 +29,9 @@ template<class T> void printtree(const vector< vector<T> >& tree) {
 template<class T, class U> void printmap(const map<T, U>& mp) {
   for (auto x : mp) { cout << x.first << "=>" << x.second << endl; }
 }
+
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
 
 #define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
