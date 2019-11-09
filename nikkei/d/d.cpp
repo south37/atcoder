@@ -114,6 +114,21 @@ int main(int argc, char** argv) {
         if (rit == rs.end()) {
           rs.emplace(r, new_c);
         } else {
+          // Now, some points exist in [l, r]
+          // we must erase all points if necessary
+
+          auto lit = it;
+          if (lit != rit) {
+            ++lit;
+            for (auto iter = lit; iter != rit; ++iter) {
+              // *it is the points between [l, r]
+              if (new_c < (*iter).sc) {
+                rs.erase(iter);
+              }
+            }
+            // We only remove because lower points have lower costs.
+          }
+
           if (r == (*rit).fr) { // same with *rit
             if (new_c < (*rit).sc) {
               rs.erase(rit);
