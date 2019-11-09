@@ -54,6 +54,91 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, m;
+  cin >> n >> m;
+  vector< vector<ll> > graph(m);
+  vector<ll> s; // starts
+  vector<ll> t; // goals
+
+  vector<triple> ops;
+  rep(i, m) {
+    ll l, r, c;
+    cin >> l >> r >> c;
+    ops.emplace_back(l, c, r);
+  }
+  sort(all(ops));
+
+  // Now, we check from s.
+  // we manage only "right sighd".
+  // [id, c] => the minimum cost under c.
+
+  set<P> rs; // The set of [id, c]
+  rep(i, m) {
+    ll l, r, c;
+    tie(l, c, r) = ops[i];
+    if (i == 0 && l != 1) { // first c must contain start = 1.
+      cout << -1 << endl;
+      return 0;
+    }
+
+    // first we consider first case
+
+    if (l == 1) { // l is start
+      auto it = rs.upper_bound(r);
+      if (it == rs.end()) { // *it > the last of rs
+        rs.emplace(r, c);
+      } else {
+        if (r == (*it).fr) { // same with *it
+          rs.erase(it);
+          rs.emplace(r, c);
+        } else {
+          rs.emplace(r, c);
+        }
+      }
+      continue;
+    }
+
+    // TODO(south37) consider other case
+    auto it = rs.lower_bound(l); // We search the next r of l.
+    if (it == rs.end()) { // no r found
+      // Invalid!
+      cout << -1 << endl;
+      return 0;
+    } else {
+      // r is found. we erase it if necessary.
+      ll new_c = *it.sc + cc;
+
+      auto rit = rs.upper_bound(r);
+      if (rit == rs.end()) {
+        rs.emplace(r, c);
+      } else {
+        if (r == (*rit).fr) { // same with *rit
+          if (new_c < (*rit).sc) {
+            rs.erase(rit);
+            rs.emplace(r, new_c);
+          }
+        } else { // r < *rit
+          if (new_c < (*rit).sc) {
+            rs.emplace(r, new_c);
+          }
+        }
+      }
+    }
+  }
+
+  // Now, all distance is calculated.
+  if (rs.size() > 0) {
+    ll r, c;
+    tie(r, c) = *(--rs.end());
+    if (r == N) {
+      cout << c << endl;
+      return 0;
+    } else { // r can't reach to N
+      cout << -1 << endl;
+      return 0;
+    }
+  }
+
+  cout << -1 << endl;
+  return 0;
 }

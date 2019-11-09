@@ -1,0 +1,30 @@
+## cons
+
+- (s,t) where L<=s<t<=R
+  - O(N^2)
+
+## what thought
+- we must operation in logN or rootN in each step
+  - M is 10^5, so N is not permitted.
+- we can store the "minimum path" in each step.
+
+## aproach 1
+- store "minimum distance to goal" in each step.
+  -
+
+## aproach 2
+- make cycle
+  - in ordinary case,
+
+## aproach 3
+- sort by "distance"
+  - we should use "minimum distance" if it can be done.
+- then, compare the "whole dist" or "summed dist"
+
+## aproachkk:w
+
+
+## e.g. 1
+
+## bad idea
+// We make new graph. In the graph, each step of M is node, and overrwappness is the the edge.
