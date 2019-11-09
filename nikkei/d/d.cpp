@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 
       auto rit = rs.upper_bound(mp(r, -1LL));
       if (rit == rs.end()) {
-        rs.emplace(r, c);
+        rs.emplace(r, new_c);
       } else {
         if (r == (*rit).fr) { // same with *rit
           if (new_c < (*rit).sc) {
