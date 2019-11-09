@@ -89,37 +89,40 @@ int main(int argc, char** argv) {
         rs.emplace(r, c);
       } else {
         if (r == (*it).fr) { // same with *it
-          rs.erase(it);
-          rs.emplace(r, c);
+          if (c < (*it).sc) { // Checck cost
+            rs.erase(it);
+            rs.emplace(r, c);
+          }
         } else {
-          rs.emplace(r, c);
+          if (c < (*it).sc) { // Checck cost
+            rs.emplace(r, c);
+          }
         }
       }
-      continue;
-    }
-
-    // TODO(south37) consider other case
-    auto it = rs.lower_bound(mp(l, -1)); // We search the next r of l.
-    if (it == rs.end()) { // no r found
-      // Invalid!
-      cout << -1 << endl;
-      return 0;
     } else {
-      // r is found. we erase it if necessary.
-      ll new_c = (*it).sc + c;
-
-      auto rit = rs.upper_bound(mp(r, -1LL));
-      if (rit == rs.end()) {
-        rs.emplace(r, new_c);
+      // TODO(south37) consider other case
+      auto it = rs.lower_bound(mp(l, -1)); // We search the next r of l.
+      if (it == rs.end()) { // no r found
+        // Invalid!
+        cout << -1 << endl;
+        return 0;
       } else {
-        if (r == (*rit).fr) { // same with *rit
-          if (new_c < (*rit).sc) {
-            rs.erase(rit);
-            rs.emplace(r, new_c);
-          }
-        } else { // r < *rit
-          if (new_c < (*rit).sc) {
-            rs.emplace(r, new_c);
+        // r is found. we erase it if necessary.
+        ll new_c = (*it).sc + c;
+
+        auto rit = rs.upper_bound(mp(r, -1LL));
+        if (rit == rs.end()) {
+          rs.emplace(r, new_c);
+        } else {
+          if (r == (*rit).fr) { // same with *rit
+            if (new_c < (*rit).sc) {
+              rs.erase(rit);
+              rs.emplace(r, new_c);
+            }
+          } else { // r < *rit
+            if (new_c < (*rit).sc) {
+              rs.emplace(r, new_c);
+            }
           }
         }
       }
@@ -128,13 +131,14 @@ int main(int argc, char** argv) {
 
   // Now, all distance is calculated.
   if (rs.size() > 0) {
-    ll r, c;
-    tie(r, c) = *(--rs.end());
-    if (r == n) {
-      cout << c << endl;
-      return 0;
-    } else { // r can't reach to N
+    auto it = rs.lower_bound(mp(n, -1)); // We search the next r of l.
+    if (it == rs.end()) { // not found
       cout << -1 << endl;
+      return 0;
+    } else {
+      ll r, c;
+      tie(r, c) = *it;
+      cout << c << endl;
       return 0;
     }
   }
