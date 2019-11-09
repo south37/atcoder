@@ -34,6 +34,8 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true
 
 #define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
+#define fr first
+#define sc second
 
 typedef long long ll;
 typedef unsigned long long ull;
