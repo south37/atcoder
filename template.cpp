@@ -36,6 +36,8 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true
 #define all(s) s.begin(), s.end()
 #define fr first
 #define sc second
+#define mp make_pair
+#define pb push_back
 
 typedef long long ll;
 typedef unsigned long long ull;
