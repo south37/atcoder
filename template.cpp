@@ -22,8 +22,7 @@ template<class T> void printvec(const vector<T>& v) {
 }
 template<class T> void printtree(const vector< vector<T> >& tree) {
   for (long long i = 0; i < tree.size(); ++i) {
-    cout << i + 1 << ": ";
-    printvec(tree[i]);
+    cout << i + 1 << ": "; printvec(tree[i]);
   }
 }
 template<class T, class U> void printmap(const map<T, U>& mp) {
@@ -46,8 +45,11 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
-  ll N;
-  cin >> N;
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ios_base::sync_with_stdio(false);
+  //cout << setprecision(10) << fixed;
 
-  cout << N << endl;
+  ll n;
+  cin >> n;
 }
