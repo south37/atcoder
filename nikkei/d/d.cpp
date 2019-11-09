@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
     // first we consider first case
 
     if (l == 1) { // l is start
-      auto it = rs.upper_bound(r);
+      auto it = rs.upper_bound(mp(r, -1LL)); // Use dummy cost -1 to search all r
       if (it == rs.end()) { // *it > the last of rs
         rs.emplace(r, c);
       } else {
@@ -99,16 +99,16 @@ int main(int argc, char** argv) {
     }
 
     // TODO(south37) consider other case
-    auto it = rs.lower_bound(l); // We search the next r of l.
+    auto it = rs.lower_bound(mp(l, -1)); // We search the next r of l.
     if (it == rs.end()) { // no r found
       // Invalid!
       cout << -1 << endl;
       return 0;
     } else {
       // r is found. we erase it if necessary.
-      ll new_c = *it.sc + cc;
+      ll new_c = (*it).sc + c;
 
-      auto rit = rs.upper_bound(r);
+      auto rit = rs.upper_bound(mp(r, -1LL));
       if (rit == rs.end()) {
         rs.emplace(r, c);
       } else {
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
   if (rs.size() > 0) {
     ll r, c;
     tie(r, c) = *(--rs.end());
-    if (r == N) {
+    if (r == n) {
       cout << c << endl;
       return 0;
     } else { // r can't reach to N
