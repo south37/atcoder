@@ -1,3 +1,5 @@
+// base. https://atcoder.jp/contests/nikkei2019-2-qual/submissions/8351130
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
