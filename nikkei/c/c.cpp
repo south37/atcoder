@@ -56,4 +56,52 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<P> a(n);
+  vector<P> b(n);
+  rep(i, n) {
+    cin >> a[i].fr;
+    a[i].sc = i;
+  }
+  rep(i, n) {
+    cin >> b[i].fr;
+    b[i].sc = i;
+  }
+
+  sort(all(a));
+  sort(all(b));
+
+  // Check the sorted state. In each i, a[i] <= b[i] must be satisfied.
+  rep(i, n) {
+    if (a[i].fr > b[i].fr) {
+      cout << "No" << endl;
+      return 0;
+    }
+  }
+
+  // Check if the i exists in which a[i+1] <= b[i].
+  for (ll i = 0; i + 1 < n; ++i) {
+    if (a[i+1].fr <= b[i].fr) {
+      cout << "Yes" << endl;
+      return 0;
+    }
+  }
+
+  // Check the count of cycles. We treat the cycles as the connected components.
+  vector<ll> p(n); // p[i] .. The parent of i.
+  rep(i, n) {
+    p[a[i].sc] = b[i].sc;
+  }
+  // Count the length of a cycle whith include 0.
+  ll x = 0;
+  ll len = 0;
+  do {
+    x = p[x];
+    ++len;
+  } while (x != 0);
+
+  if (len == n) { // Only 1 cycle exists, whose length is n.
+    cout << "No" << endl;
+  } else {
+    cout << "Yes" << endl;
+  }
 }
