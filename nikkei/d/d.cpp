@@ -45,8 +45,66 @@ typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
-const ll INF = 1e9;
+const ll INF = 1e15;
 const ll MOD = 1000000007;  // 1e9 + 7
+
+// Segment Tree
+template <typename T>
+class SegTree {
+public:
+  SegTree(ll _n) {
+    n = 1;
+    while (n < _n) { n *= 2; }
+    dat = vector<T>(2 * n - 1, INF);
+  }
+
+  void update(ll k, T a) {
+    k += n - 1;
+    dat[k] = a;
+    while (k > 0) {
+      k = (k - 1) / 2;
+      dat[k] = min(dat[k * 2 + 1], dat[k * 2 + 2]);
+    }
+  }
+
+  // Calculate the min of [a, b)
+  T query(ll a, ll b) {
+    return _query(a, b, 0, 0, n);
+  }
+
+  // Calculate the min of [a, b)
+  // k is the index (dat[k]). This is matched to [l, r)
+  T _query(ll a, ll b, ll k, ll l, ll r) {
+    // The intersection of [a, b) and [r, l) is blank.
+    if (r <= a || b <= l) { return INF; }
+
+    if (a <= l && r <= b) {  // [r, l) is completely included in [a, b)
+      return dat[k];
+    } else {
+      ll vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
+      ll vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
+      return min(vl, vr);
+    }
+  }
+
+private:
+  ll n; // The size of source data. The power of 2.
+  vector<T> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
+};
+
+// int main(int argc, char** argv) {
+//   int arr[] = { 1, 3, 2, 7, 9, 11 };
+//   int n = 6;
+//
+//   SegTree<int> st(n);
+//   rep(i, n) {
+//     st.update(i, arr[i]);
+//   }
+//
+//   cout << st.query(1, 5) << endl;
+//   cout << st.query(0, 4) << endl;
+//   cout << st.query(3, 5) << endl;
+// }
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -63,101 +121,32 @@ int main(int argc, char** argv) {
   vector<triple> ops;
   rep(i, m) {
     ll l, r, c;
+    ++r; // [l, r)
     cin >> l >> r >> c;
-    ops.emplace_back(l, c, r);
+    ops.emplace_back(l, r, c);
   }
   sort(all(ops));
 
-  // Now, we check from s.
-  // we manage only "right sighd".
-  // [id, c] => the minimum cost under c.
-
-  set<P> rs; // The set of [id, c]
+  SegTree<ll> rmq(n+1);
+  rmq.update(1, 0);
   rep(i, m) {
     ll l, r, c;
-    tie(l, c, r) = ops[i];
-    if (i == 0 && l != 1) { // first c must contain start = 1.
-      cout << -1 << endl;
-      return 0;
-    }
-
-    // first we consider first case
-
-    if (l == 1) { // l is start
-      auto it = rs.upper_bound(mp(r, -1LL)); // Use dummy cost -1 to search all r
-      if (it == rs.end()) { // *it > the last of rs
-        rs.emplace(r, c);
-      } else {
-        if (r == (*it).fr) { // same with *it
-          if (c < (*it).sc) { // Checck cost
-            rs.erase(it);
-            rs.emplace(r, c);
-          }
-        } else {
-          if (c < (*it).sc) { // Checck cost
-            rs.emplace(r, c);
-          }
-        }
-      }
-    } else {
-      // TODO(south37) consider other case
-      auto it = rs.lower_bound(mp(l, -1)); // We search the next r of l.
-      if (it == rs.end()) { // no r found
-        // Invalid!
-        cout << -1 << endl;
-        return 0;
-      } else {
-        // r is found. we erase it if necessary.
-        ll new_c = (*it).sc + c;
-
-        auto rit = rs.upper_bound(mp(r, -1LL));
-        if (rit == rs.end()) {
-          rs.emplace(r, new_c);
-        } else {
-          // Now, some points exist in [l, r]
-          // we must erase all points if necessary
-
-          auto lit = it;
-          if (lit != rit) {
-            ++lit;
-            for (auto iter = lit; iter != rit; ++iter) {
-              // *it is the points between [l, r]
-              if (new_c < (*iter).sc) {
-                rs.erase(iter);
-              }
-            }
-            // We only remove because lower points have lower costs.
-          }
-
-          if (r == (*rit).fr) { // same with *rit
-            if (new_c < (*rit).sc) {
-              rs.erase(rit);
-              rs.emplace(r, new_c);
-            }
-          } else { // r < *rit
-            if (new_c < (*rit).sc) {
-              rs.emplace(r, new_c);
-            }
-          }
-        }
-      }
+    tie(l, r, c) = ops[i];
+    //cout << "(l, r, c)=("<<l<<","<<r<<","<<c<<")"<<endl;
+    ll new_c = c + rmq.query(l, r);
+    //cout << "new_c="<<new_c<<endl;
+    if (rmq.query(r, r+1) > new_c) {
+      //cout << "rmq.query(r, r+1)="<<rmq.query(r, r+1)<<endl;
+      rmq.update(r, new_c);
+      //cout << "rmq.query(r, r+1)="<<rmq.query(r, r+1)<<endl;
     }
   }
 
-  // Now, all distance is calculated.
-  if (rs.size() > 0) {
-    auto it = rs.lower_bound(mp(n, -1)); // We search the next r of l.
-    if (it == rs.end()) { // not found
-      cout << -1 << endl;
-      return 0;
-    } else {
-      ll r, c;
-      tie(r, c) = *it;
-      cout << c << endl;
-      return 0;
-    }
+  ll ans = rmq.query(n, n+1);
+  if (ans >= INF) {
+    cout << -1 << endl;
+    return 0;
+  } else {
+    cout << ans << endl;
   }
-
-  cout << -1 << endl;
-  return 0;
 }
