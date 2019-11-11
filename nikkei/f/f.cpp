@@ -1,3 +1,5 @@
+// base. https://atcoder.jp/contests/nikkei2019-2-qual/submissions/8368129
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -54,6 +56,42 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
+  int n;
   cin >> n;
+  int ln = (n + 1) / 2, rn = n + 1 - ln;
+  vector< vector<int> > g0(rn, vector<int>(rn, -1));
+  vector< vector<int> > g1(rn, vector<int>(rn, -1));
+  // Next, calculate abs(j - i) of each (i, j)
+  for (int i = 1; i < n; ++i) {
+    string s;
+    cin >> s;
+    for (int j = 1; j < n; ++j) {
+      char c = s[j-1];
+      if (c == '?') { continue; }
+      int f = (c == 'o') ? 1 : 0; // o or x
+      int d0 = abs(j - i); // e.g. (j = 3, i = 1) => (d0 = 2)
+      int d1 = n - abs(j + i - n); // e.g. (j = 3, i = 1, n = 6) => (d1 = 4)
+
+      // We treat 2 groups(even group and odd group) independently.
+      if (d0 % 2 == 0) {
+        d0 /= 2; d1 /= 2; // compress
+        if (g0[d0][d1] == 1 - f) { // Inconsistent
+          cout << 0 << endl;
+          return 0;
+        }
+        g0[d0][d1] = g0[d1][d0] = f;
+      } else {
+        d0 /= 2; d1 /= 2; // compress
+        if (g1[d0][d1] == 1 - f) {
+          cout << 0 << endl;
+          return 0;
+        }
+        g1[d0][d1] = g1[d1][d0] = f;
+      }
+    }
+  }
+
+  mint ans = solve(g0) * solve(g1);
+  cout << ans.x << endl;
+  return 0;
 }
