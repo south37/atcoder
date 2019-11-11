@@ -183,6 +183,7 @@ private:
 mint solve(vector< vector<int> >& g) {
   int n = g.size();
   if (n % 2 == 0) { // even
+    // cout << "even" << endl;
     int rnk = 0;
     rep(i, n) {
       for (int j = i + 1; j < n; ++j) {
@@ -193,6 +194,8 @@ mint solve(vector< vector<int> >& g) {
   }
 
   // Now, n is odd.
+  // cout << "odd" << endl;
+
   int rnk = 0;
   vector<int> deg(n);
   UnionFind uf(n);
@@ -239,8 +242,8 @@ int main(int argc, char** argv) {
   int n;
   cin >> n;
   int ln = (n + 1) / 2, rn = n + 1 - ln;
-  vector< vector<int> > g0(rn, vector<int>(rn, -1));
-  vector< vector<int> > g1(rn, vector<int>(rn, -1));
+  vector< vector<int> > g0(rn, vector<int>(rn, -1)); // The abs(i-j) is even. rn == ln or rn == ln+1
+  vector< vector<int> > g1(ln, vector<int>(ln, -1)); // The abs(i-j) is odd.
   // Next, calculate abs(j - i) of each (i, j)
   for (int i = 1; i < n; ++i) {
     string s;
@@ -251,6 +254,11 @@ int main(int argc, char** argv) {
       int f = (c == 'o') ? 1 : 0; // o or x
       int d0 = abs(j - i); // e.g. (j = 3, i = 1) => (d0 = 2)
       int d1 = n - abs(j + i - n); // e.g. (j = 3, i = 1, n = 6) => (d1 = 4)
+
+      // cout << "(i,j)=("<<i<<","<<j<<")"<< endl;
+      // cout << "f=" << f << endl;
+      // cout << "d0=" << d0 << endl;
+      // cout << "d1=" << d1 << endl;
 
       // We treat 2 groups(even group and odd group) independently.
       if (d0 % 2 == 0) {
@@ -271,7 +279,24 @@ int main(int argc, char** argv) {
     }
   }
 
+  // cout << "g0: " << endl;
+  // for (auto v : g0) {
+  //   for (auto vv : v) {
+  //     cout << vv << " ";
+  //   }
+  //   cout << endl;
+  // }
+  // cout << "g1: " << endl;
+  // for (auto v : g1) {
+  //   for (auto vv : v) {
+  //     cout << vv << " ";
+  //   }
+  //   cout << endl;
+  // }
+
   mint ans = solve(g0) * solve(g1);
+  // cout << "solve(g0): " << solve(g0).x << endl;
+  // cout << "solve(g1): " << solve(g1).x << endl;
   cout << ans.x << endl;
   return 0;
 }
