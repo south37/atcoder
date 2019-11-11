@@ -48,7 +48,187 @@ typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
 const ll INF = 1e9;
-const ll MOD = 1000000007;  // 1e9 + 7
+const ll MOD = 998244353;
+
+// Mod int
+// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
+struct mint {
+  ll x;
+  mint(ll x = 0) : x((x + MOD) % MOD) {}
+  mint& operator+= (const mint a) {
+    if ((x += a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator+ (const mint a) const {
+    mint res(*this);
+    return res += a;
+  }
+  mint& operator-= (const mint a) {
+    if ((x += MOD - a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator- (const mint a) const {
+    mint res(*this);
+    return res -= a;
+  }
+  mint& operator*= (const mint a) {
+    (x *= a.x) %= MOD;
+    return *this;
+  }
+  mint operator* (const mint a) const {
+    mint res(*this);
+    return res *= a;
+  }
+  mint pow(ll t) const {
+    if (!t) { return 1; }
+    mint a = pow(t >> 1);
+    a *= a;
+    if (t & 1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(MOD-2);
+  }
+  mint& operator/= (const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/ (const mint a) const {
+    mint res(*this);
+    return res /= a;
+  }
+};
+
+// int main(int argc, char** argv) {
+//   // int p;
+//   // cin >> p;
+//
+//   MOD = 13;
+//   mint p(10);
+//   cout << (p + 15).x << endl;   // 12 (25 % 13)
+//   cout << (p - 15).x << endl;   // 8  (-5 % 13)
+//   cout << (p * 2).x << endl;    // 7  (20 % 13)
+//   cout << (p.pow(3)).x << endl; // 12 (1000 % 13)
+//   cout << (p / 3).x << endl;    // 12 (12 * 3 = 10 (36 % 13))
+//
+//   mint p2(-3);
+//   cout << p2.x << endl; // 10 (-3 % 13)
+// }
+
+class UnionFind {
+public:
+  UnionFind(ll n) : par(n, -1), rnk(n, 0), cnt(n, 1), _size(n) {}
+
+  bool same(ll x, ll y) {
+    return root(x) == root(y);
+  }
+  void unite(ll x, ll y) {
+    x = root(x); y = root(y);
+    if (x == y) return;
+
+    --_size;
+
+    if (rnk[x] < rnk[y]) { swap(x, y); }
+    par[y] = x;
+    cnt[x] += cnt[y];
+    if (rnk[x] == rnk[y]) { ++rnk[x]; }
+  }
+  ll root(ll x) {
+    if (par[x] < 0) {
+      return x;
+    } else {
+      return par[x] = root(par[x]);
+    }
+  }
+  ll count(ll x) {
+    return cnt[root(x)];
+  }
+  ll size() {
+    return _size;
+  }
+
+private:
+  vector<ll> par;
+  vector<ll> rnk;
+  vector<ll> cnt; // The number of vertices in each connected components.
+  ll _size; // The number of connected components. Decreases by unite.
+};
+
+// int main(int argc, char** argv) {
+//   ll N, M;
+//   cin >> N >> M;
+//   UnionFind tree(N);
+//   rep(i, M) {
+//     ll p, a, b;
+//     cin >> p >> a >> b;
+//     if (p == 0) { // Connect
+//       tree.unite(a, b);
+//     } else { // Judge
+//       if (tree.same(a, b)) {
+//         cout << "Yes" << endl;
+//         cout << "size: " << tree.size() << endl;
+//         cout << "count(" << a << "): " << tree.count(a) << endl;
+//         cout << "count(" << b << "): " << tree.count(b) << endl;
+//       } else {
+//         cout << "No" << endl;
+//         cout << "size: " << tree.size() << endl;
+//         cout << "count(" << a << "): " << tree.count(a) << endl;
+//         cout << "count(" << b << "): " << tree.count(b) << endl;
+//       }
+//     }
+//   }
+// }
+
+mint solve(vector< vector<int> >& g) {
+  int n = g.size();
+  if (n % 2 == 0) { // even
+    int rnk = 0;
+    rep(i, n) {
+      for (int j = i + 1; j < n; ++j) {
+        if (g[i][j] == -1) { ++rnk; } // -1 is left when edge is '?'
+      }
+    }
+    return mint(2).pow(rnk);
+  }
+
+  // Now, n is odd.
+  int rnk = 0;
+  vector<int> deg(n);
+  UnionFind uf(n);
+  rep(i, n) {
+    for (int j = i + 1; j < n; ++j) {
+      if (g[i][j] == -1) {
+        ++rnk;
+        uf.unite(i, j);
+      } else {
+        deg[i] ^= g[i][j]; // add and mod 2
+        deg[j] ^= g[i][j]; // add and mod 2
+      }
+    }
+  }
+
+  vector< vector<int> > groups(n);
+  rep(i, n) {
+    groups[uf.root(i)].push_back(i);
+  }
+
+  for (auto g : groups) {
+    int sm = 0;
+    for (int v : g) {
+      sm ^= deg[v]; // add and mod 2
+    }
+    if (g.size()) {
+      rnk -= g.size() - 1; // g.size() - 1 is the length of minimum spanning tree. rnk is the diff.
+    }
+    if (sm) { // The degree of connected components "g" is odd.
+      cout << 0 << endl;
+      exit(0);
+    }
+  }
+
+  return mint(2).pow(rnk);
+}
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -67,7 +247,7 @@ int main(int argc, char** argv) {
     cin >> s;
     for (int j = 1; j < n; ++j) {
       char c = s[j-1];
-      if (c == '?') { continue; }
+      if (c == '?') { continue; } // skip '?'
       int f = (c == 'o') ? 1 : 0; // o or x
       int d0 = abs(j - i); // e.g. (j = 3, i = 1) => (d0 = 2)
       int d1 = n - abs(j + i - n); // e.g. (j = 3, i = 1, n = 6) => (d1 = 4)
