@@ -1,0 +1,8 @@
+## cons
+- dp from X and Y. downwords
+- dp[i-2][j-1]
+ dp[i][j] .. The
+
+- dp[X][Y] = 1.
+  - dp[X][j] = 0 (j < Y)
+  - dp[i][Y] = 0 (i < X)
