@@ -54,6 +54,49 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, t;
+  cin >> n >> t;
+  vector<ll> a(n); // cost
+  vector<ll> b(n); // profit
+  rep(i, n) {
+    ll aa, bb;
+    cin >> a[i] >> b[i];
+  }
+  // printvec(a);
+  // printvec(b);
+
+  vector<P> dishes;
+  rep(i, n) {
+    dishes.emplace_back(b[i], a[i]);
+  }
+  sort(all(dishes));
+  reverse(all(dishes));
+  // Now, dishes are sorted in decreasing order of profit. If profit is same, then higher t is in ftont.
+
+  // cout << "dishes: " << endl;
+  // rep(i, n) {
+  //   cout << dishes[i].fr << ", " << dishes[i].sc << endl;
+  // }
+
+  P p = dishes[0];
+  // Now, we use dished[1..-1] for napsack dp.
+
+  // Limit is t-1.
+
+  vector<ll> dp(t + 1, 0);
+  // dp[i][j] .. the maximum profit by using item <= i and cost <= j.
+  for (int i = 1; i < n; ++i) {
+    ll cost = dishes[i].sc; // cost
+    ll profit = dishes[i].fr; // profit
+
+    for (int j = t - 1; j >= 0; --j) { // reverse because only one in each item
+      if ((j - cost) >= 0) {
+        dp[j] = max(dp[j], dp[j - cost] + profit);
+      }
+    }
+  }
+  // cout << "dp: "; printvec(dp);
+  // Here, dp[n-1][t] is the maximum profit.
+
+  cout << dp[t-1] + p.fr << endl;
 }
