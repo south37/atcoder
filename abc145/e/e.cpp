@@ -78,25 +78,35 @@ int main(int argc, char** argv) {
   //   cout << dishes[i].fr << ", " << dishes[i].sc << endl;
   // }
 
-  P p = dishes[0];
-  // Now, we use dished[1..-1] for napsack dp.
+  ll ans = 0;
+  rep(selected_i, 10) {
+    if (selected_i >= n) { continue; }
 
-  // Limit is t-1.
+    P p = dishes[selected_i];
+    // Now, we use dished[1..-1] for napsack dp.
 
-  vector<ll> dp(t + 1, 0);
-  // dp[i][j] .. the maximum profit by using item <= i and cost <= j.
-  for (int i = 1; i < n; ++i) {
-    ll cost = dishes[i].sc; // cost
-    ll profit = dishes[i].fr; // profit
+    // Limit is t-1.
 
-    for (int j = t - 1; j >= 0; --j) { // reverse because only one in each item
-      if ((j - cost) >= 0) {
-        dp[j] = max(dp[j], dp[j - cost] + profit);
+    set<ll> selected;
+
+    vector<ll> dp(t + 1, 0);
+    // dp[i][j] .. the maximum profit by using item <= i and cost <= j.
+    for (int i = 0; i < n; ++i) {
+      if (i == selected_i) { continue; } // skip
+
+      ll cost = dishes[i].sc; // cost
+      ll profit = dishes[i].fr; // profit
+
+      for (int j = t - 1; j >= 0; --j) { // reverse because only one in each item
+        if ((j - cost) >= 0) {
+          dp[j] = max(dp[j], dp[j - cost] + profit);
+        }
       }
     }
-  }
-  // cout << "dp: "; printvec(dp);
-  // Here, dp[n-1][t] is the maximum profit.
+    // cout << "dp: "; printvec(dp);
+    // Here, dp[n-1][t] is the maximum profit.
 
-  cout << dp[t-1] + p.fr << endl;
+    chmax(ans, dp[t-1] + p.fr);
+  }
+  cout << ans << endl;
 }
