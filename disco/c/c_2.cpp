@@ -63,28 +63,48 @@ int main(int argc, char** argv) {
   // Now, s[i][j] is the cell
   vector<vector<ll> > ans(h, vector<ll>(w, -1));
 
-  // We set same number untile strabery found.
-  ll strabery = 1; // start from 0.
+  vector<ll> cnts(h); // The count in each line.
+  vector< vector<ll> > straberies(h);
+  ll strabery = 1;
+  rep(i, h) {
+    rep(j, w) {
+      if (s[i][j] == '#') {
+        ++cnts[i];
+        straberies[i].push_back(strabery);
+        strabery += 1;
+      }
+    }
+  }
 
   rep(i, h) {
-    if (i % 2 == 0) {
-      for (int j = 0; j < w; ++j) {
-        if (s[i][j] == '#') { // strabery found.
-          ans[i][j] = strabery;
-          strabery = min(k, strabery + 1); // The max of strabery is k.
+    if (cnts[i] == 0) {
+      if (i == 0) { continue; } // Treat later.
+      rep(j, w) {
+        ans[i][j] = ans[i-1][j]; // Same with prev.
+      }
+    } else if (cnts[i] == 1) {
+      ll ss = straberies[i][0];
+      rep(j, w) {
+        ans[i][j] = ss;
+      }
+    } else { // cnts[i] >= 2
+      ll ss = straberies[i][0];
+      ll last_s = straberies[i][cnts[i]-1];
+      rep(j, w) {
+        if (s[i][j] == '#') { // s found
+          ans[i][j] = ss;
+          ss = min(last_s, ss + 1); // Set next strabery
         } else {
-          ans[i][j] = strabery; // Paint same strabery.
+          ans[i][j] = ss;
         }
       }
-    } else { // inverse order.
-      for (int j = w-1; j >= 0; --j) {
-        if (s[i][j] == '#') { // strabery found.
-          ans[i][j] = strabery;
-          strabery = min(k, strabery + 1); // The max of strabery is k.
-        } else {
-          ans[i][j] = strabery; // Paint same strabery.
-        }
-      }
+    }
+  }
+
+  // TODO(set i = 0 and cnts[0] = 0 case.)
+  if (cnts[0] == 0) {
+    rep(j, w) {
+      ans[0][j] = ans[1][j];
     }
   }
 

@@ -1,0 +1,4 @@
+## /
+- 1 => same all
+- 2 or more => prefix is "top", other remains
+- 0 => same to prev. i-1.
