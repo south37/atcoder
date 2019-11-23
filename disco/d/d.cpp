@@ -50,13 +50,13 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 ll ans = 0;
 
-const int LOGM = 60; // 2**50 ~ 10**15
+const ll LOGM = 60; // 2**50 ~ 10**15
 vector< vector<ll> > trans(10, vector<ll>(LOGM, -1));
 vector< vector<ll> > steps(10, vector<ll>(LOGM, -1));
 
 void constract_doubling() {
   for (ll exp = 1; exp < LOGM; ++exp) {
-    for (ll i = 1; i <= 9; ++i) {
+    for (ll i = 0; i <= 9; ++i) {
       // doubling of trans
       trans[i][exp] = trans[trans[i][exp-1]][exp-1];
 
@@ -69,8 +69,8 @@ void constract_doubling() {
       // e.g. steps[3][1] = steps[
       steps[i][exp] = steps[i][exp-1] * 2 + steps[trans[i][exp-1]][0];
 
-      cout << "trans["<<i<<"]["<<exp<<"]: " << trans[i][exp] << endl;
-      cout << "steps["<<i<<"]["<<exp<<"]: " << steps[i][exp] << endl;
+      // cout << "trans["<<i<<"]["<<exp<<"]: " << trans[i][exp] << endl;
+      // cout << "steps["<<i<<"]["<<exp<<"]: " << steps[i][exp] << endl;
     }
   }
 }
@@ -93,6 +93,7 @@ int main(int argc, char** argv) {
   // we consider them as independent.
 
   // We make a translation table
+  trans[0][0] = 0; steps[0][0] = 1;
   trans[1][0] = 2; steps[1][0] = 1;
   trans[2][0] = 4; steps[2][0] = 1;
   trans[3][0] = 6; steps[3][0] = 1;
@@ -106,5 +107,52 @@ int main(int argc, char** argv) {
   // We make doubling table.
   constract_doubling();
 
+  ll steps_ans= 0;
+  vector<ll> rests_d; // The d
 
+  rep(i, m) {
+    ll d = ds[i];
+    ll c = cs[i];
+
+    for (ll exp = LOGM-1; exp >= 0; --exp) {
+      if (c & (1LL<<(exp+1))) { // c contains the exp bit.
+        // cout << "d: " << d << endl;
+        // cout << "c: " << c << endl;
+        // cout << "(1<<(exp+1)): " << (1LL<<(exp+1)) << endl;
+        // cout << "exp: " << exp << endl;
+        // cout << "steps[d][exp]: " << steps[d][exp] << endl;
+
+        steps_ans += steps[d][exp];
+        rests_d.push_back(trans[d][exp]);
+        c -= (1LL<<(exp+1));
+      }
+    }
+    if (c > 0) {
+      assert(c == 1);
+      rests_d.push_back(d);
+    }
+  }
+
+  // cout << "steps_ans: " << steps_ans << endl;
+  // cout << "rests_d.size(): " << rests_d.size() << endl;
+
+  // Now, rests_contains small. We can simulate it.
+  ll rest = 0;
+  while (rests_d.size() > 1) {
+    ll a = rests_d.back(); rests_d.pop_back();
+    ll b = rests_d.back(); rests_d.pop_back();
+    // cout << "a: " << a << endl;
+    // cout << "b: " << b << endl;
+
+    if (a + b >= 10) {
+      rests_d.push_back(1);
+      rests_d.push_back((a+b)%10);
+      ++rest;
+    } else {
+      rests_d.push_back((a+b)%10);
+      ++rest;
+    }
+  }
+
+  cout << steps_ans + rest << endl;
 }
