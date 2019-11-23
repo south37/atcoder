@@ -76,11 +76,13 @@ int main(int argc, char** argv) {
 
   rep(i, h) {
     if (straberies[i].size() == 0) {
-      if (i == 0) { continue; } // Treat later.
+      // We set this value later.
 
-      rep(j, w) {
-        ans[i][j] = ans[i-1][j]; // Same with prev.
-      }
+      // if (i == 0) { continue; } // Treat later.
+
+      // rep(j, w) {
+      //   ans[i][j] = ans[i-1][j]; // Same with prev.
+      // }
     } else { // straberies[i].size() >= 1
       ll ss = straberies[i][0];
       ll last_s = straberies[i][straberies[i].size()-1];
@@ -95,12 +97,32 @@ int main(int argc, char** argv) {
     }
   }
 
-  // TODO(set i = 0 and cnts[0] = 0 case.)
-  if ((straberies[0].size() == 0) && (h >= 2)) {
+  // We set -1
+  rep(i, h) {
     rep(j, w) {
-      ans[0][j] = ans[1][j];
+      if (ans[i][j] == -1) { // not defined.
+        if (i >= 1) {
+          ans[i][j] = ans[i-1][j];
+        }
+      }
     }
   }
+  for (int i = h - 1; i >= 0; --i) {
+    rep(j, w) {
+      if (ans[i][j] == -1) { // not defined.
+        if (i+1 <= h-1) {
+          ans[i][j] = ans[i+1][j];
+        }
+      }
+    }
+  }
+
+  // TODO(set i = 0 and cnts[0] = 0 case.)
+  // if ((straberies[0].size() == 0) && (h >= 2)) {
+  //   rep(j, w) {
+  //     ans[0][j] = ans[1][j];
+  //   }
+  // }
 
   rep(i, h) {
     rep(j, w) {
