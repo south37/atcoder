@@ -54,6 +54,45 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll h, w, k;
+  cin >> h >> w >> k;
+  vector<string> s(h);
+  rep(i, h) {
+    cin >> s[i];
+  }
+  // Now, s[i][j] is the cell
+  vector<vector<ll> > ans(h, vector<ll>(w, -1));
+
+  // We set same number untile strabery found.
+  ll strabery = 1; // start from 0.
+
+  // TODO(south37) We have to consider the last case.
+  rep(i, h) {
+    if (i % 2 == 0) {
+      for (int j = 0; j < w; ++j) {
+        if (s[i][j] == '#') { // strabery found.
+          ans[i][j] = strabery;
+          strabery = min(k, strabery + 1); // The max of strabery is k.
+        } else {
+          ans[i][j] = strabery; // Paint same strabery.
+        }
+      }
+    } else { // inverse order.
+      for (int j = w-1; j >= 0; --j) {
+        if (s[i][j] == '#') { // strabery found.
+          ans[i][j] = strabery;
+          strabery = min(k, strabery + 1); // The max of strabery is k.
+        } else {
+          ans[i][j] = strabery; // Paint same strabery.
+        }
+      }
+    }
+  }
+
+  rep(i, h) {
+    rep(j, w) {
+      cout << ans[i][j] << " ";
+    }
+    cout << endl;
+  }
 }
