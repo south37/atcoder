@@ -63,13 +63,11 @@ int main(int argc, char** argv) {
   // Now, s[i][j] is the cell
   vector<vector<ll> > ans(h, vector<ll>(w, -1));
 
-  vector<ll> cnts(h); // The count in each line.
   vector< vector<ll> > straberies(h);
   ll strabery = 1;
   rep(i, h) {
     rep(j, w) {
       if (s[i][j] == '#') {
-        ++cnts[i];
         straberies[i].push_back(strabery);
         strabery = min(k, strabery + 1);
       }
@@ -77,19 +75,15 @@ int main(int argc, char** argv) {
   }
 
   rep(i, h) {
-    if (cnts[i] == 0) {
+    if (straberies[i].size() == 0) {
       if (i == 0) { continue; } // Treat later.
+
       rep(j, w) {
         ans[i][j] = ans[i-1][j]; // Same with prev.
       }
-    } else if (cnts[i] == 1) {
+    } else { // straberies[i].size() >= 1
       ll ss = straberies[i][0];
-      rep(j, w) {
-        ans[i][j] = ss;
-      }
-    } else { // cnts[i] >= 2
-      ll ss = straberies[i][0];
-      ll last_s = straberies[i][cnts[i]-1];
+      ll last_s = straberies[i][straberies[i].size()-1];
       rep(j, w) {
         if (s[i][j] == '#') { // s found
           ans[i][j] = ss;
@@ -102,7 +96,7 @@ int main(int argc, char** argv) {
   }
 
   // TODO(set i = 0 and cnts[0] = 0 case.)
-  if (cnts[0] == 0) {
+  if ((straberies[0].size() == 0) && (h >= 2)) {
     rep(j, w) {
       ans[0][j] = ans[1][j];
     }
