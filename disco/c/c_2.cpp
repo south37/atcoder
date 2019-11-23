@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
       if (s[i][j] == '#') {
         ++cnts[i];
         straberies[i].push_back(strabery);
-        strabery += 1;
+        strabery = min(k, strabery + 1);
       }
     }
   }
