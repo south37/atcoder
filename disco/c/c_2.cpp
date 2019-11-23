@@ -110,7 +110,10 @@ int main(int argc, char** argv) {
 
   rep(i, h) {
     rep(j, w) {
-      cout << ans[i][j] << " ";
+      cout << ans[i][j];
+      if (j != w-1) {
+        cout << " ";
+      }
     }
     cout << endl;
   }
