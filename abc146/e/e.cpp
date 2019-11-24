@@ -1,3 +1,5 @@
+// editorial. https://img.atcoder.jp/abc146/editorial.pdf
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -60,79 +62,31 @@ int main(int argc, char** argv) {
   rep(i, n) {
     cin >> a[i];
   }
-
+  vector<ll> s(n+1); // s[i] .. The sum of a[j] in [0, i)
   rep(i, n) {
-    a[i] = a[i] % k;
+    s[i+1] = s[i] + a[i];
   }
+  // cout << "s: "; printvec(s);
 
-  // Now, we start from the all position, in which i is less than
-  // We want to find 0 and larger point.
-
-  vector<ll> ones;
+  vector<ll> d(n+1); // d[i] .. (s[i] - i)%k. d[0] = 0.
   rep(i, n) {
-    if (a[i] == 1) {
-      ones.push_back(i);
-    }
+    d[i+1] = (s[i+1] - (i+1))%k;
   }
+  // cout << "d: "; printvec(d);
 
-  vector<P> pairs; // (digit, count). count > 0 only when digit = 0.
-  // vector<ll> zeros;
-  rep(i, n) {
-    ll zero_cnt = 0;
-    ll j = i;
-    while (j < n && a[j] == 0) { ++zero_cnt; }
-    if (zero_cnt > 0) {
-      pairs.emplace_back(0, zero_cnt);
-    }
-    if (j < n) {
-      pairs.emplace_back(a[j], 1);
-    }
-    // Now, j is not zero
-    i = j + 1;
-  }
-
-  vector<ll> oks; // The oks
+  // we want to calculate the count of all pairs (i,j) where d[i] == d[j] and i<j and j-i<k.
+  // (s[j]-s[i])%k == j-i <=> d[j] == d[i]
 
   ll ans = 0;
-
-  // Now, we have ones and pairs.
-  ll sz = pairs.size();
-  ll i = 0;
-  while (i < sz) {
-    ll continues = 0;
-
-    ll j = i;
-    while (j < sz) {
-      if (pairs[j].fr == 1) {
-        ++continues;
-        ++j;
-        continue;
-      }
-
-      ll zero_cnt = 0;
-      if (j-1 >= 0 && pairs[j-1].fr == 0) {
-        zero_cnt += pairs[j-1].sc;
-      }
-      if (j+1 < sz && pairs[j+1].fr == 0) {
-        zero_cnt += pairs[j+1].sc;
-      }
-      // Now, we can use zero_cnt for pair[i].
-      if (pairs[j].fr <=  zero_cnt) {
-        ++continues;
-      } else {
-        break;
-      }
-
-      ++j;
+  map<ll, ll> cnts;
+  rep(i, n+1) {
+    if (i >= k) {
+      --cnts[d[i-k]];
     }
+    // Now, cnts contains d[i-k+1]..d[i-1]. k-2 elements.
+    ans += cnts[d[i]];
 
-    if (continues >= 2) {
-      ans += continues * (continues -1)/2;
-    } else {
-      ans += continues;
-    }
-
-    i = j +1;
+    ++cnts[d[i]];
   }
 
   cout << ans << endl;
