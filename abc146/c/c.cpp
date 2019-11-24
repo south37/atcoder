@@ -60,6 +60,49 @@ int main(int argc, char** argv) {
   ll a, b, x;
   cin >> a >> b >> x;
 
-  ll mx = min((x-b-(a-1))/a, 1000000000);
-  mx
+  // We use binary search
+  ll l = 1;
+  ll r = INF + 1; // 1e9 + 1
+
+  // At first, we check 1.
+  if ((a + b) > x) {
+    cout << 0 << endl;
+    return 0;
+  }
+
+  // [l, r)
+  while (r - l > 1) {
+    ll mid = (r + l)/2;
+
+    ll digit;
+    if        (mid >= 1000000000) {
+      digit = 10;
+    } else if (mid >= 100000000) {
+      digit = 9;
+    } else if (mid >= 10000000) {
+      digit = 8;
+    } else if (mid >= 1000000) {
+      digit = 7;
+    } else if (mid >= 100000) {
+      digit = 6;
+    } else if (mid >= 10000) {
+      digit = 5;
+    } else if (mid >= 1000) {
+      digit = 4;
+    } else if (mid >= 100) {
+      digit = 3;
+    } else if (mid >= 10) {
+      digit = 2;
+    } else {
+      digit = 1;
+    }
+
+    if ((a * mid + b * digit) <= x) { // ok
+      l = mid;
+    } else {
+      r = mid;
+    }
+  }
+
+  cout << l << endl;
 }
