@@ -56,4 +56,12 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string s;
+  cin >> s;
+  rep(i, s.size()) {
+    // cout << (((int)s[i] + n) % 26) << endl;;
+    // cout << (s[i]-'A') << endl;;
+    cout << (char)('A' + (((s[i]-'A') + n) % 26));
+  }
+  cout << endl;
 }

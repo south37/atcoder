@@ -54,6 +54,12 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  // AN + B d(N) <= X
+  // AN <= (X-d(N) B) <= (X-B)
+  // N <= (X-B)/A
+  ll a, b, x;
+  cin >> a >> b >> x;
+
+  ll mx = min((x-b-(a-1))/a, 1000000000);
+  mx
 }

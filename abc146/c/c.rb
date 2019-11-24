@@ -13,7 +13,29 @@ def main
 
   maximium = [(X-B) / A + 1, 1000_000_000].min
   maximium.downto(1).each do |n|
-    digit = n.to_s.size
+    digit =
+      if n >= 1000_000_000
+        10
+      elsif n >= 100_000_000
+        9
+      elsif n >= 10_000_000
+        8
+      elsif n >= 1_000_000
+        7
+      elsif n >= 100_000
+        6
+      elsif n >= 10_000
+        5
+      elsif n >= 1_000
+        4
+      elsif n >= 100
+        3
+      elsif n >= 10
+        2
+      else
+        1
+      end
+
     if A * n + B * digit <= X
       p n
       return
