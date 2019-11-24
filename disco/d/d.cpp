@@ -69,8 +69,8 @@ void constract_doubling() {
       // e.g. steps[3][1] = steps[
       steps[i][exp] = steps[i][exp-1] * 2 + steps[trans[i][exp-1]][0];
 
-      // cout << "trans["<<i<<"]["<<exp<<"]: " << trans[i][exp] << endl;
-      // cout << "steps["<<i<<"]["<<exp<<"]: " << steps[i][exp] << endl;
+      cout << "trans["<<i<<"]["<<exp<<"]: " << trans[i][exp] << endl;
+      cout << "steps["<<i<<"]["<<exp<<"]: " << steps[i][exp] << endl;
     }
   }
 }
