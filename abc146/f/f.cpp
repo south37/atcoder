@@ -54,6 +54,58 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, m;
+  cin >> n >> m;
+  string s;
+  cin >> s;
+
+  vector<P> valid_indices;
+
+  vector<P> dp(n+1, mp(-1, -1)); // contains the (count, prev_distance)
+  ll largest_cnt = -1;
+  for (int i = 1; i <= n; ++i) {
+    if (s[i] == '1') {
+      dp[i] = mp(-1, -1);
+      continue;
+    }
+    // Now, s[i] == '0'
+    if (i <= m) {
+      dp[i] = mp(1, i);
+      valid_indices.emplace_back(i, 1);
+      continue;
+    }
+
+    // Now, i > m.
+    // We want to find i-m <= "j in d" <= i.
+
+    auto iter = lower_bound(all(valid_indices), mp((ll)(i-m), -1LL));
+    if (iter == valid_indices.end()) {
+      cout << -1 << endl;
+      return 0;
+    }
+    ll id = (*iter).fr;
+    ll cnt = (*iter).sc;
+    dp[i] = mp(cnt+1, i - id);
+    valid_indices.emplace_back(i, cnt+1);
+  }
+
+  // Now, dp[n] contains the result.
+  if (dp[n] == mp(-1LL, -1LL)) {
+    cout << -1 << endl;
+    return 0;
+  }
+
+  vector<ll> ans;
+  ll i = n;
+  P cur = dp[n];
+  rep(iter, dp[n].fr) {
+    ans.push_back(cur.sc);
+    i -= cur.sc;
+    cur = dp[i];
+  }
+  reverse(all(ans));
+
+  rep(j, ans.size()) {
+    cout << ans[j] << ((j == ans.size() - 1) ? '\n' : ' ');
+  }
 }
