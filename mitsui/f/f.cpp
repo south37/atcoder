@@ -54,6 +54,62 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll t1; ll t2;
+  cin >> t1 >> t2;
+  ll a1; ll a2;
+  ll b1; ll b2;
+  cin >> a1 >> a2;
+  cin >> b1 >> b2;
+
+  ll diff1 = a1-b1;
+  ll diff2 = a2-b2;
+
+  // cout << "diff1: " << diff1 << endl;
+  // cout << "diff2: " << diff2 << endl;
+
+  if (diff1 > 0 && diff2 > 0) {
+    cout << 0 << endl;
+    return 0;
+  }
+  if (diff1 < 0 && diff2 < 0) {
+    cout << 0 << endl;
+    return 0;
+  }
+
+  // Now, the sign of diff1 and diff2 is different.
+
+  if (diff1 > 0) {
+    diff1 *= -1;
+    diff2 *= -1;
+  }
+  // Here, diff1 < 0, diff2 > 0.
+
+  // cout << "diff1: " << diff1 << endl;
+  // cout << "diff2: " << diff2 << endl;
+
+  ll dis1 = diff1 * t1; // diff after t1;
+  ll dis2 = dis1 + diff2 * t2; // diff after t1 + t2.
+
+  // cout << "dis1: " << dis1 << endl;
+  // cout << "dis2: " << dis2 << endl;
+
+  if (dis2 < 0) { // can't reach to 0
+    cout << 0 << endl;
+    return 0;
+  }
+
+  if (dis2 > 0) {
+    ll ans = 1;
+    if (abs(dis1) % dis2 == 0) { // Touch 1 at last.
+      ans += 2 * (abs(dis1) / dis2);
+      ans -= 1; // minus 1 for last touch.
+    } else {
+      ans += 2 * (abs(dis1) / dis2);
+    }
+    cout << ans << endl;
+    return 0;
+  } else { // dis2 == 0
+    cout << "infinity" << endl;
+    return 0;
+  }
 }
