@@ -56,4 +56,45 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string s;
+  cin >> s;
+  vector<vector<ll>> dp1(n+1, vector<ll>(10)); // dp1[i][j] ..
+  vector<vector<ll>> dp2(n+1, vector<ll>(10)); // dp1[i][j] ..
+  vector<vector<ll>> dp3(n+1, vector<ll>(10)); // dp1[i][j] ..
+  rep(i, s) {
+    int c = s[i] - '0';
+
+    ll dp1_sum = 0;
+    // Update dp1
+    rep(j, 10) {
+      if (j == c) {
+        dp1[i+1][j] = dp1[i][j] + 1;
+      } else {
+        dp1[i+1][j] = dp1[i][j];
+      }
+
+      dp1_sum += dp1[i][j];
+    }
+
+    ll dp2_sum = 0;
+    // Update dp2
+    rep(j, 10) {
+      if (j == c) {
+        dp2[i+1][j] = dp2[i][j] + dp1_sum;
+      } else {
+        dp2[i+1][j] = dp2[i][j];
+      }
+      dp2_sum += dp2[i][j];
+    }
+
+    // Update dp3
+    rep(j, 10) {
+      if (j == c) {
+        dp3[i+1][j] = dp3[i][j] + dp2_sum;
+      } else {
+        dp3[i+1][j] = dp3[i][j];
+      }
+      dp2_sum += dp2[i][j];
+    }
+  }
 }

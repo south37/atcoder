@@ -56,4 +56,34 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string s;
+  cin >> s;
+
+  ll ans = 0;
+
+  // Check all case.
+  rep(i, 10) rep(j, 10) rep(k, 10) {
+    // Here, we check the validity of (i, j, k);
+
+    vector<int> tri(3);
+    tri[0] = i; tri[1] = j; tri[2] = k;
+    int l = 0; // index of tri
+
+    bool found = false;
+    rep(iter, n) {
+      if (found) { break; }
+
+      int c = s[iter] - '0';
+      if (c == tri[l]) { // found
+        ++l;
+        if (l == 3) {
+          ++ans;
+          found = true;
+          break;
+        }
+      }
+    }
+  }
+
+  cout << ans << endl;
 }
