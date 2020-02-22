@@ -1,0 +1,8 @@
+##
+AiBi must be the divisee of all A.
+
+The candiate is divisor of A[i]*A[i+1]..A[j].
+
+By calculating the prime factor of each A[i], we can get the "smallest value" which is the divisee of all A.
+
+
