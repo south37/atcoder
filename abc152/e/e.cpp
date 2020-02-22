@@ -52,17 +52,72 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-ll powmod(ll x, ll n) { // like pow(x, n)
-  ll r = 1;
-  while (n) {
-    if (n & 1) {
-      r = r * x % MOD;
-    }
-    x = x * x % MOD;
-    n >>= 1;
+// Mod int
+// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
+struct mint {
+  ll x;
+  mint(ll x = 0) : x((x + MOD) % MOD) {}
+  mint& operator+= (const mint a) {
+    if ((x += a.x) >= MOD) x %= MOD;
+    return *this;
   }
-  return r;
-}
+  mint operator+ (const mint a) const {
+    mint res(*this);
+    return res += a;
+  }
+  mint& operator-= (const mint a) {
+    if ((x += MOD - a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator- (const mint a) const {
+    mint res(*this);
+    return res -= a;
+  }
+  mint& operator*= (const mint a) {
+    (x *= a.x) %= MOD;
+    return *this;
+  }
+  mint operator* (const mint a) const {
+    mint res(*this);
+    return res *= a;
+  }
+  mint pow(ll t) const {
+    if (!t) { return 1; }
+    mint a = pow(t >> 1);
+    a *= a;
+    if (t & 1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(MOD-2);
+  }
+  mint& operator/= (const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/ (const mint a) const {
+    mint res(*this);
+    return res /= a;
+  }
+};
+
+// int main(int argc, char** argv) {
+//   // int p;
+//   // cin >> p;
+//
+//   MOD = 13;
+//   mint p(10);
+//   cout << (p + 15).x << endl;   // 12 (25 % 13)
+//   cout << (p - 15).x << endl;   // 8  (-5 % 13)
+//   cout << (p * 2).x << endl;    // 7  (20 % 13)
+//   cout << (p.pow(3)).x << endl; // 12 (1000 % 13)
+//   cout << (p / 3).x << endl;    // 12 (12 * 3 = 10 (36 % 13))
+//
+//   mint p2(-3);
+//   cout << p2.x << endl; // 10 (-3 % 13)
+// }
+
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -106,27 +161,21 @@ int main(int argc, char** argv) {
   // cout << "smallestP: "; printmap(smallestP);
 
   // Here, smallestP has the information of divisee. B[i] = divisee / A[i].
-  // divisee may be very large, so we use factor cnts for each B[i].
+
+  mint L(1); // the smallest product
+  for (auto p : smallestP) {
+    int factor = p.first;
+    int cnt = p.second;
+    mint contrib(factor);
+    L *= contrib.pow(cnt);
+  }
 
   ll ans = 0;
   for (int i = 0; i < n; ++i) {
-    map<int, int>& factorCnts = factorCntsList[i];
-    ll B = 1;
-    for (auto& p : smallestP) {
-      int factor = p.first;
-      int cnt = p.second - factorCnts[factor];
-      // cout << "i: " << i << endl;
-      // cout << "B factor; " << factor << endl;
-      // cout << "B cnt; " << cnt << endl;
-      // we should multiply by pow(factor, cnt)
-      if (cnt > 0) { // exist
-        B *= powmod(factor, cnt);
-        B %= MOD;
-      }
-    }
-    // cout << "B: " << B.x << endl;
-    // Here, B is the multiplier of all contribution from each factors.
-    ans += B;
+    mint B(L);
+    B /= A[i];
+
+    ans += B.x;
     ans %= MOD;
   }
 
