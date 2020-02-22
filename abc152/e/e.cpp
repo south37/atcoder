@@ -163,10 +163,10 @@ int main(int argc, char** argv) {
   // Here, smallestP has the information of divisee. B[i] = divisee / A[i].
   // divisee may be very large, so we use factor cnts for each B[i].
 
-  mint ans(0);
+  ll ans = 0;
   for (int i = 0; i < n; ++i) {
     map<int, int>& factorCnts = factorCntsList[i];
-    mint B(1);
+    ll B = 1;
     for (auto& p : smallestP) {
       int factor = p.first;
       int cnt = p.second - factorCnts[factor];
@@ -176,13 +176,15 @@ int main(int argc, char** argv) {
       // we should multiply by pow(factor, cnt)
       if (cnt > 0) { // exist
         mint contrib(factor);
-        B *= contrib.pow(cnt);
+        B *= contrib.pow(cnt).x;
+        B %= MOD;
       }
     }
     // cout << "B: " << B.x << endl;
     // Here, B is the multiplier of all contribution from each factors.
     ans += B;
+    ans %= MOD;
   }
 
-  cout << ans.x << endl;
+  cout << ans << endl;
 }
