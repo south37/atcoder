@@ -48,12 +48,37 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+int divceil(int a, int b) {
+  return (a+b-1)/b;
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll k, q;
+  cin >> k >> q;
+  vector<int> d(k);
+  rep(i, k) {
+    cin >> d[i];
+  }
+  rep(iq, q) {
+    int n, x, m;
+    cin >> n >> x >> m;
+    ll last = x, eq = 0;
+    rep(i, k) {
+      // repeated d's length is n-1. calculate the each contribution
+      ll num = divceil((n-1)-i, k);
+      last += (d[i]%m)*num;
+      if ((d[i]%m) == 0) {
+        eq += num;
+      }
+    }
+    // last/m - x/m .. the count of (aj mod m) > (aj+1 mod m)
+    // eq .. the counf of (aj mod m) == (aj+1 mod m)
+    ll ans = (n-1) - (last/m - x/m) - eq;
+    cout << ans << endl;
+  }
 }
