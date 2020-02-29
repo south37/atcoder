@@ -43,10 +43,14 @@ typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
-typedef double D;
 
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
+
+const ll D = 80*160 + 10; // abs(A-B) * (H+W) + 10
+const ll D2 = D*2;
+
+typedef bitset<D2> bs;
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -54,6 +58,45 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll h, w;
+  cin >> h >> w;
+  vector<vector<ll>> a(h, vector<ll>(w));
+  rep(i, h) {
+    rep(j, w) {
+      cin >> a[i][j];
+    }
+  }
+  rep(i, h) {
+    rep(j, w) {
+      ll x;
+      cin >> x;
+      a[i][j] = abs(a[i][j] - x);;
+    }
+  }
+  // Here, a contains the diff of A and B
+
+  vector<vector<bs>> dp(h, vector<bs>(w));
+  dp[0][0][D-a[0][0]] = 1;
+  dp[0][0][D+a[0][0]] = 1;
+  rep(i, h) {
+    rep(j, w) {
+      if (i) {
+        dp[i][j] |= dp[i-1][j] << a[i][j];
+        dp[i][j] |= dp[i-1][j] >> a[i][j];
+      }
+      if (j) {
+        dp[i][j] |= dp[i][j-1] << a[i][j];
+        dp[i][j] |= dp[i][j-1] >> a[i][j];
+      }
+    }
+  }
+  // Here, dp[i][j][k] means the reachability of k at (i,j)
+
+  ll ans = D;
+  rep(k, 2*D) {
+    if (dp[h-1][w-1][k]) { // reachable to k
+      ans = min(ans, abs(k-D));
+    }
+  }
+  cout << ans << endl;
 }
