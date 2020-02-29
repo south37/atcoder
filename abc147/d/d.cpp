@@ -127,10 +127,10 @@ int main(int argc, char** argv) {
     cin >> a[i];
   }
 
-  vector<ll> cnts(61);
+  vector<ll> cnts(60);
   for (ll x : a) {
-    rep(i, 61) {
-      if ((x>>i) & 1) { // i bit is 1
+    rep(i, 60) {
+      if (x>>i & 1) { // i bit is 1
         ++cnts[i];
       }
     }
@@ -138,15 +138,15 @@ int main(int argc, char** argv) {
   // Here, cnts[i] means the count of 1 bit in a at i.
   mint ans(0);
   for (ll x : a) {
-    rep(i, 61) {
-      if ((x>>i) & 1) { // i bit is 1
+    rep(i, 60) {
+      if (x>>i & 1) { // i bit is 1
         // Here, "n - cnts[i]" is the count of 0. We should add (n-cnts[i]) * (1<<i)
         mint contrib(n-cnts[i]);
-        contrib *= (1ll << i) % MOD;
+        contrib *= 1ll << i;
         ans += contrib;
       } else { // i bit is 0
         mint contrib(cnts[i]);
-        contrib *= (1ll << i) % MOD;
+        contrib *= 1ll << i;
         ans += contrib;
       }
     }
