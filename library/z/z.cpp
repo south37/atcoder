@@ -1,3 +1,5 @@
+// ref. https://codeforces.com/contest/1313/submission/71676206
+
 #include <iostream>
 #include <vector>
 
@@ -5,29 +7,31 @@ using namespace std;
 
 #define rep(i, n) for (int i = 0; i < n; ++i)
 
-vector<int> Zalgo(const string &S) {
-  int N = (int)S.size();
-  vector<int> res(N);
-  res[0] = N;
-  int i = 1, j = 0;
-  while (i < N) {
-    while (i+j < N && S[j] == S[i+j]) ++j;
-    res[i] = j;
-    if (j == 0) {++i; continue;}
-    int k = 1;
-    while (i+k < N && k+res[k] < j) res[i+k] = res[k], ++k;
-    i += k, j -= k;
+vector<int> build_z(const string& s) {
+  int n = s.size();
+  vector<int> z(n, 0);
+  int l = -1, r = -1;
+  for (int i = 1; i < n; ++i) {
+    if (i <= r) {
+      z[i] = min<int>(r - i + 1, z[i - l]);
+    }
+    while (i + z[i] < n && s[i + z[i]] == s[z[i]]) {
+      ++z[i];
+    }
+    if (i + z[i] - 1 > r) {
+      r = i + z[i] - 1;
+      l = i;
+    }
   }
-  return res;
+  return z;
 }
 
 void search(const string& text, const string& pattern, vector<int>& result) {
-  string s = pattern + "$" + text;
-  int p = pattern.length();
+  vector<int> z = build_z(pattern + "$" + text);
 
-  vector<int> Z = Zalgo(s);
-  for (int i = p + 1; i < Z.size(); ++i) {
-    if (Z[i] == p) {
+  int p = pattern.length();
+  for (int i = p + 1; i < z.size(); ++i) {
+    if (z[i] == p) {
       result.push_back(i-p-1);
     }
   }
