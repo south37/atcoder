@@ -71,12 +71,6 @@ public:
 
     while (k > 0) {
       k = (k - 1) / 2;
-      // set<char>& l = dat[k * 2 + 1];
-      // set<char>& r = dat[k * 2 + 2];
-      // set union of l and r
-      // dat[k] = l; // copy
-      // for (char c : r) { dat[k].insert(c); }
-
       // NOTE: We need to insert a
       // dat[k][a-'a'] = 1;
 
