@@ -52,7 +52,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 // template <typename T>
 class SegTree {
 public:
-  SegTree(int _n, string& s) {
+  SegTree(ll _n, string& s) {
     n = 1;
     while (n < _n) { n *= 2; }
     dat = vector<vector<int>>(2 * n - 1, vector<int>(26));
@@ -97,7 +97,7 @@ public:
   // k is the index (dat[k]). This is matched to [l, r)
   vector<int> _query(int a, int b, int k, int l, int r) {
     // The intersection of [a, b) and [r, l) is blank.
-    if (r <= a || b <= l) { return {}; }
+    if (r <= a || b <= l) { return vector<int>(26); }
 
     if (a <= l && r <= b) {  // [r, l) is completely included in [a, b)
       return dat[k];
@@ -109,10 +109,10 @@ public:
 
       vector<int> res(26);
       rep(i, 26) {
-        if (vl.size() > 0 && vl[i] == 1) {
+        if (vl[i] == 1) {
           res[i] = 1;
         }
-        if (vr.size() > 0 && vr[i] == 1) {
+        if (vr[i] == 1) {
           res[i] = 1;
         }
       }
@@ -177,6 +177,7 @@ int main(int argc, char** argv) {
         continue;
       }
 
+      // count the 1
       ll ans = 0;
       rep(i, 26) {
         if (a[i] == 1) { ++ans; }
