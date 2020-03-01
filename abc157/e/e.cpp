@@ -162,6 +162,7 @@ int main(int argc, char** argv) {
       ll i;
       char c;
       cin >> i >> c;
+      --i; // 0-indexed
       st.update(i, c);
     } else { // query. t == 2
       // cout << "query" << endl;
