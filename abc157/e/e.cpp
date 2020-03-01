@@ -55,7 +55,7 @@ public:
   SegTree(int _n, string& s) {
     n = 1;
     while (n < _n) { n *= 2; }
-    dat = vector<set<char>>(2 * n - 1);
+    dat = vector<vector<int>>(2 * n - 1, vector<int>(26));
     // Initialize dat by s
     rep(i, s.size()) {
       update(i, s[i]);
@@ -64,7 +64,11 @@ public:
 
   void update(int k, char a) {
     k += n - 1;
-    dat[k] = { a };
+    dat[k] = vector<int>(26);
+    dat[k][a-'a'] = 1; // set 1 to position
+    // cout <<"update: ";
+    // printvec(dat[k]);
+
     while (k > 0) {
       k = (k - 1) / 2;
       // set<char>& l = dat[k * 2 + 1];
@@ -74,35 +78,46 @@ public:
       // for (char c : r) { dat[k].insert(c); }
 
       // NOTE: We need to insert a
-      dat[k].insert(a);
+      dat[k][a-'a'] = 1;
     }
   }
 
   // Calculate the min of [a, b)
-  set<char> query(int a, int b) {
+  vector<int> query(int a, int b) {
     return _query(a, b, 0, 0, n);
   }
 
   // Calculate the min of [a, b)
   // k is the index (dat[k]). This is matched to [l, r)
-  set<char> _query(int a, int b, int k, int l, int r) {
+  vector<int> _query(int a, int b, int k, int l, int r) {
     // The intersection of [a, b) and [r, l) is blank.
     if (r <= a || b <= l) { return {}; }
 
     if (a <= l && r <= b) {  // [r, l) is completely included in [a, b)
       return dat[k];
     } else {
-      set<char> vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
-      set<char> vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
-      // return the union of vl, vr
-      for (char c : vr) { vl.insert(c); }
-      return vl;
+      vector<int> vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
+      vector<int> vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
+      // cout << "vl: "; printvec(vl);
+      // cout << "vr: "; printvec(vr);
+
+      vector<int> res(26);
+      rep(i, 26) {
+        if (vl.size() > 0 && vl[i] == 1) {
+          res[i] = 1;
+        }
+        if (vr.size() > 0 && vr[i] == 1) {
+          res[i] = 1;
+        }
+      }
+      return res;
     }
   }
 
 private:
   int n; // The size of source data. The power of 2.
-  vector<set<char>> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
+  vector<vector<int>> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
+  // we need vector<int>(26) for containing the information
 };
 
 // int main(int argc, char** argv) {
@@ -136,15 +151,31 @@ int main(int argc, char** argv) {
     ll t;
     cin >> t;
     if (t == 1) { // update
+      // cout << "update" << endl;
+
       ll i;
       char c;
       cin >> i >> c;
       st.update(i, c);
     } else { // query. t == 2
+      // cout << "query" << endl;
+
       ll l, r;
       cin >> l >> r;
       --l; --r; // 0-indexed
-      cout << st.query(l, r+1).size() << endl;;
+      vector<int> a = st.query(l, r+1);
+      // printvec(a);
+
+      if (a.size() == 0) {
+        cout << 0 << endl;
+        continue;
+      }
+
+      ll ans = 0;
+      rep(i, 26) {
+        if (a[i] == 1) { ++ans; }
+      }
+      cout << ans << endl;;
     }
   }
 }
