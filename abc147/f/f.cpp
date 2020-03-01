@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
   // Check the case when d = 0
   if (d == 0) {
     if (x == 0) {
-      cout << 0 << endl;
+      cout << 1 << endl;
       return 0;
     } else {
       cout << n+1 << endl;
