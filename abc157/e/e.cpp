@@ -78,7 +78,21 @@ public:
       // for (char c : r) { dat[k].insert(c); }
 
       // NOTE: We need to insert a
-      dat[k][a-'a'] = 1;
+      // dat[k][a-'a'] = 1;
+
+      vector<int>& l = dat[k * 2 + 1];
+      vector<int>& r = dat[k * 2 + 2];
+      dat[k] = vector<int>(26); // clear.
+      vector<int>& res = dat[k];
+
+      rep(i, 26) {
+        if (l.size() > 0 && l[i] == 1) {
+          res[i] = 1;
+        }
+        if (r.size() > 0 && r[i] == 1) {
+          res[i] = 1;
+        }
+      }
     }
   }
 
