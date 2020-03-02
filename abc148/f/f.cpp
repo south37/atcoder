@@ -61,8 +61,7 @@ void dfs(int v, int d, int p) {
 }
 
 vector<ll> calcDist(int s) {
-  dist.clear();
-  dist.resize(n);
+  dist.assign(n, 0); // reset
   dfs(s, 0, -1);
   return dist;
 }
