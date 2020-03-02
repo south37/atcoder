@@ -73,7 +73,7 @@ struct Circle {
     double l = v.norm(); // the distance between `o` and `c.o`
     if (equal(l, 0)) return {}; // `o` and `c.o` are same
     if (equal(l+r+c.r, max({ l, r, c.r })*2)) { // this circle and c touches in a single point.
-      if (c.r == max({ l, r, c.r })) {
+      if (equal(l+r, c.r)) { // c.r is longest
         return { o - v*(r/l) };
       } else {
         return { o + v*(r/l) };
