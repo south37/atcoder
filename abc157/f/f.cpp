@@ -113,7 +113,9 @@ int main(int argc, char** argv) {
   rep(ti, 100) {
     double x = (l+r)/2;
     vector<V> ps; // the candidate positions
+    // set center positions
     rep(i, n) ps.push_back(c[i].o);
+    // set touch points
     rep(i, n) {
       rep(j, i) {
         Circle a = c[i];
