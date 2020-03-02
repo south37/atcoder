@@ -96,6 +96,8 @@ int main(int argc, char** argv) {
 
   Circle a(V(0.0, 0.0), 2.0);
   Circle b(V(2.0, 0.0), 2.0);
+
+  // intesection points of circle a and circl b
   vector<V> v = a.xp(b);
   for (V& x : v) {
     cout<<"("<<x.x<<","<<x.y<<")"<<endl;
