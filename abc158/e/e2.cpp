@@ -63,8 +63,8 @@ int main(int argc, char** argv) {
   // vector<vector<ll>> dp(n+1, vector<ll>(p)); // count of [0, i) for each digit.
   // vector<ll> pre(p);
   // vector<ll> cur(p);
-  unordered_map<ll, ll> pre;
-  unordered_map<ll, ll> cur;
+  map<ll, ll> pre;
+  map<ll, ll> cur;
   // initialize
   ll ans = 0;
 
