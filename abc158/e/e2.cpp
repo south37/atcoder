@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 
   rep(i, n) {
     ll digit = s[i] - '0';
-    cout << "digit: " << digit << endl;
+    // cout << "digit: " << digit << endl;
     // dp[i][k] .. the number of remaining k which include i.
 
     // Try only this digit.
@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
       // cout << "remain: " << remain << endl;
       dp[i+1][remain] += dp[i][k];
     }
-    printvec(dp[i+1]);
+    // printvec(dp[i+1]);
     if (dp[i+1][0] > 0) { // k == 0 means divisable
       ans += dp[i+1][0];
     }
