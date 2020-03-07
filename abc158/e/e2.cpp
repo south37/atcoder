@@ -61,13 +61,15 @@ int main(int argc, char** argv) {
 
   // dp[i][k] ..we count the number of remaining k
   // vector<vector<ll>> dp(n+1, vector<ll>(p)); // count of [0, i) for each digit.
-  vector<ll> pre(p);
-  vector<ll> cur(p);
+  // vector<ll> pre(p);
+  // vector<ll> cur(p);
+  unordered_map<ll, ll> pre;
+  unordered_map<ll, ll> cur;
   // initialize
   ll ans = 0;
 
   rep(i, n) {
-    cur.assign(p, 0);
+    cur.clear();
 
     ll digit = s[i] - '0';
     // cout << "digit: " << digit << endl;
@@ -76,11 +78,14 @@ int main(int argc, char** argv) {
     // Try only this digit.
     ll remain = digit % p;
     cur[remain] += 1;
-    rep(k, p) {
+    for (auto& pp : pre) {
+      ll k = pp.first;
+      ll cnt = pp.second;
+
       ll remain = (k * 10 + digit) % p;
       // cout << "k: " << k << endl;
       // cout << "remain: " << remain << endl;
-      cur[remain] += pre[k];
+      cur[remain] += cnt;
     }
     // printvec(dp[i+1]);
     if (cur[0] > 0) { // k == 0 means divisable
