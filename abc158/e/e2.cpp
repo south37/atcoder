@@ -60,28 +60,34 @@ int main(int argc, char** argv) {
   cin >> s;
 
   // dp[i][k] ..we count the number of remaining k
-  vector<vector<ll>> dp(n+1, vector<ll>(p)); // count of [0, i) for each digit.
+  // vector<vector<ll>> dp(n+1, vector<ll>(p)); // count of [0, i) for each digit.
+  vector<ll> pre(p);
+  vector<ll> cur(p);
   // initialize
   ll ans = 0;
 
   rep(i, n) {
+    cur.assign(p, 0);
+
     ll digit = s[i] - '0';
     // cout << "digit: " << digit << endl;
     // dp[i][k] .. the number of remaining k which include i.
 
     // Try only this digit.
     ll remain = digit % p;
-    dp[i+1][remain] += 1;
+    cur[remain] += 1;
     rep(k, p) {
       ll remain = (k * 10 + digit) % p;
       // cout << "k: " << k << endl;
       // cout << "remain: " << remain << endl;
-      dp[i+1][remain] += dp[i][k];
+      cur[remain] += pre[k];
     }
     // printvec(dp[i+1]);
-    if (dp[i+1][0] > 0) { // k == 0 means divisable
-      ans += dp[i+1][0];
+    if (cur[0] > 0) { // k == 0 means divisable
+      ans += cur[0];
     }
+
+    swap(cur, pre);
   }
 
   cout << ans << endl;
