@@ -54,6 +54,48 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  string s;
+  cin >> s;
+  deque<char> deq;
+  rep(i, s.size()) {
+    deq.push_back(s[i]);
+  }
+
+  bool rev = false;
+  ll q;
+  cin >> q;
+  rep(i, q) {
+    ll t;
+    cin >> t;
+    if (t == 1) {
+      rev = !rev;
+    } else { // t==2
+      ll f;
+      char c;
+      cin >> f >> c;
+      if (f == 1) { // prev
+        if (rev) {
+          deq.push_back(c);
+        } else {
+          deq.push_front(c);
+        }
+      } else { // back
+        if (rev) {
+          deq.push_front(c);
+        } else {
+          deq.push_back(c);
+        }
+      }
+    }
+  }
+  // Here, deq has result.
+  string res;
+  rep(i, deq.size()) {
+    res += deq[i];
+  }
+  if (rev) { // reversed
+    reverse(all(res));
+  }
+
+  cout << res << endl;
 }
