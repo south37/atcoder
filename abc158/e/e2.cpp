@@ -77,20 +77,21 @@ int main(int argc, char** argv) {
 
     // Try only this digit.
     ll remain = digit % p;
-    cur[remain] += 1;
+    if (remain == 0) { ans += 1; }
+    cur[(remain*10) % p] += 1;
+
     for (auto& pp : pre) {
       ll k = pp.first;
       ll cnt = pp.second;
 
-      ll remain = (k * 10 + digit) % p;
+      ll remain = (k + digit) % p;
+      if (remain == 0) { ans += cnt; }
+
       // cout << "k: " << k << endl;
       // cout << "remain: " << remain << endl;
-      cur[remain] += cnt;
+      cur[(remain*10)%p] += cnt;
     }
     // printvec(dp[i+1]);
-    if (cur[0] > 0) { // k == 0 means divisable
-      ans += cur[0];
-    }
 
     swap(cur, pre);
   }
