@@ -1,3 +1,5 @@
+// ref. https://img.atcoder.jp/hitachi2020/editorial.pdf
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -49,60 +51,13 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 vector<vector<ll>> tree;
-vector<vector<ll>> threeTree;
-vector<ll> deg;
-ll zero_cnt = 0;
-ll one_cnt = 0;
-ll two_cnt = 0;
-vector<ll> colors; // color at i. used as visited. initialized by -1.
-vector<ll> states;
+vector<ll> colors; // color.
 
-void threeDfs(int v, int nv, int step) {
-  if (states[nv] == 1) { return; } // cycle
-  states[nv] = 1;
-
-  if (step == 3) {
-    threeTree[v].push_back(nv);
-    states[nv] = 0;
-    return;
-  }
-
-  for (int nnv : tree[nv]) {
-    threeDfs(v, nnv, step + 1);
-  }
-  states[nv] = 0;
-}
-
-// color = 1 or 2
-void dfs(int v, int color, int pre) {
-  if (colors[v] != -1) { return; } // skip already visited one.
-
-  // At step 3, we paint.
-  if (color == 1) {
-    if (one_cnt == 0) { return; } // already 0
-  } else {
-    if (two_cnt == 0) { return; }
-  }
-
+void dfs(int v, int pre, int color) {
   colors[v] = color;
-
-  if (color == 1) {
-    --one_cnt;
-    color = 2;
-    if (two_cnt == 0) { // two is already 0
-      return;
-    }
-  } else { // color == 2;
-    --two_cnt;
-    color = 1;
-    if (one_cnt == 0) { // two is already 0
-      return;
-    }
-  }
-
-  for (int nv : threeTree[v]) {
-    if (nv == pre) { continue; } // skp parent
-    dfs(nv, color, v);
+  for (int nv : tree[v]) {
+    if (nv == pre) { continue; } // skip pre
+    dfs(nv, v, !color);
   }
 }
 
@@ -115,22 +70,13 @@ int main(int argc, char** argv) {
   ll n;
   cin >> n;
   tree.resize(n);
-  deg.resize(n);
-  colors.assign(n, -1);
-  states.assign(n, -1);
-
-  threeTree.resize(n);
-
-  one_cnt = (n+2)/3;
-  two_cnt = n/3;
+  colors.resize(n, -1);
+  ll one_cnt = (n+2)/3;
+  ll two_cnt = n/3;
   if (n%3 == 2) {
     two_cnt += 1;
   }
-  zero_cnt = n - one_cnt - two_cnt;
-
-  // cout << "zero_cnt: " << zero_cnt << endl;
-  // cout << "one_cnt: " << one_cnt << endl;
-  // cout << "two_cnt: " << two_cnt << endl;
+  ll zero_cnt = n - one_cnt - two_cnt;
 
   rep(i, n-1) {
     ll a, b;
@@ -138,76 +84,76 @@ int main(int argc, char** argv) {
     --a; --b; // 0-indexed
     tree[a].push_back(b);
     tree[b].push_back(a);
-    ++deg[a];
-    ++deg[b];
   }
 
-  // We want tree with distance 3.
-  rep(i, n) {
-    threeDfs(i, i, 0);
-  }
-  vector<ll> threeDeg(n);
-  vector<ll> threeLeaves;
-  rep(i, n) {
-    if (threeTree[i].size() == 1) {
-      threeLeaves.push_back(i);
-    }
-  }
+  // paint red(0) or black(1).
+  dfs(0, -1, 0);
 
-  //for (int v : threeLeaves) {
-  rep(v, n) {
-    ll color;
-    if (one_cnt > two_cnt) {
-      color = 1;
+  // Here, all nodes are painted
+  ll red_cnt = 0;
+  ll black_cnt = 0;
+  rep(i, n) {
+    if (colors[i] == 0) { // red
+      ++red_cnt;
     } else {
-      color = 2;
-    }
-
-    dfs(v, color, -1);
-  }
-  rep(i, n) {
-    if (colors[i] == -1) {
-      colors[i] = 0;
+      ++black_cnt;
     }
   }
 
-  // vector<ll> leaves;
-  // rep(i, n) {
-  //   if (deg[i] == 1) {
-  //     leaves.push_back(i);
-  //   }
-  // }
-
-  // for (int v : leaves) {
-  //   ll color;
-  //   if (one_cnt > two_cnt) {
-  //     color = 1;
-  //   } else {
-  //     color = 2;
-  //   }
-
-  //   dfs(v, 0, color);
-  // }
-  // rep(i, n) {
-  //   if (colors[i] == -1) {
-  //     colors[i] = 0;
-  //   }
-  // }
-
-  // Here, 1 and 2 are painted.
   vector<ll> ans(n);
-  ll zeros = 1;
+  if (red_cnt > n/3 && black_cnt > n/3) {
+    // Here, we use 1 for red and 2 for black
+    rep(i, n) {
+      if (colors[i] == 0 && one_cnt > 0) {
+        ans[i] = 1;
+        --one_cnt;
+      } else if (colors[i] == 1 && two_cnt > 0) {
+        ans[i] = 2;
+        --two_cnt;
+      } else {
+        ans[i] = 0;
+      }
+    }
+  } else {
+    ll target_color;
+    if (red_cnt <= n/3) {
+      // Here, we use 0 for red
+      target_color = 0; // red
+    } else { // black_cnt <= n/3
+      // Here, we use 0 for black
+      target_color = 1;
+    }
+
+    rep(i, n) {
+      if (colors[i] == target_color) {
+        ans[i] = 0;
+        --zero_cnt;
+      } else {
+        if (one_cnt) {
+          ans[i] = 1;
+          --one_cnt;
+        } else if (two_cnt) {
+          ans[i] = 2;
+          --two_cnt;
+        } else {
+          ans[i] = 0;
+        }
+      }
+    }
+  }
+
   ll ones = 0;
   ll twos = 0;
+  ll zeros = 1;
   rep(i, n) {
-    if (colors[i] == 0) {
-      ans[i] = zeros * 3;
+    if (ans[i] == 0) {
+      ans[i] = 3*zeros;
       ++zeros;
-    } else if (colors[i] == 1) {
-      ans[i] = ones * 3 + 1;
+    } else if (ans[i] == 1) {
+      ans[i] = 3*ones + 1;
       ++ones;
-    } else { // 2
-      ans[i] = twos * 3 + 2;
+    } else { // a[i] == 2;
+      ans[i] = 3*twos + 2;
       ++twos;
     }
   }
