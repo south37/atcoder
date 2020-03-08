@@ -1,3 +1,5 @@
+// ref. https://www.youtube.com/watch?v=sv3l8heocMY
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -114,6 +116,16 @@ struct mint {
 //   cout << p2.x << endl; // 10 (-3 % 13)
 // }
 
+vector<vector<ll>> tree; // adjacency list of tree. It may not be connected. It may have multiple connected components.
+
+mint dfs(int v) {
+  mint res(1);
+  for (int nv : tree[v]) {
+    res *= dfs(nv);
+  }
+  return res + 1; // erase .. 1, not erase .. res
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -122,4 +134,30 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  tree.resize(n);
+
+  vector<P> p(n); // pair of <x, d>
+  rep(i, n) {
+    cin >> p[i].first >> p[i].second;
+  }
+  sort(all(p));
+
+  set<P> s; // set of unused ones. pair of <x, i>
+  for (int i = n-1; i >= 0; --i) {
+    int x = p[i].first;
+    int d = p[i].second;
+    while (s.size() && s.begin()->first < x+d) {
+      tree[i].push_back(s.begin()->second);
+      s.erase(s.begin());
+    }
+    s.emplace(x, i);
+  }
+
+  // Here, roots are in s.
+  mint ans(1);
+  for (auto root : s) {
+    int v = root.second;
+    ans *= dfs(v);
+  }
+  cout << ans.x << endl;
 }
