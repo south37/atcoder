@@ -59,42 +59,30 @@ int main(int argc, char** argv) {
   string s;
   cin >> s;
 
-  // dp[i][k] ..we count the number of remaining k
-  // vector<vector<ll>> dp(n+1, vector<ll>(p)); // count of [0, i) for each digit.
-  // vector<ll> pre(p);
-  // vector<ll> cur(p);
-  map<ll, ll> pre;
-  map<ll, ll> cur;
-  // initialize
-  ll ans = 0;
-
-  rep(i, n) {
-    cur.clear();
-
-    ll digit = s[i] - '0';
-    // cout << "digit: " << digit << endl;
-    // dp[i][k] .. the number of remaining k which include i.
-
-    // Try only this digit.
-    ll remain = digit % p;
-    if (remain == 0) { ans += 1; }
-    cur[(remain*10) % p] += 1;
-
-    for (auto& pp : pre) {
-      ll k = pp.first;
-      ll cnt = pp.second;
-
-      ll remain = (k + digit) % p;
-      if (remain == 0) { ans += cnt; }
-
-      // cout << "k: " << k << endl;
-      // cout << "remain: " << remain << endl;
-      cur[(remain*10)%p] += cnt;
+  if (10%p == 0) { // 2, 5
+    ll ans = 0;
+    rep(i, n) {
+      if ((s[i]-'0') % p == 0) {
+        ans += i+1;
+      }
     }
-    // printvec(dp[i+1]);
-
-    swap(cur, pre);
+    cout << ans << endl;
+    return 0;
   }
 
+  vector<ll> d(n+1);
+  ll ten = 1; // 10^k at digit k
+  for (int i = n-1; i >= 0; --i) {
+    int a = (s[i]-'0') * ten % p;
+    d[i] = (d[i+1]+a) % p;
+    ten *= 10; ten %= p;
+  }
+  vector<ll> cnt(p);
+  // We want to find the count of pairs (i,j) where d[i] == d[j]. This means d[i] - d[j]=0 mod p.
+  ll ans = 0;
+  for (int i = n; i >= 0; --i) {
+    ans += cnt[d[i]];
+    ++cnt[d[i]];
+  }
   cout << ans << endl;
 }
