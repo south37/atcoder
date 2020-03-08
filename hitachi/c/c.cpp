@@ -49,43 +49,60 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 vector<vector<ll>> tree;
+vector<vector<ll>> threeTree;
 vector<ll> deg;
 ll zero_cnt = 0;
 ll one_cnt = 0;
 ll two_cnt = 0;
 vector<ll> colors; // color at i. used as visited. initialized by -1.
+vector<ll> states;
+
+void threeDfs(int v, int nv, int step) {
+  if (states[nv] == 1) { return; } // cycle
+  states[nv] = 1;
+
+  if (step == 3) {
+    threeTree[v].push_back(nv);
+    states[nv] = 0;
+    return;
+  }
+
+  for (int nnv : tree[nv]) {
+    threeDfs(v, nnv, step + 1);
+  }
+  states[nv] = 0;
+}
 
 // color = 1 or 2
-void dfs(int v, int step, int color) {
+void dfs(int v, int color, int pre) {
   if (colors[v] != -1) { return; } // skip already visited one.
 
   // At step 3, we paint.
-  if (step % 3 == 0) {
-    if (color == 1) {
-      if (one_cnt == 0) { return; } // already 0
-    } else {
-      if (two_cnt == 0) { return; }
+  if (color == 1) {
+    if (one_cnt == 0) { return; } // already 0
+  } else {
+    if (two_cnt == 0) { return; }
+  }
+
+  colors[v] = color;
+
+  if (color == 1) {
+    --one_cnt;
+    color = 2;
+    if (two_cnt == 0) { // two is already 0
+      return;
     }
-
-    colors[v] = color;
-
-    if (color == 1) {
-      --one_cnt;
-      color = 2;
-      if (two_cnt == 0) { // two is already 0
-        return;
-      }
-    } else { // color == 2;
-      --two_cnt;
-      color = 1;
-      if (one_cnt == 0) { // two is already 0
-        return;
-      }
+  } else { // color == 2;
+    --two_cnt;
+    color = 1;
+    if (one_cnt == 0) { // two is already 0
+      return;
     }
   }
 
-  for (int nv : tree[v]) {
-    dfs(nv, (step + 1)%3, color);
+  for (int nv : threeTree[v]) {
+    if (nv == pre) { continue; } // skp parent
+    dfs(nv, color, v);
   }
 }
 
@@ -100,6 +117,9 @@ int main(int argc, char** argv) {
   tree.resize(n);
   deg.resize(n);
   colors.assign(n, -1);
+  states.assign(n, -1);
+
+  threeTree.resize(n);
 
   one_cnt = (n+2)/3;
   two_cnt = n/3;
@@ -122,14 +142,20 @@ int main(int argc, char** argv) {
     ++deg[b];
   }
 
-  vector<ll> leaves;
+  // We want tree with distance 3.
   rep(i, n) {
-    if (deg[i] == 1) {
-      leaves.push_back(i);
+    threeDfs(i, i, 0);
+  }
+  vector<ll> threeDeg(n);
+  vector<ll> threeLeaves;
+  rep(i, n) {
+    if (threeTree[i].size() == 1) {
+      threeLeaves.push_back(i);
     }
   }
 
-  for (int v : leaves) {
+  //for (int v : threeLeaves) {
+  rep(v, n) {
     ll color;
     if (one_cnt > two_cnt) {
       color = 1;
@@ -137,13 +163,36 @@ int main(int argc, char** argv) {
       color = 2;
     }
 
-    dfs(v, 0, color);
+    dfs(v, color, -1);
   }
   rep(i, n) {
     if (colors[i] == -1) {
       colors[i] = 0;
     }
   }
+
+  // vector<ll> leaves;
+  // rep(i, n) {
+  //   if (deg[i] == 1) {
+  //     leaves.push_back(i);
+  //   }
+  // }
+
+  // for (int v : leaves) {
+  //   ll color;
+  //   if (one_cnt > two_cnt) {
+  //     color = 1;
+  //   } else {
+  //     color = 2;
+  //   }
+
+  //   dfs(v, 0, color);
+  // }
+  // rep(i, n) {
+  //   if (colors[i] == -1) {
+  //     colors[i] = 0;
+  //   }
+  // }
 
   // Here, 1 and 2 are painted.
   vector<ll> ans(n);
