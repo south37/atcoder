@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
       bool ok = true;
       for (int ni = k; ni < s[i].size(); ++ni) {
         int nj = ni-k;
-        if (nj > s[j].size()) { break; }
+        if (nj >= s[j].size()) { break; }
         if (s[i][ni] == '?' || s[j][nj] == '?') { continue; }
         if (s[i][ni] != s[j][nj]) { ok = false; }
       }
