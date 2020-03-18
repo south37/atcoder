@@ -64,7 +64,7 @@ ll solve(ll ai, ll aj, ll bi, ll bj) {
     ll nai = ai/s, nbi = bi/s; // location at scale s.
     if (nai != nbi) { break; } // if not in same row, result should be Manhattan distance
     ll naj = aj/s, nbj = bj/s;
-    if (nai == 1 && abs(naj-nbj) > 1) { // not in same column
+    if ((nai%3) == 1 && abs(naj-nbj) > 1) { // not in same column
       ll up  = s*nai-1;
       ll bot = s*(nai+1);
       ll loss = min(ai,bi) - up;
