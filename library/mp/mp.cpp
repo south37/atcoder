@@ -1,3 +1,5 @@
+// ref. https://www.youtube.com/watch?v=9MphwmIsO7Q
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
