@@ -87,7 +87,14 @@ int main(int argc, char** argv) {
   string t, s;
   cin >> t;
   cin >> s;
+
+  // Find all t in s. |t| <= |s|
   MP<string> mp(t);
+  rep(i, t.size()+1) {
+    cout << mp[i] << ' ';
+  }
+  cout << endl;
+
   vector<int> ans = mp.findAll(s);
   for (int i : ans) {
     cout << i << endl;
