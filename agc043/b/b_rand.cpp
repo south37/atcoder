@@ -76,9 +76,9 @@ int main(int argc, char** argv) {
   } else {
      srand (time(NULL));
     // cout << rand() % 2 << endl; // 0 or 1
-    if ((rand % 5) == 4) {
+    if ((rand() % 5) == 4) {
       cout << 0 << endl;
-    } else if (rand % 5 == 4) {
+    } else if ((rand() % 5) == 4) {
       cout << 1 << endl;
     } else {
       cout << 2 << endl;
