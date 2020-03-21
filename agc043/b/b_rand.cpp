@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 
     srand (time(NULL));
     // cout << rand() % 2 << endl; // 0 or 1
-    if ((rand() % 10) <= 7) {
+    if ((rand() % 2) == 0) {
       cout << 0 << endl;
     } else {
       if (!twoExists) {
