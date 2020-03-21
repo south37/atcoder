@@ -11,6 +11,7 @@
 #include <vector>
 #include <string.h>
 #include <set>
+#include <time.h>       /* time */
 
 using namespace std;
 
@@ -73,6 +74,7 @@ int main(int argc, char** argv) {
     }
     cout << d[0] << endl;
   } else {
+    srand (time(NULL));
     cout << rand() % 3 << endl;
   }
 }
