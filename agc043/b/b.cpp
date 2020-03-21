@@ -1,3 +1,5 @@
+// ref. https://img.atcoder.jp/agc043/editorial.pdf
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -47,7 +49,99 @@ typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
 const ll INF = 1e9;
-const ll MOD = 1000000007;  // 1e9 + 7
+// const ll MOD = 1000000007;  // 1e9 + 7
+
+ll MOD = 2;
+
+// Mod int
+// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
+struct mint {
+  ll x;
+  mint(ll x = 0) : x((x + MOD) % MOD) {}
+  mint& operator+= (const mint a) {
+    if ((x += a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator+ (const mint a) const {
+    mint res(*this);
+    return res += a;
+  }
+  mint& operator-= (const mint a) {
+    if ((x += MOD - a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator- (const mint a) const {
+    mint res(*this);
+    return res -= a;
+  }
+  mint& operator*= (const mint a) {
+    (x *= a.x) %= MOD;
+    return *this;
+  }
+  mint operator* (const mint a) const {
+    mint res(*this);
+    return res *= a;
+  }
+  mint pow(ll t) const {
+    if (!t) { return 1; }
+    mint a = pow(t >> 1);
+    a *= a;
+    if (t & 1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(MOD-2);
+  }
+  mint& operator/= (const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/ (const mint a) const {
+    mint res(*this);
+    return res /= a;
+  }
+};
+
+// Combination mod prime.
+// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
+struct Combination {
+  vector<mint> fact, ifact;
+  Combination(int n) { init(n); }
+  void init(int n) {
+    assert(n < MOD); // n must be lower than MOD.
+
+    fact.resize(n + 1);
+    ifact.resize(n + 1);
+
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) { fact[i] = fact[i-1] * i; }
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) { ifact[i-1] = ifact[i] * i; }
+  }
+  mint operator() (int n, int k) const {
+    if (k < 0 || k > n) { return 0; }
+    return fact[n] * ifact[k] * ifact[n-k];
+  }
+  mint perm(int n, int k) const {
+    if (k < 0 || k > n) { return 0; }
+    return fact[n] * ifact[n-k];
+  }
+};
+
+// int main(int argc, char** argv) {
+//   MOD = 13;
+//
+//   Combination c(12);
+//   cout << c(12, 0).x << endl;  // 1  = 1 % 13
+//   cout << c(12, 1).x << endl;  // 12 = 12 % 13
+//   cout << c(12, 2).x << endl;  // 1  = 66 % 13 = (12 * 11 / 2) % 13
+//   cout << c(12, 3).x << endl;  // 12 = 220 % 13 = (12 * 11 * 10 / (3 * 2 * 1)) % 13
+//   cout << c(12, 11).x << endl; // 12 = 12 % 13
+//   cout << c(12, 12).x << endl; // 1  = 12 % 13
+//
+//   cout << c.perm(12, 3).x << endl; // 7 = 12 * 11 * 10 % 13
+// }
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -59,27 +153,36 @@ int main(int argc, char** argv) {
   cin >> n;
   string a;
   cin >> a;
-
-  // naive simulation
   vector<ll> d(n);
   rep(i, n) {
     d[i] = (a[i] - '0') - 1;
   }
 
-  // scan from left
-  ll cur = 0;
-  rep(i, n-1) {
-    cur += abs(d[i] - d[i+1]);
-    cur %= 3;
+  Combination c(n);
+  vector<ll> e(n); // even, odd of d
+  rep(i, n) {
+    e[i] = d[i] % 2;
   }
-  cout << cur << endl;
+  mint oddEven(0);
+  rep(i, n) {
+    oddEven += e[i] * c(n-1, i);
+  }
+  // Here, if oddEven.x == 1, then ans is odd. So, ans is 1.
+  if (oddEven.x == 1) {
+    cout << 1 << endl;
+    return 0;
+  }
 
-  // rep(iter, n-1) {
-  //   // cout << "d:"; printvec(d);
-  //   rep(i, n - iter - 1) {
-  //     d[i] = abs(d[i] - d[i+1]);
-  //   }
-  //   // d.resize(n-iter-1);
-  // }
-  // cout << d[0] << endl;
+  // Here, ans is 0 or 2
+  bool oneExists = false;
+  rep(i, n) {
+    if (d[i] == 1) {
+      oneExists = true;
+    }
+  }
+  if (oneExists) {
+    cout << 0 << endl;
+  } else {
+    cout << 2 << endl;
+  }
 }
