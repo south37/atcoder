@@ -74,14 +74,51 @@ int main(int argc, char** argv) {
     }
     cout << d[0] << endl;
   } else {
-     srand (time(NULL));
-    // cout << rand() % 2 << endl; // 0 or 1
-    if ((rand() % 10) <= 8) {
+    vector<ll> d(n);
+    rep(i, n) {
+      d[i] = (a[i] - '0') - 1;
+    }
+
+    ll limit = 1000;
+    rep(iter, limit) {
+      // cout << "d:"; printvec(d);
+      rep(i, n - iter - 1) {
+        d[i] = abs(d[i] - d[i+1]);
+      }
+      // d.resize(n-iter-1);
+    }
+    // Here, d[0, n-limit) is calculated
+    bool twoExists = false;
+    bool allSame = true;
+    ll firstVal = d[0];
+    rep(i, n-limit) {
+      if (d[i] == 2) {
+        twoExists = true;
+      }
+      if (d[i] != firstVal) {
+        allSame = false;
+      }
+    }
+
+    if (allSame) {
       cout << 0 << endl;
-    } else if ((rand() % 5) <= 3) {
-      cout << 1 << endl;
+      return 0;
+    }
+
+    srand (time(NULL));
+    // cout << rand() % 2 << endl; // 0 or 1
+    if ((rand() % 10) <= 7) {
+      cout << 0 << endl;
     } else {
-      cout << 2 << endl;
+      if (!twoExists) {
+        cout << 1 << endl;
+      } else {
+        if ((rand() % 5) <= 3) {
+          cout << 1 << endl;
+        } else {
+          cout << 2 << endl;
+        }
+      }
     }
   }
 }
