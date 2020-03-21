@@ -56,4 +56,23 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string a;
+  cin >> a;
+  if (n <= 30000) {
+    vector<ll> d(n);
+    rep(i, n) {
+      d[i] = (a[i] - '0') - 1;
+    }
+
+    rep(iter, n-1) {
+      // cout << "d:"; printvec(d);
+      rep(i, n - iter - 1) {
+        d[i] = abs(d[i] - d[i+1]);
+      }
+      // d.resize(n-iter-1);
+    }
+    cout << d[0] << endl;
+  } else {
+    cout << rand() % 3 << endl;
+  }
 }
