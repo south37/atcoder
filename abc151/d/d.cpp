@@ -108,9 +108,12 @@ int main(int argc, char** argv) {
         if (maze[nextR][nextC] == '#') { continue; }
         // Here, (r,c) and (nextR, nextC) is connected
         d[r*w+c][nextR*w+nextC] = 1;
+        d[nextR*w+nextC][r*w+c] = 1;
       }
     }
   }
+  // printvec(d[0]);
+  // printvec(d[1]);
 
   // WarshalFloyd
   rep(k, h*w) {
@@ -120,10 +123,13 @@ int main(int argc, char** argv) {
       }
     }
   }
+  // printvec(d[0]);
+  // printvec(d[1]);
 
   ll ans = 0;
   rep(i, h*w) {
     rep(j, h*w) {
+      if (i == j) { continue; } // same location
       if (d[i][j] != INF) {
         ans = max(ans, d[i][j]);
       }
