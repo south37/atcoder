@@ -67,106 +67,22 @@ int main(int argc, char** argv) {
     cin >> maze[r];
   }
 
-  set<P> multiq; // multiple queue. in which, they are side of black.
-
-  // At first, try reach from (0,0) to (h-1, w-1);
-  {
-    vector<vector<bool>> visited(h, vector<bool>(w));
-    queue<P> q;
-    q.emplace(0, 0);
-    visited[0][0] = true;
-    while (!q.empty()) {
-      auto p = q.front(); q.pop();
-      int r = p.first;
-      int c = p.second;
-      cout << "(r, c): " << r << "," << c << endl;
-      if (r == h-1 && c == w-1) { // reached to last.
-        cout << 0 << endl;
-        return 0;
+  vector<vector<ll>> dp(h, vector<ll>(w, INF));
+  dp[h-1][w-1] = 0;
+  // We calculate rsult by dp. dp[i][j] .. min black for reach to (h-1,w-1).
+  for (int r = h-1; r >= 0; --r) {
+    for (int c = w-1; c >= 0; --c) {
+      if (r < h-1) {
+        dp[r][c] = min(dp[r][c], dp[r+1][c]);
       }
-      bool isSideOfBlack = false;
-      rep(i, 2) {
-        int nextR = r + dr[i];
-        int nextC = c + dc[i];
-        if (nextR >= h || nextC >= w) { continue; } // reached to wall
-        if (visited[nextR][nextC]) { continue; } // visited
-        visited[nextR][nextC] = true;
-
-        if (maze[nextR][nextC] == '#') { // reached to black.
-          isSideOfBlack = true;
-        } else {
-          q.emplace(nextR, nextC);
-        }
+      if (c < w-1) {
+        dp[r][c] = min(dp[r][c], dp[r][c+1]);
       }
-      if (isSideOfBlack) {
-        multiq.emplace(r, c);
+      if (maze[r][c] == '#') { // if black, cost increase 1.
+        dp[r][c] += 1;
       }
     }
   }
 
-  // Here, we checked reachabelity from (0, 0).
-  // we want to find the reachable locations from (w, h). Then check the min distance.
-
-  set<P> targets;
-  {
-    vector<vector<bool>> visited(h, vector<bool>(w));
-    queue<P> q;
-    q.emplace(w-1, h-1);
-    visited[w-1][h-1] = true;
-    while (!q.empty()) {
-      auto p = q.front(); q.pop();
-      int r = p.first;
-      int c = p.second;
-      bool isSideOfBlack = false;
-      rep(i, 2) {
-        int nextR = r + revDr[i];
-        int nextC = c + revDc[i];
-        if (nextR < 0 || nextR >= h || nextC < 0 || nextC >= w) { continue; } // reached to wall
-        if (visited[nextR][nextC]) { continue; } // visited
-        visited[nextR][nextC] = true;
-
-        if (maze[nextR][nextC] == '#') { // reached to black.
-          isSideOfBlack = true;
-        } else {
-          q.emplace(nextR, nextC);
-        }
-      }
-      if (isSideOfBlack) {
-        targets.insert({ r, c });
-      }
-    }
-  }
-
-  // Here, we want the min distance from "multiq" to "targets".
-  {
-    queue<pair<P, ll>> q;
-
-    vector<vector<bool>> visited(h, vector<bool>(w));
-    for (auto p : multiq) {
-      visited[p.first][p.second] = true;
-      q.emplace(p, 0);
-    }
-    while (!q.empty()) {
-      auto p = q.front(); q.pop();
-      auto pos = p.first;
-      ll dist = p.second;
-      int r = pos.first;
-      int c = pos.second;
-      if (targets.find(pos) != targets.end()) { // found
-        cout << (dist-1) << endl;
-        return 0;
-      }
-      rep(i, 2) {
-        int nextR = r + dr[i];
-        int nextC = c + dc[i];
-        if (nextR < 0 || nextR >= h || nextC < 0 || nextC >= w) { continue; } // reached to wall
-        if (visited[nextR][nextC]) { continue; } // visited
-        visited[nextR][nextC] = true;
-
-        q.emplace(P(nextR, nextC), dist + 1);
-      }
-    }
-  }
-
-  // must not reach here.
+  cout << dp[0][0] << endl;
 }
