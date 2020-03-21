@@ -49,9 +49,7 @@ typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
 const ll INF = 1e9;
-// const ll MOD = 1000000007;  // 1e9 + 7
-
-ll MOD = 2;
+const ll MOD = 1000000007;  // 1e9 + 7
 
 // Mod int
 // cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
@@ -163,12 +161,13 @@ int main(int argc, char** argv) {
   rep(i, n) {
     e[i] = d[i] % 2;
   }
-  mint oddEven(0);
+  ll oddEven = 0;
   rep(i, n) {
-    oddEven += e[i] * c(n-1, i);
+    oddEven += (c(n-1, i) * e[i]).x % 2;
+    oddEven %= 2;
   }
   // Here, if oddEven.x == 1, then ans is odd. So, ans is 1.
-  if (oddEven.x == 1) {
+  if (oddEven == 1) {
     cout << 1 << endl;
     return 0;
   }
