@@ -79,6 +79,7 @@ int main(int argc, char** argv) {
       auto p = q.front(); q.pop();
       int r = p.first;
       int c = p.second;
+      cout << "(r, c): " << r << "," << c << endl;
       if (r == h-1 && c == w-1) { // reached to last.
         cout << 0 << endl;
         return 0;
@@ -116,10 +117,6 @@ int main(int argc, char** argv) {
       auto p = q.front(); q.pop();
       int r = p.first;
       int c = p.second;
-      if (r == h-1 && c == w-1) { // reached to last.
-        cout << 0 << endl;
-        return 0;
-      }
       bool isSideOfBlack = false;
       rep(i, 2) {
         int nextR = r + revDr[i];
@@ -156,7 +153,7 @@ int main(int argc, char** argv) {
       int r = pos.first;
       int c = pos.second;
       if (targets.find(pos) != targets.end()) { // found
-        cout << dist << endl;
+        cout << (dist-1) << endl;
         return 0;
       }
       rep(i, 2) {
