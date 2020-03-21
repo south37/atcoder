@@ -90,8 +90,8 @@ int main(int argc, char** argv) {
         }
         dp[r][c] = min(dp[r][c], cand);
       }
-      cout << "(r,c):" << r<<","<<c<<endl;
-      cout << "dp[r][c]:" << dp[r][c] <<endl;
+      // cout << "(r,c):" << r<<","<<c<<endl;
+      // cout << "dp[r][c]:" << dp[r][c] <<endl;
     }
   }
 
