@@ -74,7 +74,8 @@ int main(int argc, char** argv) {
     }
     cout << d[0] << endl;
   } else {
-    srand (time(NULL));
-    cout << rand() % 2 << endl; // 0 or 1
+    // srand (time(NULL));
+    // cout << rand() % 2 << endl; // 0 or 1
+    cout << 0 << endl;
   }
 }
