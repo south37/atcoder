@@ -68,19 +68,30 @@ int main(int argc, char** argv) {
   }
 
   vector<vector<ll>> dp(h, vector<ll>(w, INF));
-  dp[h-1][w-1] = 0;
+  if (maze[h-1][w-1] == '#') {
+    dp[h-1][w-1] = 1;
+  } else {
+    dp[h-1][w-1] = 0;
+  }
   // We calculate rsult by dp. dp[i][j] .. min black for reach to (h-1,w-1).
   for (int r = h-1; r >= 0; --r) {
     for (int c = w-1; c >= 0; --c) {
-      if (r < h-1) {
-        dp[r][c] = min(dp[r][c], dp[r+1][c]);
+      if (r < h-1) { // try bottom
+        ll cand = dp[r+1][c];
+        if (maze[r][c] == '#' && maze[r+1][c] != '#') {
+          cand += 1;
+        }
+        dp[r][c] = min(dp[r][c], cand);
       }
-      if (c < w-1) {
-        dp[r][c] = min(dp[r][c], dp[r][c+1]);
+      if (c < w-1) { // try right
+        ll cand = dp[r][c+1];
+        if (maze[r][c] == '#' && maze[r][c+1] != '#') {
+          cand += 1;
+        }
+        dp[r][c] = min(dp[r][c], cand);
       }
-      if (maze[r][c] == '#') { // if black, cost increase 1.
-        dp[r][c] += 1;
-      }
+      cout << "(r,c):" << r<<","<<c<<endl;
+      cout << "dp[r][c]:" << dp[r][c] <<endl;
     }
   }
 
