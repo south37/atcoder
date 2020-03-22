@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
       // We want to known the contribution of (n-1)C(i) using Lucas's theorem.
       // The bit representatio of n-1 must have all bits in i. (n-1)C(i) mod 2 == 1 if ((n-1)&i) == i, else 0.
       if (((n-1)&i) != i) { continue; }
-      ans ^= e[i];
+      ans ^= a[i];
     }
     cout << ans*2 << endl;
   }
