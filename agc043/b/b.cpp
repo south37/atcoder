@@ -1,5 +1,5 @@
 // ref. https://img.atcoder.jp/agc043/editorial.pdf
-// ref. https://atcoder.jp/contests/agc043/submissions/11046589
+// ref. https://atcoder.jp/contests/agc043/submissions/11047912
 
 #include <algorithm>
 #include <bitset>
@@ -60,41 +60,31 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
-  string a;
-  cin >> a;
-  vector<ll> d(n);
-  rep(i, n) {
-    d[i] = (a[i] - '0') - 1;
-  }
-
-  vector<ll> e(n); // even, odd of d
-  rep(i, n) {
-    e[i] = d[i] % 2;
-  }
-  ll oddEven = 0;
-  rep(i, n) {
-    int j = (n-1) - i;
-    if ((i^j) == (i+j)) {
-      oddEven += e[i];
-      oddEven %= 2;
-    }
-  }
-  // Here, if oddEven.x == 1, then ans is odd. So, ans is 1.
-  if (oddEven == 1) {
-    cout << 1 << endl;
-    return 0;
-  }
-
-  // Here, ans is 0 or 2
+  string s;
+  cin >> s;
+  vector<ll> a(n);
   bool has1 = false;
   rep(i, n) {
-    if (d[i] == 1) {
-      has1 = true;
+    a[i] = (s[i] - '0') - 1;
+    if (a[i] == 1) { has1 = true; }
+  }
+  if (!has1) {
+    rep(i, n) {
+      // 0 => 0, 2 => 1
+      a[i] /= 2;
     }
   }
-  if (has1) {
-    cout << 0 << endl;
-  } else {
-    cout << 2 << endl;
+  // Here, calculate the answer of [0, 1, ..., 0]
+  int ans = 0;
+  rep(i, n) {
+    // We want to known the contribution of (n-1)C(i) using Lucas's theorem.
+    // The bit representatio of n-1 must have all bits in i. (n-1)C(i) mod 2 == 1 if ((n-1)&i) == i, else 0.
+    if (((n-1)&i) != i) { continue; }
+    ans ^= a[i]%2;
   }
+
+  if (!has1) { // Here, ans is ans is answer is odd
+    ans *= 2;
+  }
+  cout << ans << endl;
 }
