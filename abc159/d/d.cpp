@@ -56,4 +56,37 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n);
+  rep(i, n) {
+    cin >> a[i];
+  }
+
+  // At first, calculate the histgram
+  vector<ll> hist(200050); // larger than N
+  // vector<ll> hist(10); // larger than N
+  rep(i, n) {
+    ++hist[a[i]];
+  }
+  // printvec(hist);
+
+  // Next, calculate the whole result
+  ll total = 0;
+  rep(i, 200050) {
+    ll cnt = hist[i];
+    // cnt C 2
+    if (cnt > 0) {
+      total += cnt * (cnt-1) / 2;
+    }
+  }
+  // cout << total << endl;
+
+  rep(i, n) {
+    ll j = a[i]; // target
+
+    ll cnt = hist[j] - 1; // Here, at i, hist is hist[i] - 1.
+    ll ans = total;
+    ans -= (hist[j] * (hist[j]-1))/2;
+    ans += cnt * (cnt-1)/2;
+    cout << ans << endl;
+  }
 }
