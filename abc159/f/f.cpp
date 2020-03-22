@@ -168,7 +168,11 @@ int main(int argc, char** argv) {
   mint ans = 0;
   rep(l, n) {
     for (ll r = l; r < n; ++r) {
-      ans += dp[r+1][s] - dp[l][s] - dp2[l];
+      cout << dp2[l].x << endl;
+      mint now = dp[r+1][s] - dp[l][s] - dp2[l];
+      // mint now = dp[r+1][s] - dp[l][s];
+      cout << "("<<l<<","<<r<<"): " << now.x << endl;
+      ans += now;
     }
   }
 
