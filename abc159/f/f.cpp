@@ -134,20 +134,41 @@ int main(int argc, char** argv) {
   vector<vector<mint>> dp(MAX_V, vector<mint>(MAX_V, 0));
   dp[0][0] = 1; // the count of [0, 0)
 
+  vector<mint> dp2(MAX_V); // dp2[i] .. contains the "contribution from above". dp2[i+1] is the contribution from [0, i).
+
   rep(i, n) {
     rep(k, s+1) {
       dp[i+1][k] = dp[i][k];
-      if (k >= a[i]) {
+      if (k >= a[i]) { // (k-a[i], a[i]) contributes to dp.
         dp[i+1][k] += dp[i][k-a[i]];
+
+        dp2[i+1] += dp[i][k-a[i]];  // contribution from above.
       }
     }
   }
 
-  // Here, dp is calculated. f(l,r) = dp[r+1][s] - dp[l][s].
+  cout << "dp2: ";
+  rep(i, n+1) {
+    cout << dp2[i].x << " ";
+  }
+  cout << endl;
+
+  // cout << "dp:"; printvec(dpi
+  // cout << dp[0][s].x << endl;
+  // cout << dp[1][s].x << endl;
+  // cout << dp[2][s].x << endl;
+  // cout << dp[3][s].x << endl;
+
+
+  // vector<mint> dp2sum(MAX_V);
+  // rep(i, n) {
+  // }
+
+  // Here, dp is calculated. f(l,r) = dp[r+1][s] - dp[l][s] - (dp2[l], contribution from abeove).
   mint ans = 0;
   rep(l, n) {
     for (ll r = l; r < n; ++r) {
-      ans += dp[r+1][s] - dp[l][s];
+      ans += dp[r+1][s] - dp[l][s] - dp2[l];
     }
   }
 
