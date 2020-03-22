@@ -116,6 +116,85 @@ struct mint {
 //   cout << p2.x << endl; // 10 (-3 % 13)
 // }
 
+vector<ll> a;
+ll s;
+
+// Segment Tree
+template <typename T>
+class SegTree {
+public:
+  SegTree(int _n) {
+    n = 1;
+    while (n < _n) { n *= 2; }
+    // dat[i] contains the information of counts in s. dat[i] .. [0, i)
+    dat = vector<vector<T>>(2 * n - 1, vector<T>(MAX_V, 0));
+    dat[n-1][0] = 1;
+  }
+
+  void update(int id) {
+    ll k = id + n - 1;
+    // Here, we update the count of dat[k]
+    // dat[k] = val;
+    rep(j, s+1) { // loop from 0 to s
+      dat[k][j] = dat[k-1][j];
+      if (j >= a[id-1]) {
+        dat[k][j] += dat[k-1][j-a[id-1]];
+      }
+    }
+    cout << "dat["<<k-(n-1)<<"]:";
+    rep(i, 7) {
+      cout << dat[k][i].x << " ";
+    }
+    cout << endl;
+    cout << "dat["<<k-(n-1)<<"][s]: " << dat[k][s].x << endl;
+
+    while (k > 0) {
+      k = (k - 1) / 2;
+      // dat[k] = min(dat[k * 2 + 1], dat[k * 2 + 2]);
+      rep(j, s+1) { // loop from 0 to s
+        dat[k][j] = max(dat[k*2+1][j], dat[k*2+2][j]);
+      }
+    }
+  }
+
+  // Calculate the min of [a, b)
+  T query(int a, int b) {
+    return _query(a, b, 0, 0, n);
+  }
+
+  // Calculate the min of [a, b)
+  // k is the index (dat[k]). This is matched to [l, r)
+  T _query(int a, int b, int k, int l, int r) {
+    // The intersection of [a, b) and [r, l) is blank.
+    if (r <= a || b <= l) { return 0; }
+
+    if (a <= l && r <= b) {  // [r, l) is completely included in [a, b)
+      return dat[k][s];
+    } else {
+      T vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
+      T vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
+      return max(vl.x, vr.x);
+    }
+  }
+
+private:
+  int n; // The size of source data. The power of 2.
+  vector<vector<T>> dat; // The data. The size if 2*n-1. The last n elements(dat[n..2*n-2]) are leaves(source data). The first n-1 elements are nodes.
+};
+
+// int main(int argc, char** argv) {
+//   int arr[] = { 1, 3, 2, 7, 9, 11 };
+//   int n = 6;
+//
+//   SegTree<int> st(n);
+//   rep(i, n) {
+//     st.update(i, arr[i]);
+//   }
+//
+//   cout << st.query(1, 5) << endl;
+//   cout << st.query(0, 4) << endl;
+//   cout << st.query(3, 5) << endl;
+// }
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -123,58 +202,25 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n, s;
+  ll n;
   cin >> n >> s;
-  vector<ll> a(n);
+  a.resize(n);
   rep(i, n) {
     cin >> a[i];
   }
 
-
-  vector<vector<mint>> dp(MAX_V, vector<mint>(MAX_V, 0));
-  dp[0][0] = 1; // the count of [0, 0)
-
-  vector<mint> dp2(MAX_V); // dp2[i] .. contains the "contribution from above". dp2[i+1] is the contribution from [0, i).
-
+  SegTree<mint> st(MAX_V);
   rep(i, n) {
-    rep(k, s+1) {
-      dp[i+1][k] = dp[i][k];
-      if (k >= a[i]) { // (k-a[i], a[i]) contributes to dp.
-        dp[i+1][k] += dp[i][k-a[i]];
-
-        dp2[i+1] += dp[i][k-a[i]];  // contribution from above.
-      }
-    }
+    st.update(i+1); //, a[i]);
   }
 
-  cout << "dp2: ";
-  rep(i, n+1) {
-    cout << dp2[i].x << " ";
-  }
-  cout << endl;
-
-  // cout << "dp:"; printvec(dpi
-  // cout << dp[0][s].x << endl;
-  // cout << dp[1][s].x << endl;
-  // cout << dp[2][s].x << endl;
-  // cout << dp[3][s].x << endl;
-
-
-  // vector<mint> dp2sum(MAX_V);
-  // rep(i, n) {
-  // }
-
-  // Here, dp is calculated. f(l,r) = dp[r+1][s] - dp[l][s] - (dp2[l], contribution from abeove).
+  // Here, st contains the information of count in each range.
   mint ans = 0;
   rep(l, n) {
     for (ll r = l; r < n; ++r) {
-      cout << dp2[l+1].x << endl;
-      cout << (dp[r+1][s] - dp[l][s]).x << endl;
-      mint now = dp[r+1][s] - dp[l][s] - dp2[l+1];
-      cout << "("<<l<<","<<r<<"): " << now.x << endl;
-      ans += now;
+      cout << "("<<l<<","<<r<<"):" << st.query(l+1, r+2).x << endl;
+      ans += st.query(l+1, r+2);
     }
   }
-
   cout << ans.x << endl;
 }
