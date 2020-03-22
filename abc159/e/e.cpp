@@ -76,45 +76,58 @@ int main(int argc, char** argv) {
     }
     cand += bnd.size();
 
+    // cout << "bnd:"; printvec(bnd);
+
     vector<ll> cnts(bnd.size() + 1); // counts in each region
     // Here, we calculate all case.
     rep(c, w) {
-      // ll idx = 0;
-      rep(r, h) {
-        // if (bnd[idx]
-        ll idx = upper_bound(all(bnd), r) - bnd.begin(); // idx of counts
-        if (block[r][c] == '1') { // bound white
-          ++cnts[idx];
+      {
+        ll idx = 0;
+        rep(r, h) {
+          if (idx < bnd.size() && r > bnd[idx]) { ++idx; }
+          // cout << "r:" << r << endl;
+          // cout << "idx:" << idx << endl;
+          if (block[r][c] == '1') { // bound white
+            ++cnts[idx];
+          }
         }
       }
 
       // Check the counts. if reached to bigger than k, we add boundary and re-add.
       bool reachToK = false;
-      rep(r, h) {
-        ll idx = upper_bound(all(bnd), r) - bnd.begin(); // idx of counts
-        if (cnts[idx] > k) { // reached to k.
-          reachToK = true;
-          ++cand; // add boundary
-          break;
+      {
+        ll idx = 0;
+        rep(r, h) {
+          if (idx < bnd.size() && r > bnd[idx]) { ++idx; }
+          if (cnts[idx] > k) { // reached to k.
+            reachToK = true;
+            ++cand; // add boundary
+            break;
+          }
         }
       }
 
       if (reachToK) { // reach to k
         cnts.assign(bnd.size() + 1, 0); // reset
-        rep(r, h) { // set current
-          ll idx = upper_bound(all(bnd), r) - bnd.begin(); // idx of counts
-          if (block[r][c] == '1') { // bound white
-            ++cnts[idx];
-          }
-          if (cnts[idx] > k) { // reach to k in one loop
-            isInvalid = true;
+        // cout << "cnts:"; printvec(cnts);
+        {
+          ll idx = 0;
+          rep(r, h) { // set current
+            if (idx < bnd.size() && r > bnd[idx]) { ++idx; }
+            if (block[r][c] == '1') { // bound white
+              ++cnts[idx];
+            }
+            if (cnts[idx] > k) { // reach to k in one loop
+              isInvalid = true;
+            }
           }
         }
+        // cout << "cnts:"; printvec(cnts);
       }
     }
 
     if (!isInvalid) {
-      ans = max(ans, cand);
+      ans = min(ans, cand);
     }
   }
 
