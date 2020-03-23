@@ -130,50 +130,22 @@ int main(int argc, char** argv) {
     cin >> a[i];
   }
 
+  mint ans(0);
 
-  vector<vector<mint>> dp(MAX_V, vector<mint>(MAX_V, 0));
-  dp[0][0] = 1; // the count of [0, 0)
-
-  vector<mint> dp2(MAX_V); // dp2[i] .. contains the "contribution from above". dp2[i+1] is the contribution from [0, i).
-
+  vector<mint> q(s+1);
   rep(i, n) {
-    rep(k, s+1) {
-      dp[i+1][k] = dp[i][k];
-      if (k >= a[i]) { // (k-a[i], a[i]) contributes to dp.
-        dp[i+1][k] += dp[i][k-a[i]];
-
-        dp2[i+1] += dp[i][k-a[i]];  // contribution from above.
+    q[0] += 1; // q + 1
+    { // q *= (1 + x^a[i])
+      vector<mint> q2(s+1);
+      rep(j, s+1) {
+        q2[j] += q[j];
+        if (j + a[i] <= s) {
+          q2[j+a[i]] += q[j];
+        }
       }
+      swap(q, q2);
     }
-  }
-
-  cout << "dp2: ";
-  rep(i, n+1) {
-    cout << dp2[i].x << " ";
-  }
-  cout << endl;
-
-  // cout << "dp:"; printvec(dpi
-  // cout << dp[0][s].x << endl;
-  // cout << dp[1][s].x << endl;
-  // cout << dp[2][s].x << endl;
-  // cout << dp[3][s].x << endl;
-
-
-  // vector<mint> dp2sum(MAX_V);
-  // rep(i, n) {
-  // }
-
-  // Here, dp is calculated. f(l,r) = dp[r+1][s] - dp[l][s] - (dp2[l], contribution from abeove).
-  mint ans = 0;
-  rep(l, n) {
-    for (ll r = l; r < n; ++r) {
-      cout << dp2[l+1].x << endl;
-      cout << (dp[r+1][s] - dp[l][s]).x << endl;
-      mint now = dp[r+1][s] - dp[l][s] - dp2[l+1];
-      cout << "("<<l<<","<<r<<"): " << now.x << endl;
-      ans += now;
-    }
+    ans += q[s];
   }
 
   cout << ans.x << endl;
