@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
 
   mint ans(0);
   rep(i, n) {
-    ans += dp[i+1][s]; // add sum of [l, i].
+    ans += dp[i+1][s]; // add sum of [l, i]. l is in [0, i].
   }
 
   cout << ans.x << endl;
