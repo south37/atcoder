@@ -1,5 +1,3 @@
-// ref. https://www.youtube.com/watch?v=lTjWiIRyIdg&feature=youtu.be
-
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -132,22 +130,24 @@ int main(int argc, char** argv) {
     cin >> a[i];
   }
 
-  mint ans(0);
-
-  vector<mint> q(s+1);
+  vector<vector<mint>> dp(n+1, vector<mint>(s+1));
+  // Here, add 1 to each i. By this, we can calculate the sum from left at i.
   rep(i, n) {
-    q[0] += 1; // q + 1
-    { // q *= (1 + x^a[i])
-      vector<mint> q2(s+1);
-      rep(j, s+1) {
-        q2[j] += q[j];
-        if (j + a[i] <= s) {
-          q2[j+a[i]] += q[j];
-        }
+    dp[i][0] += 1;
+  }
+
+  rep(i, n) {
+    rep(k, s+1) {
+      dp[i+1][k] += dp[i][k];
+      if (k + a[i] <= s) {
+        dp[i+1][k+a[i]] += dp[i][k];
       }
-      swap(q, q2);
     }
-    ans += q[s];
+  }
+
+  mint ans(0);
+  rep(i, n) {
+    ans += dp[i+1][s]; // add sum of [l, i].
   }
 
   cout << ans.x << endl;
