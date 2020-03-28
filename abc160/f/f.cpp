@@ -167,18 +167,20 @@ unordered_map<ll, unordered_map<ll, pair<ll, mint>>> subCnts;
 
 // return the count of subtree
 pair<ll, mint> dfs(int v, int p) {
-  if (subCnts[p].find(v) != subCnts[p].end()) {
+  if (p != -1 && subCnts[p].find(v) != subCnts[p].end()) {
     return subCnts[p][v];
   }
 
   vector<ll> cnts;
   vector<mint> patterns;
+  vector<ll> subs;
 
   for (int nv : g[v]) {
     if (nv == p) { continue; } // skip parent
     auto p = dfs(nv, v); // { cnt, pattern }
     cnts.push_back(p.first);
     patterns.push_back(p.second);
+    subs.push_back(nv);
   }
   // cout << "v:" << v << endl;
   // cout << "cnts:";
@@ -204,6 +206,24 @@ pair<ll, mint> dfs(int v, int p) {
 
     totalPattern *= p;
     totalPattern /= c.fact[cnt];
+  }
+
+  // Memorize at root
+  if (p == -1) {
+    // Here, we can calculate subCnts[subV][v] easily
+    rep(i, cnts.size()) {
+      int nv = subs[i];
+      int cnt = cnts[i];
+      mint p = patterns[i];
+
+      mint subP = totalPattern;
+      subP *= c.fact[cnt];
+      subP /= c.fact[totalCnt];
+      subP *= c.fact[totalCnt - cnt];
+      subP /= p;
+
+      subCnts[nv][v] = { totalCnt + 1 - cnt, subP };
+    }
   }
 
   // cout << "totalCnt: " << totalCnt << endl;
