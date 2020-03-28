@@ -48,64 +48,72 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+ll n;
+vector<vector<ll>> dist;
+vector<vector<ll>> g;
+
+void calcDist(int s) {
+  // Here, calculate distance from v.
+  queue<P> q;
+  dist[s][s] = 0;
+  q.emplace(s, 0);
+  while(!q.empty()) {
+    auto p = q.front(); q.pop();
+    int v = p.first;
+    int d = p.second;
+    for (int nv : g[v]) {
+      if (dist[v][nv] < INF) { continue; } // skip already calculated
+      dist[v][nv] = d+1;
+      q.emplace(nv, d+1);
+    }
+  }
+
+  // Here, all dist[s][x] is calculated
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll x, y, a, b, c;
-  cin >> x >> y >> a >> b >> c;
-  vector<ll> p(a);
-  vector<ll> q(b);
-  vector<ll> r(c);
-  vector<P> alls; // the pair of (value, type). type is (0, 1, 2).
-  rep(i, a) {
-    cin >> p[i];
-    alls.emplace_back(p[i], 0);
+  ll n, x, y;
+  cin >> n >> x >> y;
+  // --x; --y;
+  g.resize(n+1);
+  dist = vector<vector<ll>>(n+1, vector<ll>(n+1, INF)); // min distance of (i, j)
+
+  for (int i = 1; i < n; ++i) {
+    g[i].push_back(i+1);
+    g[i+1].push_back(i);
   }
-  rep(i, b) {
-    cin >> q[i];
-    alls.emplace_back(q[i], 1);
+  g[x].push_back(y);
+  g[y].push_back(x);
+  // printtree(g);
+
+  // Here, calculate the cont of each
+  vector<ll> ans(n+1); // ans[i] .. ans for i. 1-indexied
+  for (int i = 1; i <= n; ++i) {
+    ans[i] = n-i;
   }
-  rep(i, c) {
-    cin >> r[i];
-    alls.emplace_back(r[i], 2);
+  printvec(ans);
+
+  // Here, we calculate the min distance from each i to j.
+  for (int s = 1; s <= n; ++s) {
+    calcDist(s);
   }
 
-  sort(all(alls));
-  reverse(all(alls)); // decreasing order
-
-
-  ll tot = x + y;
-  ll ans = 0;
-  // scan alls
-
-  rep(i, a + b + c) {
-    ll v = alls[i].first;
-    ll type = alls[i].second;
-    if (tot == 0) { break; } // reached to last
-
-    if (type == 0) { // red
-      if (x > 0) {
-        ans += v;
-        --x;
-        --tot;
-      }
-    } else if (type == 1) { // green
-      if (y > 0) {
-        ans += v;
-        --y;
-        --tot;
-      }
-    } else { // transp
-      if (tot > 0) {
-        ans += v;
-        --tot;
-      }
+  for (int l = 1; l <= n; ++l) {
+    for (int r = l+1; r <= n; ++r) {
+      // Here, check (l, r) pair
+      ll oldDist = r - l;
+      ll newDist = dist[r][l];
+      --ans[oldDist];
+      ++ans[newDist];
     }
   }
 
-  // Here, calculated
-  cout << ans << endl;
+  for (int i = 1; i < n; ++i) {
+    cout << ans[i] << endl;
+  }
 }
