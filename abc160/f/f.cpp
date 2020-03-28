@@ -160,8 +160,17 @@ vector<vector<ll>> g; // tree
 
 vector<mint> ans;
 
+// vector<vector<pair<ll, mint>>> subCnts; // cnts[i][j] .. parent i to subtree j
+// vector<vector<pair<ll, mint>>> subCnts; // cnts[i][j] .. parent i to subtree j
+
+map<ll, map<ll, pair<ll, mint>>> subCnts;
+
 // return the count of subtree
 pair<ll, mint> dfs(int v, int p) {
+  if (subCnts[p].find(v) != subCnts[p].end()) {
+    return subCnts[p][v];
+  }
+
   vector<ll> cnts;
   vector<mint> patterns;
 
@@ -171,14 +180,14 @@ pair<ll, mint> dfs(int v, int p) {
     cnts.push_back(p.first);
     patterns.push_back(p.second);
   }
-  cout << "v:" << v << endl;
-  cout << "cnts:";
-  printvec(cnts);
-  cout << "patterns:";
-  rep(i, patterns.size()) {
-    cout << patterns[i].x << " ";
-  }
-  cout << endl;
+  // cout << "v:" << v << endl;
+  // cout << "cnts:";
+  // printvec(cnts);
+  // cout << "patterns:";
+  // rep(i, patterns.size()) {
+  //   cout << patterns[i].x << " ";
+  // }
+  // cout << endl;
 
   ll totalCnt = 0;
   mint totalPattern(1);
@@ -197,10 +206,11 @@ pair<ll, mint> dfs(int v, int p) {
     totalPattern /= c.fact[cnt];
   }
 
-  cout << "totalCnt: " << totalCnt << endl;
-  cout << "totaPattern: " << totalPattern.x << endl;
+  // cout << "totalCnt: " << totalCnt << endl;
+  // cout << "totaPattern: " << totalPattern.x << endl;
 
-  return { totalCnt + 1, totalPattern };
+  subCnts[p][v] = { totalCnt + 1, totalPattern };
+  return subCnts[p][v];
 }
 
 int main(int argc, char** argv) {
@@ -212,6 +222,8 @@ int main(int argc, char** argv) {
   ll n;
   cin >> n;
   ans.resize(n);
+
+  // subCnts = vector<vector<pair<ll, mint>>(n+1, vector<pair<ll, mint>>(n+1, pair<ll, mint>(INF, mint(0)));
 
   c.init(n+5);
 
@@ -225,8 +237,8 @@ int main(int argc, char** argv) {
   }
 
   // Here, we should do tree dp.
-  {
-    auto p = dfs(0, -1);
+  rep(i, n) {
+    auto p = dfs(i, -1);
     // Here, p is the result from 0
     ll cnt = p.first;
     mint ans = p.second;
