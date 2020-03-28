@@ -163,7 +163,7 @@ vector<mint> ans;
 // vector<vector<pair<ll, mint>>> subCnts; // cnts[i][j] .. parent i to subtree j
 // vector<vector<pair<ll, mint>>> subCnts; // cnts[i][j] .. parent i to subtree j
 
-vector<map<ll, pair<ll, mint>>> subCnts;
+vector<unordered_map<ll, pair<ll, mint>>> subCnts;
 
 // return the count of subtree
 pair<ll, mint> dfs(int v, int p) {
