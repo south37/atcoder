@@ -163,7 +163,7 @@ vector<mint> ans;
 // vector<vector<pair<ll, mint>>> subCnts; // cnts[i][j] .. parent i to subtree j
 // vector<vector<pair<ll, mint>>> subCnts; // cnts[i][j] .. parent i to subtree j
 
-map<ll, map<ll, pair<ll, mint>>> subCnts;
+vector<map<ll, pair<ll, mint>>> subCnts;
 
 // return the count of subtree
 pair<ll, mint> dfs(int v, int p) {
@@ -229,8 +229,12 @@ pair<ll, mint> dfs(int v, int p) {
   // cout << "totalCnt: " << totalCnt << endl;
   // cout << "totaPattern: " << totalPattern.x << endl;
 
-  subCnts[p][v] = { totalCnt + 1, totalPattern };
-  return subCnts[p][v];
+  if (p != -1) {
+    subCnts[p][v] = { totalCnt + 1, totalPattern };
+    return subCnts[p][v];
+  } else {
+    return { totalCnt + 1, totalPattern };
+  }
 }
 
 int main(int argc, char** argv) {
@@ -243,7 +247,7 @@ int main(int argc, char** argv) {
   cin >> n;
   ans.resize(n);
 
-  // subCnts = vector<vector<pair<ll, mint>>(n+1, vector<pair<ll, mint>>(n+1, pair<ll, mint>(INF, mint(0)));
+  subCnts.resize(n+1);
 
   c.init(n+5);
 
