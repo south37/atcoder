@@ -128,6 +128,7 @@ struct Combination {
 
 Combination comb(1);
 
+// Tree DP
 struct DP {
   mint dp;
   int t;
