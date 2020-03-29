@@ -59,51 +59,77 @@ int main(int argc, char** argv) {
   ll n, m;
   cin >> n >> m;
   vector<vector<ll>> g(n);
+  vector<vector<ll>> revG(n);
   rep(i, m) {
     int s, t;
     cin >> s >> t;
     --s; --t; // 0-indexed
     g[s].push_back(t);
+    revG[t].push_back(s);
   }
 
-  vector<double> dp(n); // dp[i] .. expected valud from i.
-  // dp[n-1] = 0;
+  vector<double> en(n); // en[i] .. expected valud from i.
+  vector<double> pn(n); // pn[i] .. probability from i.
+  // en[n-1] = 0;
+  pn[n-1] = 1;
   for (int v = n-2; v >= 0; --v) {
-    double now = 0;
+    int deg = g[v].size();
     for (int u : g[v]) {
-      now += dp[u];
+      en[v] += en[u];
+      pn[v] += pn[u];
     }
-    now /= g[v].size();
-    now += 1; // one-hop
-    dp[v] = now;
+    en[v] /= deg; en[v] += 1;
+    pn[v] /= deg;
+  }
+  // Here, g is DAG, so all pn[i] = 1.
+
+  vector<double> e1(n); // e1[i] .. expected valud to i.
+  vector<double> p1(n); // p1[i] .. probability to i.
+  p1[0] = 1;
+  for (int v = 1; v < n; ++v) {
+    for (int u : revG[v]) {
+      e1[v] += (e1[u]+1)/g[u].size();
+      p1[v] += p1[u]/g[u].size();
+    }
   }
 
-  double ans = dp[0];
-  for (int nv = 0; nv < n-1; ++nv) {
-    if (g[nv].size() == 1) { continue; } // skip 1-degree
-    int nu = g[nv][0];
-    for (int u : g[nv]) {
-      if (dp[u] > dp[nu]) { nu = u; }
-    }
-    // Here, nu is the maximum dp[nu]
-
-    double nowAns;
+  double ans = en[0];
+  for (int v = 0; v < n-1; ++v) {
+    int deg = g[v].size();
+    if (deg == 1) { continue; } // skip 1-degree
+    double now = en[0];
+    // 1/deg -> 0
     {
-      for (int v = n-2; v >= 0; --v) {
-        double now = 0;
-        for (int u : g[v]) {
-          if (v == nv && u == nu) { continue; } // skip removed edge
-          now += dp[u];
-        }
-        int deg = g[v].size();
-        if (v == nv) { --deg; }
-        now /= deg;
-        now += 1; // one-hop
-        dp[v] = now;
+      double p = 1.0/deg;
+      for (int u : g[v]) {
+        double s = e1[v] * pn[u];
+        s += p1[v]*en[u];
+        s += p1[v]*pn[u];
+        s *= p;
+        now -= s;
       }
-      nowAns = dp[0];
     }
-    ans = min(ans, nowAns);
+    // 0 -> 1/(deg-1)
+    {
+      double p = 1.0/(deg-1);
+      for (int u : g[v]) {
+        double s = e1[v] * pn[u];
+        s += p1[v]*en[u];
+        s += p1[v]*pn[u];
+        s *= p;
+        now += s;
+      }
+    }
+
+    for (int u : g[v]) {
+      // 1/(deg-1) -> 0
+      double p = 1.0/(deg-1);
+      double s = e1[v] * pn[u];
+      s += p1[v]*en[u];
+      s += p1[v]*pn[u];
+      s *= p;
+      ans = min(ans, now-s);
+    }
   }
   cout << ans << endl;
 }
