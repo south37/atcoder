@@ -126,28 +126,32 @@ struct Combination {
   }
 };
 
-Combination c(1);
+Combination comb(1);
 
 struct DP {
   mint dp;
   int t;
-  DP(mint dp, int t) : dp(dp), t(t) {};
+  DP(mint dp=1, int t=0) : dp(dp), t(t) {};
   DP& operator+=(const DP& a) {
     dp *= a.dp;
+    dp *= comb(t+a.t, t);
     t += a.t;
     return *this;
+  }
+  void process() {
+    ++t;
   }
 };
 
 vector<vector<ll>> g; // tree
 
 DP dfs(int v, int p) {
-  DP dp(0, 0);
+  DP dp;
   for (int nv : g[v]) {
     if (nv == p) { continue; } // skip parent
     dp += dfs(nv, v);
   }
-
+  dp.process();
   return dp;
 }
 
@@ -160,7 +164,7 @@ int main(int argc, char** argv) {
   ll n;
   cin >> n;
 
-  c.init(n+5);
+  comb.init(n+5);
 
   g.resize(n);
   rep(i, n-1) {
@@ -170,4 +174,7 @@ int main(int argc, char** argv) {
     g[a].push_back(b);
     g[b].push_back(a);
   }
+
+  DP dp = dfs(0, -1);
+  cout << dp.dp.x << endl;
 }
