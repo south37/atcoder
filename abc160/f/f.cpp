@@ -139,12 +139,19 @@ struct DP {
     t += a.t;
     return *this;
   }
+  DP operator+(const DP& a) const {
+    DP res(*this);
+    return res += a;
+  }
+  DP& operator-=(const DP& a) {
+    t -= a.t;
+    dp /= comb(t+a.t, a.t);
+    dp /= a.dp;
+    return *this;
+  }
   DP operator-(const DP& a) const {
     DP res(*this);
-    res.t -= a.t;
-    res.dp /= comb(res.t+a.t, a.t);
-    res.dp /= a.dp;
-    return res;
+    return res -= a;
   }
   DP addRoot() const {
     DP res(*this);
