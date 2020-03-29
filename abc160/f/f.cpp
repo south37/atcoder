@@ -138,21 +138,23 @@ struct DP {
     t += a.t;
     return *this;
   }
-  void process() {
-    ++t;
+  DP addRoot() const {
+    DP res(*this);
+    ++res.t;
+    return res;
   }
 };
 
+vector<DP> dp;
 vector<vector<ll>> g; // tree
 
 DP dfs(int v, int p) {
-  DP dp;
   for (int nv : g[v]) {
     if (nv == p) { continue; } // skip parent
-    dp += dfs(nv, v);
+    DP now = dfs(nv, v);
+    dp[v] += now.addRoot();
   }
-  dp.process();
-  return dp;
+  return dp[v];
 }
 
 int main(int argc, char** argv) {
@@ -165,6 +167,7 @@ int main(int argc, char** argv) {
   cin >> n;
 
   comb.init(n+5);
+  dp.resize(n);
 
   g.resize(n);
   rep(i, n-1) {
@@ -175,6 +178,6 @@ int main(int argc, char** argv) {
     g[b].push_back(a);
   }
 
-  DP dp = dfs(0, -1);
+  DP dp = dfs(0, -1).addRoot();
   cout << dp.dp.x << endl;
 }
