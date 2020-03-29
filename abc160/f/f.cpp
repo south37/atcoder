@@ -138,6 +138,13 @@ struct DP {
     t += a.t;
     return *this;
   }
+  DP operator-(const DP& a) const {
+    DP res(*this);
+    res.t -= a.t;
+    res.dp /= comb(res.t+a.t, a.t);
+    res.dp /= a.dp;
+    return res;
+  }
   DP addRoot() const {
     DP res(*this);
     ++res.t;
@@ -153,6 +160,15 @@ void dfs(int v, int p) {
     if (nv == p) { continue; } // skip parent
     dfs(nv, v);
     dp[v] += dp[nv].addRoot();
+  }
+}
+
+void bfs(int v, int p) {
+  for (int nv : g[v]) {
+    if (nv == p) { continue; } // skip parent
+    DP d = dp[v] - dp[nv].addRoot();
+    dp[nv] += d.addRoot();
+    bfs(nv, v);
   }
 }
 
@@ -178,6 +194,8 @@ int main(int argc, char** argv) {
   }
 
   dfs(0, -1);
-  DP ans = dp[0].addRoot();
-  cout << ans.dp.x << endl;
+  bfs(0, -1);
+  rep(i, n) {
+    cout << dp[i].addRoot().dp.x << endl;
+  }
 }
