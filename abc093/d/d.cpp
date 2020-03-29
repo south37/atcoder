@@ -1,3 +1,5 @@
+// ref. https://atcoder.jp/contests/arc094/submissions/2315168
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -45,7 +47,7 @@ typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
-const ll INF = (ll)1e9 + 5;
+const ll INF = (ll)1e10;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 // return true when maxim number is equal or smaller than x.
@@ -55,9 +57,9 @@ bool check(ll a, ll b, ll x) {
   for (ll i = max(x/2 - 50, 1ll); i <= min(x/2 + 50, x); ++i) {
     // pair i-th smallest(from a) and i-th greatest(from b)
     ll L = i;
-    if (L >= a) { ++L; } // [1,...,a-1,a+1..L]
-    ll R = x+1-i;
-    if (i <= x-b+1) { ++R; } // [R,...,b-1, b+1, ..., x]
+    if (L >= a) { ++L; } // [1,...,a-1,a+1..i+1]
+    ll R = x-i+1;
+    if (i <= x-b+1) { ++R; } // [x-i,...,b-1, b+1, ..., x]
     tmp = max(tmp, L*R);
   }
 
