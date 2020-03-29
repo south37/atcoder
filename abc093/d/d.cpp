@@ -59,7 +59,7 @@ bool check(ll a, ll b, ll x) {
     ll L = i;
     if (L >= a) { ++L; } // [1,...,a-1,a+1..i+1]
     ll R = x-i+1;
-    if (i <= x-b+1) { ++R; } // [x-i,...,b-1, b+1, ..., x]
+    if (i <= x-b+1) { ++R; } // [,...,b-1,b+1,...,x-i+2, ..., x+1]
     tmp = max(tmp, L*R);
   }
 
