@@ -1,3 +1,5 @@
+// ref. https://www.youtube.com/watch?v=aDDV_WBwzTM
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -45,7 +47,7 @@ typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
 
-const ll INF = 1e9;
+const ll INF = 1e12;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
@@ -54,6 +56,32 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, k;
+  cin >> n >> k;
+  ll m = n-k; // remaining count
+
+  vector<ll> h(n+1); // h[0] = 0
+  rep(i, n) {
+    cin >> h[i+1];
+  }
+
+  // dp[i][j] .. min cost to remain i as last and remaining count is j
+  vector<vector<ll>> dp(n+1, vector<ll>(m+1, INF));
+  dp[0][0] = 0;
+
+  for (int i = 1; i <= n; ++i) {
+    // calculate in [0, m)
+    rep(j, m) {
+      ll now = INF;
+      rep(k, i) { // [0, i)
+        now = min(now, dp[k][j] + max(0ll, h[i]-h[k]));
+      }
+      dp[i][j+1] = now;
+    }
+  }
+  ll ans = INF;
+  rep(i, n+1) {
+    ans = min(ans, dp[i][m]);
+  }
+  cout << ans << endl;
 }
