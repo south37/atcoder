@@ -148,13 +148,12 @@ struct DP {
 vector<DP> dp;
 vector<vector<ll>> g; // tree
 
-DP dfs(int v, int p) {
+void dfs(int v, int p) {
   for (int nv : g[v]) {
     if (nv == p) { continue; } // skip parent
-    DP now = dfs(nv, v);
-    dp[v] += now.addRoot();
+    dfs(nv, v);
+    dp[v] += dp[nv].addRoot();
   }
-  return dp[v];
 }
 
 int main(int argc, char** argv) {
@@ -178,6 +177,7 @@ int main(int argc, char** argv) {
     g[b].push_back(a);
   }
 
-  DP dp = dfs(0, -1).addRoot();
-  cout << dp.dp.x << endl;
+  dfs(0, -1);
+  DP ans = dp[0].addRoot();
+  cout << ans.dp.x << endl;
 }
