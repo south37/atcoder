@@ -126,18 +126,19 @@ int main(int argc, char** argv) {
     mp[s[i].first] = i;
   }
 
-  // dp[i][j]
+  // dp[i][j] .. use [0, i), number is n/j at i-1.
   vector<vector<mint>> dp(k+1, vector<mint>(m));
   dp[0][mp[n]] = 1;
   rep(i, k) {
-    // calculate cummulated sum
+    // calculate cummulated sum. j is large <=> n/j is small.
     for (int j = m-2; j >= 0; --j) {
       dp[i][j] += dp[i][j+1];
     }
-    rep(j, m) {
+    for (int j = m-1; j >= 0; --j) {
       // Add the contribution where j*j' <= n
       int nj = mp[n/s[j].first];
-      dp[i+1][j] = dp[i][nj] * s[j].second;
+      dp[i+1][j] = dp[i][nj]; // cummulative sum of [nj..m).
+      dp[i+1][j] *= s[j].second; // j is duplicated
     }
   }
   mint ans(0);
