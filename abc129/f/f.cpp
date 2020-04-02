@@ -113,7 +113,7 @@ struct mint {
 
 // f(l) .. contribution from a.
 // f(l+1) = f(l)*10^k + 1
-// f(l*2) = f(l)^10^kl + f(l)
+// f(l*2) = f(l)*10^kl + f(l)
 
 // g(l) .. contribution from b.
 // g(l+1) = g(l)*10^k + bl
@@ -153,11 +153,11 @@ int main(int argc, char** argv) {
 
   cin >> L >> a >> b >> MOD;
   ll last = a+b*(L-1);
-  ll ten = 1;
+  ll ten = 10;
   mint ans(0);
-  for (int i = 1; i <= 18; ++i) {
-    ll l = ten, r = ten*10-1; // e.g. [10, 99] for i=2
-    if (a+b*(l-1) < l) { continue; } // skip small value
+  for (int i = 1; i <= 18; ++i, ten *= 10) {
+    ll l = ten/10, r = ten-1; // e.g. [10, 99] for i=2
+    if (last < l) { continue; } // skip small value
     if (a > r) { continue; } // skip large value
 
     ll na = 0; // initial term
@@ -181,8 +181,6 @@ int main(int argc, char** argv) {
       }
       nl = (nlast-na)/b + 1;
     }
-    ten *= 10;
-
     ans *= mint(ten).pow(nl);
     ans += mint(na)*f(nl, ten);
     ans += g(nl, ten);
