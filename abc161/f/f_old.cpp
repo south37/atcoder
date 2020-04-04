@@ -56,63 +56,41 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
-  set<ll> factors; // all factors o n
+  set<ll> factors;
 
   {
-    factors.insert(n);
-
     ll now = n;
     ll i = 2;
     while (i * i <= now) {
       if (now % i == 0) {
         factors.insert(i);
-        factors.insert(now/i);
+        while (now % i == 0) {
+          now /= i;
+        }
       }
       ++i;
     }
+    if (now > 1) {
+      factors.insert(now);
+    }
   }
 
-  // for (ll factor : factors) {
-  //   cout << factor << endl;
-  // }
-
-  set<ll> factorsOfMinus; // all factors o n
+  vector<pair<ll, ll>> factorCnts; // { factor, cnt }
   {
-    factorsOfMinus.insert(n-1);
-    ll now = n-1;
-    ll i = 2;
-    while (i * i <= now) {
-      if (now % i == 0) {
-        factorsOfMinus.insert(i);
-        factorsOfMinus.insert(now/i);
-      }
-      ++i;
-    }
-  }
-
-  // for (ll factor : factorsOfMinus) {
-  //   cout << factor << endl;
-  // }
-
-  // Here, we try all factors of n-1.
-  ll ans = 0;
-  for (ll factor : factorsOfMinus) {
-    if (factors.find(factor) == factors.end()) { // not in factors
-      ++ans;
-    }
-  }
-
-  // Here, we try all factors
-  for (ll factor: factors) {
     ll now = n;
-    while (now % factor == 0) {
-      now /= factor;
-    }
-    now %= factor;
-    if (now == 1) {
-      ++ans;
+    for (ll factor : factors) {
+      ll cnt = 0;
+      while (now % factor == 0) {
+        ++cnt;
+        now /= factor;
+      }
+      factorCnts.push_back({ factor, cnt });
     }
   }
 
-  cout << ans << endl;
+  for (auto& p : factorCnts) {
+    ll factor = p.first;
+    ll cnt = p.second;
+    cout << factor << ": " << cnt << endl;
+  }
 }
