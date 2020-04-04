@@ -56,6 +56,11 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  if (n == 2) {
+    cout << 1 << endl;
+    return 0;
+  }
+
   set<ll> factors; // all factors o n
 
   {
