@@ -54,6 +54,75 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll k;
+  cin >> k;
+  if (k <= 9) {
+    cout << k << endl;
+    return 0;
+  }
+
+  ll ans = 10;
+  rep(i, k-10) {
+    // compare 2 digit.
+    vector<ll> ds;
+    ll now = ans;
+    while (now > 0) {
+      ds.push_back(now % 10);
+      now /= 10;
+    }
+    // cout << "ds: "; printvec(ds);
+
+    // Here, ds has the digis in reverse order
+    bool updated = false;
+    rep(i, ds.size()-1) {
+      ll lastD = ds[i];
+      ll preD = ds[i+1];
+      if (preD == 9) { // consider 9 case
+        if (lastD == 8) {
+          ++ds[i]; // update lastD
+          updated = true;
+        }
+      } else if (preD + 1 > lastD) {
+        ++ds[i]; // update lastD
+        ll cur = ds[i]-1;
+        updated = true;
+      }
+      if (updated) {
+        ll cur = ds[i]-1;
+        for (int j = i-1; j >= 0; --j) {
+          ds[j] = max(cur, 0ll);
+          --cur;
+        }
+        break; // break repeat
+      }
+      // Here, continue
+    }
+    if (!updated) { // ds is decreasing order
+      ll n = ds.size();
+      ll lastD = ds[n-1]; // most significant digit
+      if (lastD < 9) {
+        ds[n-1] = lastD + 1;
+        ll cur = lastD;
+        for (int j = n-2; j >= 0; --j) {
+          ds[j] = max(cur, 0ll);
+          --cur;
+        }
+      } else { // 9
+        // create 10...0
+        ds = vector<ll>(n+1);
+        ds[n] = 1;
+      }
+    }
+    reverse(all(ds));
+
+    // Here, we convert vector to number
+    ll nex = 0;
+    for (int digit : ds) {
+      nex *= 10;
+      nex += digit;
+    }
+    ans = nex;
+  }
+
+  cout << ans << endl;
 }

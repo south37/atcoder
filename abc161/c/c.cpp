@@ -54,6 +54,10 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, k;
+  cin >> n >> k;
+  ll remain = n % k;
+
+  ll ans = min(remain, k - remain);
+  cout << ans << endl;
 }
