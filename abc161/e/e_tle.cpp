@@ -54,6 +54,73 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, k, c;
+  cin >> n >> k >> c;
+  string s;
+  cin >> s;
+
+  vector<ll> avail; // available
+  {
+    rep(i, n) {
+      if (s[i] == 'o') {
+        avail.push_back(i);
+      }
+    }
+  }
+
+  // Here, st has the information
+  set<ll> selected;
+  selected.insert(avail[0]);
+  ll last = avail[0];
+  for (int i = 1; i < avail.size(); ++i) {
+    ll idx = avail[i];
+    if (idx > last + c) {
+      selected.insert(idx);
+      last = idx;
+    }
+
+    if (selected.size() == k) { // reached
+      break;
+    }
+  }
+
+  // Here, selected has idx in greeday way.
+  set<ll> remain;
+  for (int idx : avail) {
+    if (selected.find(idx) == selected.end()) { // not in selected
+      remain.insert(idx);
+    }
+  }
+
+  vector<ll> ans;
+  // ll ans = 0;
+  // Here, selected, remain is created.
+  // We try all elements in selected, if we can create a set, then it should not be ans.
+  for (int unselected : selected) {
+    set<ll> selected2;
+    ll last = -INF;
+    rep(i, avail.size()) {
+      ll idx = avail[i];
+      if (idx == unselected) { continue; } // skip unselected element
+
+      if (idx > last + c) {
+        selected2.insert(idx);
+        last = idx;
+      }
+
+      if (selected2.size() == k) { // reached
+        break;
+      }
+    }
+
+    if (selected2.size() == k) { // can create
+      // do nothing
+    } else {
+      ans.push_back(unselected + 1);
+    }
+  }
+
+  for (int id : ans) {
+    cout << id << endl;
+  }
 }
