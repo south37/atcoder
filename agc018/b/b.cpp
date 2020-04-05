@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 
   set<ll> hidden;
   ll ans = INF;
-  rep(iter, n) {
+  rep(iter, m) { // loop for the number of sports
     // Here, we calculate the most populate one.
     vector<ll> cnts(m);
     rep(i, n) {
