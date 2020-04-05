@@ -117,6 +117,10 @@ int main(int argc, char** argv) {
     smallest = r;
   }
 
+  // For Debug
+  // cout << "smallest: " << smallest << endl;
+  // cout << "largest: " << largest << endl;
+
   if (smallest <= largest) {
     cout << smallest << " " << largest << endl;
   } else { // invalid
