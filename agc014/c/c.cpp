@@ -85,7 +85,6 @@ int main(int argc, char** argv) {
     ll cnt = p.second;
     if (cnt > k) { continue; } // cnt is too large
     // Here, cnt <= k. It is valid.
-    ll dist = INF;
     ll r = pos.first;  // row
     ll c = pos.second; // col
     if (r == 0 || r == h-1 || c == 0 || c == w-1) { // reached to edge
