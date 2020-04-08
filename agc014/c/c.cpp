@@ -88,10 +88,10 @@ int main(int argc, char** argv) {
     ll dist = INF;
     ll r = pos.first;  // row
     ll c = pos.second; // col
-    chmin(ans, 1+((r)+(k-1))/k); // top    .. (r) / k
-    chmin(ans, 1+((h-r-1)+(k-1))/k); // bottom .. (h-r-1) / k
-    chmin(ans, 1+((c)+(k-1))/k); // left   .. (c) / k
-    chmin(ans, 1+((w-c-1)+(k-1))/k); // right  .. (w-c-1) / k
+    chmin(ans, 1+(r      +(k-1))/k); // top    .. round up of (r) / k
+    chmin(ans, 1+((h-1-r)+(k-1))/k); // bottom .. round up of (h-1-r) / k
+    chmin(ans, 1+(c      +(k-1))/k); // left   .. round up of (c) / k
+    chmin(ans, 1+((w-1-c)+(k-1))/k); // right  .. round up of (w-1-c) / k
     rep(i, 4) {
       int nextR = r + dr[i];
       int nextC = c + dc[i];
