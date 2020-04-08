@@ -88,6 +88,12 @@ int main(int argc, char** argv) {
     ll dist = INF;
     ll r = pos.first;  // row
     ll c = pos.second; // col
+    if (r == 0 || r == h-1 || c == 0 || c == w-1) { // reached to edge
+      cout << 1 << endl;
+      return 0;
+    }
+    // Here, 0 < r < h-1, 0 < c < w-1
+
     chmin(ans, 1+(r      +(k-1))/k); // top    .. round up of (r) / k
     chmin(ans, 1+((h-1-r)+(k-1))/k); // bottom .. round up of (h-1-r) / k
     chmin(ans, 1+(c      +(k-1))/k); // left   .. round up of (c) / k
@@ -95,12 +101,7 @@ int main(int argc, char** argv) {
     rep(i, 4) {
       int nextR = r + dr[i];
       int nextC = c + dc[i];
-      if (nextR < 0 || nextR >= h || nextC < 0 || nextC >= w) { // reached to edge without wall.
-        if (cnt < k) { // cnt + 1 <= k must be satisfied
-          chmin(ans, 1ll);
-        }
-        continue;
-      }
+      // Here, we don't need to check the range of (nextR, nextC)
       if (mat[nextR][nextC] == '#') { continue; } // skip wall
       if (visited[nextR][nextC]) { continue; }
       visited[nextR][nextC] = true;
