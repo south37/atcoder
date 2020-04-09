@@ -75,6 +75,9 @@ int main(int argc, char** argv) {
   }
   rep(i, m) { // i is current state
     ll c = __builtin_popcount(i);
+    if (c == 1) { continue; } // skip 1 bit
+
+    ll pos = c-1; // position of last element
     ll cnt = c; // inversion number
     rep(j, n) { // j is last element
       if ((1ll<<j) & i) {
@@ -82,8 +85,8 @@ int main(int argc, char** argv) {
         ll pre = i^(1ll<<j); // pre is prev state
         rep(k, n) {
           if ((1ll<<k) & pre) { // k is prev element
-            ll prv = (c^k)%2 ? b[k] : a[k]; // c is 1-indexed, k is 0-indexed.
-            ll cur = (c^j)%2 ? a[j] : b[j];
+            ll prv = ((pos-1)^k)%2 ? b[k] : a[k]; // check the parity of (pos-1)-k
+            ll cur = (pos^j)%2     ? b[j] : a[j]; // check the parity of pos-j
             if (prv <= cur) { // valid
               chmin(dp[i][j], dp[pre][k] + cnt);
             }
