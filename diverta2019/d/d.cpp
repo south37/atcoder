@@ -90,7 +90,6 @@ int main(int argc, char** argv) {
         ll cost    = trade[i].first;
         ll benefit = trade[i].second;
 
-        // Here, we calculate dp[i+1]
         rep(w, n+1) { // loop in [0, n]
           if (w-cost >= 0) {
             chmax(dp[w], dp[w-cost] + benefit);
