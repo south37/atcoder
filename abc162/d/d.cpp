@@ -56,4 +56,53 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string S;
+  cin >> S;
+
+  ll s = 0; // summ
+
+  vector<char> chars(3);
+  chars[0] = 'B';
+  chars[1] = 'G';
+  chars[2] = 'R';
+
+  do {
+    ll now = 0;
+    ll r = 0;
+    char a = chars[0];
+    char b = chars[1];
+    char c = chars[2];
+
+    // cout << "a:" << a << endl;
+    // cout << "b:" << b << endl;
+    // cout << "c:" << c << endl;
+
+    rep(i, n) {
+      if (S[i] == a) {
+        ++r;
+      } else if (S[i] == b) {
+        now += r;
+      } else { // s[i] == c
+        s += now;
+      }
+    }
+  } while (next_permutation(all(chars)));
+
+  // cout << "s: " << s << endl;
+
+  // Here, all sum is calculated
+  for (int m = 1; m < n; ++m) {
+    // Here, we try all cas
+    rep(i, n) {
+      ll j = i + m;
+      ll k = j + m;
+      if (j >= n || k >= n) { break; }
+      // Check (i,j,k)
+      if (S[i] != S[j] && S[j] != S[k] && S[i] != S[k]) { // valid
+        --s;
+      }
+    }
+  }
+
+  cout << s << endl;
 }
