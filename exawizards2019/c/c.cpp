@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
   // Here, we do binary search to calculate left boundary.
   ll left;
   {
-    ll l = -1, r = n-1;
+    ll l = -1, r = n;
     // search in (l, r]
     while (r-l > 1) {
       ll mid = (r+l)/2;
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   // Here, we do binary search to calculate right boundary
   ll right;
   {
-    ll l = 0, r = n;
+    ll l = -1, r = n;
     // search in [l, r)
     while (r-l > 1) {
       ll mid = (r+l)/2;
