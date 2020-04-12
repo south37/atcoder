@@ -48,12 +48,25 @@ typedef double D;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+int gcd(int a, int b) {
+  if (a < b) { swap(a, b); }
+  if (b == 0) { return a; }
+  return gcd(b, a % b);
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll k;
+  cin >> k;
+  ll ans = 0;
+  rep(i, k) rep(j, k) rep(m, k) {
+    ll a = gcd(i+1, j+1);
+    ll b = gcd(a, m+1);
+    ans += b;
+  }
+  cout << ans << endl;
 }

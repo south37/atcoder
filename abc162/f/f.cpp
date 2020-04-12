@@ -56,4 +56,86 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n);
+  rep(i, n) {
+    cin >> a[i];
+  }
+  // Here, check the even-odd
+  if (n%2 == 0) { // even
+    // here, we should check of sum in even, oda
+    ll eSum = 0;
+    ll oSum = 0;
+    rep(i, n) {
+      if (i%2==0) {
+        eSum += a[i];
+      } else {
+        oSum += a[i];
+      }
+    }
+    cout << max(eSum, oSum) << endl;
+    return 0;
+  }
+
+  // Here, n%2== 1
+  vector<ll> leftOdds(n); // sum of [0, i] in odds
+  vector<ll> leftEvens(n); // sum of [0, i] in even
+  vector<ll> rightOdds(n);
+  vector<ll> rightEvens(n);
+
+  // Scan from left
+  leftEvens[0] = a[0];
+  leftOdds[0] = 0;
+  for (int i = 1; i < n; ++i) {
+    leftEvens[i] = leftEvens[i-1];
+    leftOdds[i] = leftOdds[i-1];
+    if (i%2 == 0) {
+      leftEvens[i] += a[i];
+    } else {
+      leftOdds[i] += a[i];
+    }
+  }
+
+  rightEvens[n-1] = a[n-1]; // n-1 is even
+  rightOdds[0] = 0;
+  // Scan from right
+  for (int i = n-2; i >= 0; --i) {
+    rightEvens[i] = rightEvens[i+1];
+    rightOdds[i] = rightOdds[i+1];
+    if (i%2 == 0) {
+      rightEvens[i] += a[i];
+    } else {
+      rightOdds[i] += a[i];
+    }
+  }
+
+  cout << "a: "; printvec(a);
+  cout << "leftEvens:"; printvec(leftEvens);
+  cout << "leftOdds:"; printvec(leftOdds);
+  cout << "rightEvens:"; printvec(rightEvens);
+  cout << "rightOdds:"; printvec(rightOdds);
+
+  cout << "leftEvens[n-2]: " << leftEvens[n-2] << endl;
+  cout << "leftOdds[n-2]: " << leftOdds[n-2] << endl;
+  cout << "rightEvens[1]: " << rightEvens[1] << endl;
+  cout << "rightOdds[1]: " << rightOdds[1] << endl;
+
+  ll ans = max(leftEvens[n-2], leftOdds[n-2]);
+  ans = max(ans, max(rightOdds[1], rightEvens[1]));
+  for (int i = 1; i < n-1; ++i) {
+    // Here, i is not used
+    cout << "i: " << i << endl;
+    cout << "leftEvens + rightOdds: " << leftEvens[i-1] + rightOdds[i+1] << endl;
+    cout << "leftOdds + rightEvens: " << leftOdds[i-1]  + rightEvens[i+1] << endl;
+
+    if (i % 2 == 0) {
+      ans = max(ans, leftEvens[i-2] + rightOdds[i+1]);
+      ans = max(ans, leftOdds[i-1]  + rightEvens[i+2]);
+      ans = max(ans, leftEvens[i-2]  + rightEvens[i+2]);
+    } else {
+      ans = max(ans, leftEvens[i-1] + rightOdds[i+1]);
+      ans = max(ans, leftOdds[i-1]  + rightEvens[i+1]);
+    }
+  }
+  cout << ans << endl;
 }
+

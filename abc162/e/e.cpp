@@ -128,18 +128,34 @@ int main(int argc, char** argv) {
   for (int i = 2; i <= k; ++i) {
     cnt[i] = k/i; // round down.
   }
-  cout << "cnt:"; printvec(cnt);
+  // cout << "cnt:"; printvec(cnt);
+
+  vector<mint> num(k+1); // number
+  for (int i = 1; i <= k; ++i) {
+    num[i] = mint(cnt[i]).pow(n);
+  }
+  // For Debug
+  // for (int i = 1; i <= k; ++i) {
+  //   cout << num[i].x << " ";
+  // }
+  // cout << endl;
+
+  for (int i = k; i >= 1; --i) {
+    // Here, we decrease [2i, 3i ,,, ] from i
+    for (int j = i * 2; j <= k; j += i) {
+      num[i] -= num[j];
+    }
+  }
+  // For Debug
+  // for (int i = 1; i <= k; ++i) {
+  //   cout << num[i].x << " ";
+  // }
+  // cout << endl;
 
   mint ans(0);
   for (int i = 1; i <= k; ++i) {
     // Here, calculate contrib from i.
-    mint now = mint(cnt[i]).pow(n);
-    for (int j = i * 2; j <= k; j += i) { // j = [i, 2i, ...]
-      now -= mint(cnt[j]).pow(n);
-    }
-    cout << "i: " << i << endl;
-    cout << "now: " << now.x << endl;
-    ans += now * i; // contribution of i
+    ans += num[i] * i; // contribution of i
   }
 
   cout << ans.x << endl;
