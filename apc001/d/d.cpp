@@ -126,6 +126,10 @@ int main(int argc, char** argv) {
     cout << 0 << endl;
     return 0;
   }
+  if (n < 2*(n-m-1)) {
+    cout << "Impossible" << endl;
+    return 0;
+  }
 
   vector<ll> a(n);
   rep(i, n) {
