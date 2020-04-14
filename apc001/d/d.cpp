@@ -1,4 +1,5 @@
 // ref. https://img.atcoder.jp/apc001/editorial.pdf
+// ref. https://atcoder.jp/contests/apc001/submissions/2058446
 
 #include <algorithm>
 #include <bitset>
@@ -122,14 +123,6 @@ int main(int argc, char** argv) {
 
   ll n, m;
   cin >> n >> m;
-  if (m == n-1) { // already connected
-    cout << 0 << endl;
-    return 0;
-  }
-  if (n < 2*(n-m-1)) {
-    cout << "Impossible" << endl;
-    return 0;
-  }
 
   vector<ll> a(n);
   rep(i, n) {
@@ -149,38 +142,35 @@ int main(int argc, char** argv) {
   }
 
   ll ans = 0;
-  // Here, we select 2(n-1-m) vertices.
-  ll remain = 2 * (n-1-m);
-  vector<bool> selected(n);
+  ll cnt = 0; // number of connected components
+  vector<ll> unselected; // unselected vertices
   for (auto& p : mp) {
+    ++cnt;
+
     auto& st = p.second;
     auto pp = *st.begin(); st.erase(st.begin());
     ll cost = pp.first;
     ll id = pp.second;
     ans += cost;
-    selected[id] = true;
-    --remain;
-    if (remain < 0) {
-      cout << "Impossible" << endl;
-      return 0;
+
+    for (auto& ppp : st) {
+      unselected.push_back(ppp.first);
     }
   }
 
-  set<ll> unselected; // unselected vertices
-  rep(i, n) {
-    if (!selected[i]) {
-      unselected.insert(a[i]);
-    }
-  }
-  while (remain) {
-    if (unselected.empty()) {
-      cout << "Impossible" << endl;
-      return 0;
-    }
-    ll cost = *unselected.begin(); unselected.erase(unselected.begin());
-    ans += cost;
-    --remain;
+  if (cnt == 1) { // already connected
+    cout << 0 << endl;
+    return 0;
   }
 
+  ll remain = cnt - 2; // we must pick cnt - 2;
+  if (unselected.size() < remain) {
+    cout << "Impossible" << endl;
+    return 0;
+  }
+  sort(all(unselected));
+  rep(i, remain) {
+    ans += unselected[i];
+  }
   cout << ans << endl;
 }
