@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 
     if (small.size() < q) { continue; } // inavalid
     sort(all(small));
-    ans = min(ans, small[q-1] - a[i]);
+    ans = min(ans, small[q-1] - small[0]);
   }
 
   cout << ans << endl;
