@@ -62,51 +62,33 @@ int main(int argc, char** argv) {
   }
 
   ll ans = INF;
-
-  // Now, we try all values in a.
   rep(i, n) {
-    ll x = a[i];
-    vector<ll> c; // candidates. c[q-1] is the minimum maximium value.
-    ll s = 0; // The start position.
-    while (s < n) {
-      // cout << "s: " << s << endl;
+    // Here, a[i] is min
+    vector<ll> small; // small emenents in each region
 
-      while (a[s] < x && s < n) { ++s; } // skip a[s] < x
-      // cout << "ns: " << s << endl;
-
-      // Now, a[s] >= x
-      ll j = s;
-
-      vector<ll> d;
-      while (a[j] >= x && j < n) {
-        // cout << "j: " << j << endl;
-        if (j == i) { ++j; continue; } // we must pick up j except for i.
-        d.push_back(a[j]);
-        ++j;
+    ll pre = -1; // prev one.
+    ll j = 0;
+    while (j < n) {
+      while (j < n && a[j] >= a[i]) { ++j; }
+      // Here, j == n or a[j] < a[i]
+      vector<ll> now; // elements in this region
+      for (int k = pre + 1; k < j; ++k) {
+        now.push_back(a[k]);
       }
-      sort(all(d));
-
-      cout << "x: " << x << endl;
-      cout << "d: ";
-      printvec(d);
-
-      // Now, a[j] < x
-      if (d.size() >= k) {
-        for (int l = 0; l <= c.size()-k; ++l) { // if c.size()==k, we pick only 1
-          c.push_back(d[l]);
+      ll cnt = now.size()-k+1; // maximum trial in this region
+      if (cnt > 0) {
+        sort(all(now));
+        rep(k, cnt) {
+          small.push_back(now[k]);
         }
       }
-      printvec(c);
-
-      s = j; // set j as next s.
+      pre = j;
+      ++j;
     }
 
-    if (c.size() >= q) {
-      sort(all(c));
-      cout << "x: " << x << endl;
-      cout << "c: " << c[q-1] << endl;
-      chmin(ans, c[q-1] - x);
-    }
+    if (small.size() < q) { continue; } // inavalid
+    sort(all(small));
+    ans = min(ans, small[q-1] - a[i]);
   }
 
   cout << ans << endl;
