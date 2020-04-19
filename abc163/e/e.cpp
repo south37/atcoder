@@ -56,4 +56,33 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<pair<ll, ll>> a(n); // pair of <id, value>
+  rep(i, n) {
+    a[i].first = i;
+    cin >> a[i].second;
+  }
+  ll ans = 0;
+  // Here, try start
+  rep(s, n) {
+    ll now = 0;
+    rep(i, n) {
+      // Move i -> i+s
+      ll j = (i+s)%n;
+      ll diff = abs(i-j);
+      now += a[i].second * diff;
+    }
+    ans = max(ans, now);
+  }
+
+  reverse(all(a));
+  rep(s, n) {
+    ll now = 0;
+    for (int i = s; i < s+n; ++i) {
+      ll j = i%n;
+      now += a[j].second * abs(j - a[j].first);
+    }
+    ans = max(ans, now);
+  }
+
+  cout << ans << endl;
 }
