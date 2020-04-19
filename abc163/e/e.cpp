@@ -56,33 +56,31 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
-  vector<pair<ll, ll>> a(n); // pair of <id, value>
+  vector<pair<ll, ll>> a(n); // pair of <value, id>
   rep(i, n) {
-    a[i].first = i;
-    cin >> a[i].second;
+    cin >> a[i].first;
+    a[i].second = i + 1; // 1-indexed
   }
-  ll ans = 0;
-  // Here, try start
-  rep(s, n) {
-    ll now = 0;
-    rep(i, n) {
-      // Move i -> i+s
-      ll j = (i+s)%n;
-      ll diff = abs(i-j);
-      now += a[i].second * diff;
-    }
-    ans = max(ans, now);
-  }
-
+  sort(all(a));
   reverse(all(a));
-  rep(s, n) {
-    ll now = 0;
-    for (int i = s; i < s+n; ++i) {
-      ll j = i%n;
-      now += a[j].second * abs(j - a[j].first);
-    }
-    ans = max(ans, now);
+  // For Debug
+  // rep(i, n) {
+  //   cout << a[i].first << " " << a[i].second << endl;
+  // }
+
+  vector<vector<ll>> dp(n+1, vector<ll>(n+1)); // dp[x][y] .. max score when selecting x as (i-pi) and y as (pi-i).
+  rep(x, n) rep(y, n) {
+    ll now = x + y;
+    if (now >= n) { continue; }
+    ll px = x+1; // 1, 2, ...
+    ll py = n-y; // n, n-1, ...
+    chmax(dp[x+1][y], dp[x][y] + a[now].first * (a[now].second - px));
+    chmax(dp[x][y+1], dp[x][y] + a[now].first * (py - a[now].second));
   }
 
+  ll ans = 0;
+  rep(i, n+1) {
+    chmax(ans, dp[i][n-i]);
+  }
   cout << ans << endl;
 }
