@@ -74,8 +74,12 @@ int main(int argc, char** argv) {
     if (now >= n) { continue; }
     ll px = x+1; // 1, 2, ...
     ll py = n-y; // n, n-1, ...
-    chmax(dp[x+1][y], dp[x][y] + a[now].first * (a[now].second - px));
-    chmax(dp[x][y+1], dp[x][y] + a[now].first * (py - a[now].second));
+    if (a[now].second - px >= 0) { // i >= j
+      chmax(dp[x+1][y], dp[x][y] + a[now].first * (a[now].second - px));
+    }
+    if (py - a[now].second >= 0) { // i <= j
+      chmax(dp[x][y+1], dp[x][y] + a[now].first * (py - a[now].second));
+    }
   }
 
   ll ans = 0;
