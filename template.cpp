@@ -38,12 +38,15 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true
 #define sc second
 #define mp make_pair
 #define pb push_back
+#define eb emplace_back
 
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
+typedef vector<ll> vl;
+typedef vector<P> vp;
 
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
