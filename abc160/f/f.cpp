@@ -128,7 +128,7 @@ struct Combination {
 
 Combination comb(1);
 
-// Tree DP
+// Tree DP. Rerooting.
 struct DP {
   mint dp;
   int t;
