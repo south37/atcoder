@@ -27,6 +27,7 @@ struct BIT {
       d[i] += x;
     }
   }
+  // The sum of [0, i]
   T sum(int i) {
     i++; // 0-indexed to 1-indexed
     T x = 0;
@@ -34,6 +35,10 @@ struct BIT {
       x += d[i];
     }
     return x;
+  }
+  // The sum of [l, r)
+  T sum(int l, int r) {
+    return sum(r-1) - sum(l-1);
   }
 };
 
