@@ -109,7 +109,7 @@ void dfs(ll v, ll p = -1) {
   out[v] = k;
 }
 
-ll c2(ll n) { return n*(n+1)/2; }
+ll c2(ll n) { return n*(n+1)/2; } // nC2 + n = n*(n+1)/2
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
