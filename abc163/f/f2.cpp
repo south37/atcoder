@@ -105,6 +105,7 @@ int main(int argc, char** argv) {
 
   rep(i, n) {
     cin >> c[i];
+    --c[i];
   }
   rep(i, n-1) {
     ll a, b;
