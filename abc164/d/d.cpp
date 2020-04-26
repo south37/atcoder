@@ -50,7 +50,73 @@ typedef vector<ll> vl;
 typedef vector<P> vp;
 
 const ll INF = 1e9;
-const ll MOD = 1000000007;  // 1e9 + 7
+const ll MOD = 2019;  // 1e9 + 7
+
+// Mod int
+// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
+struct mint {
+  ll x;
+  mint(ll x = 0) : x((x + MOD) % MOD) {}
+  mint& operator+= (const mint a) {
+    if ((x += a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator+ (const mint a) const {
+    mint res(*this);
+    return res += a;
+  }
+  mint& operator-= (const mint a) {
+    if ((x += MOD - a.x) >= MOD) x %= MOD;
+    return *this;
+  }
+  mint operator- (const mint a) const {
+    mint res(*this);
+    return res -= a;
+  }
+  mint& operator*= (const mint a) {
+    (x *= a.x) %= MOD;
+    return *this;
+  }
+  mint operator* (const mint a) const {
+    mint res(*this);
+    return res *= a;
+  }
+  mint pow(ll t) const {
+    if (!t) { return 1; }
+    mint a = pow(t >> 1);
+    a *= a;
+    if (t & 1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(MOD-2);
+  }
+  mint& operator/= (const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/ (const mint a) const {
+    mint res(*this);
+    return res /= a;
+  }
+};
+
+// int main(int argc, char** argv) {
+//   // int p;
+//   // cin >> p;
+//
+//   MOD = 13;
+//   mint p(10);
+//   cout << (p + 15).x << endl;   // 12 (25 % 13)
+//   cout << (p - 15).x << endl;   // 8  (-5 % 13)
+//   cout << (p * 2).x << endl;    // 7  (20 % 13)
+//   cout << (p.pow(3)).x << endl; // 12 (1000 % 13)
+//   cout << (p / 3).x << endl;    // 12 (12 * 3 = 10 (36 % 13))
+//   mint p2(-3);
+//
+//   cout << p2.x << endl; // 10 (-3 % 13)
+// }
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -58,6 +124,38 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  string S;
+  cin >> S;
+  ll n = S.size();
+  reverse(all(S));
+  vector<mint> s(n+1); // s[r] / 10^r
+  rep(i, n) {
+    s[i+1] = s[i] + mint(10).pow(i)*(S[i]-'0');
+  }
+  // Debug
+  // cout << s[0].x << endl;
+  // cout << s[1].x << endl;
+  // cout << s[2].x << endl;
+  // cout << s[3].x << endl;
+  // cout << s[4].x << endl;
+  // cout << s[n].x << endl;
+
+  // Here, s[i] is sum of [0, i)
+  // rep(i, n) {
+  //   s[i+1] /= mint(10).pow(i);
+  // }
+
+  // Here, calculate the diff.
+
+  ll ans = 0;
+  map<ll, ll> cnts;
+  ++cnts[0];
+  rep(i, n) {
+    if (cnts.find(s[i+1].x) != cnts.end()) {
+      ans += cnts[s[i+1].x];
+    }
+    ++cnts[s[i+1].x];
+  }
+
+  cout << ans << endl;
 }
