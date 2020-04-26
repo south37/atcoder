@@ -69,8 +69,8 @@ ll rec(ll i, ll j) {
     ll right = rec(i, j-1) + a[j];
     return dp[i][j] = max(left, right);
   } else {
-    ll left  = rec(i+1, j) - a[i];
-    ll right = rec(i, j-1) - a[j];
+    ll left  = rec(i+1, j);
+    ll right = rec(i, j-1);
     return dp[i][j] = min(left, right);
   }
 }
@@ -88,5 +88,7 @@ int main(int argc, char** argv) {
     s += a[i];
   }
   memset(dp, -1, sizeof(dp));
-  cout << rec(0, n-1) << endl;
+  ll X = rec(0, n-1);
+  ll ans = 2*X - s;
+  cout << ans << endl;
 }
