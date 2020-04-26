@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
 
   for (ll t = 1; t < n; ++t) {
     dp.assign(n, vector<ll>(MAX_A * MAX_N + 5, INF));
-    dp[0][0] = 0; // start from 0
+    dp[0][s] = 0; // start from 0
     rec(t, 0);
     cout << dp[t][0] << endl;
   }
