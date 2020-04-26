@@ -55,18 +55,34 @@ const ll MOD = 1000000007;  // 1e9 + 7
 const ll MAX_A = 55;
 const ll MAX_N = 55;
 
-vector<ll> g[MAX_N];
+vector<vector<ll>> g;
 vector<vector<ll>> dp;
-ll cost[MAX_A][MAX_A];
-ll t[MAX_A][MAX_A];
+vector<vector<ll>> cost;
+vector<vector<ll>> t;
 ll n, m;
 
 ll rec(ll v, ll j) {
-  if (dp[v][j] != INF) { return dp[v][j]; }
-  for (int nv : g[v]) {
+  cout << "v: " << v << endl;
+  cout << "j: " << j << endl;
+  if (j < 0 || j > dp[v].size()) { return INF; }
+  if (dp[v][j] != INF) { return dp[v][j]; } // already calculated
+
+  cout << "v: " << v << endl;
+  cout << "j: " << j << endl;
+  for (ll nv : g[v]) {
+    // j = precost - cost[nv][v]
     ll precost = j - cost[nv][v];
-    if (precost >= 0 && precost <= MAX_A*MAX_N) { // Here, consume a[u][v]
+    // cout << "dp[MAX_N * MAX_A]: " << dp[MAX_N * MAX_A] << endl;
+
+    if (precost >= 0 && precost <= MAX_N) { // Here, consume a[u][v]
+      cout << "nv: " << nv << endl;
+      cout << "precost: " << precost << endl;
+      cout << "MAX_N * MAX_A: " << MAX_N * MAX_A << endl;
+      cout << "t[nv][v]: " << t[nv][v] << endl;
+      cout << "rec(nv, precost): " << rec(nv, precost) << endl;
+      ll now =
       chmin(dp[v][j], rec(nv, precost) + t[nv][v]);
+      cout << "chmin success" << endl;
     }
   }
   return dp[v][j];
@@ -80,6 +96,10 @@ int main(int argc, char** argv) {
 
   ll s;
   cin >> n >> m >> s;
+  g.resize(n);
+  cost.assign(n, vector<ll>(n, INF));
+  t.assign(n, vector<ll>(n, INF));
+
   rep(i, m) {
     ll u, v, a, b;
     cin >> u >> v >> a >> b;
@@ -94,6 +114,7 @@ int main(int argc, char** argv) {
   rep(i, n) {
     g[i].push_back(i); // add self
   }
+
   rep(i, n) {
     ll a, b;
     cin >> a >> b;
@@ -103,10 +124,22 @@ int main(int argc, char** argv) {
     t[i][i] = b;
   }
 
+  // For Debug
+  cout << "g: " << endl;
+  printtree(g);
+  cout << "cost: " << endl;
+  printtree(cost);
+  cout << "t: " << endl;
+  printtree(t);
+
   for (ll t = 1; t < n; ++t) {
     dp.assign(n, vector<ll>(MAX_A * MAX_N + 5, INF));
-    dp[0][0] = 0; // start from 0
-    rec(t, 0);
-    cout << dp[t][0] << endl;
+    dp[0][2] = 0; // start from 0
+
+    ll ans = INF;
+    rep(j, MAX_A * MAX_N) {
+      chmin(ans, rec(t, j));
+    }
+    cout << ans << endl;
   }
 }
