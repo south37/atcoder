@@ -63,13 +63,17 @@ ll n, m;
 
 ll rec(ll v, ll j) {
   if (j < 0 || j >= dp[v].size()) { return INF; } // invalid
+  assert(v >= 0 && v < n);
+  assert(j >= 0 && j < dp[v].size());
   if (dp[v][j] != INF) { return dp[v][j]; }
 
-  for (int nv : g[v]) {
-    // j = precost - cost[nv][v]
-    ll precost = j + cost[nv][v];
-    if (precost >= 0 && precost <= MAX_A*MAX_N) { // Here, consume a[u][v]
-      chmin(dp[v][j], rec(nv, precost) + t[nv][v]);
+  for (ll nv : g[v]) {
+    // j = precost - cost[nv][v] <=> precost = j + cost[nv][v]
+    if (j + cost[nv][v] >= 0 && j + cost[nv][v] < MAX_A*MAX_N) { // Here, consume a[u][v]
+      ll now = rec(nv, j + cost[nv][v]) + t[nv][v];
+      if (dp[v][j] > now) {
+        dp[v][j] = now;
+      }
     }
   }
   return dp[v][j];
