@@ -62,9 +62,12 @@ ll t[MAX_A][MAX_A];
 ll n, m;
 
 ll rec(ll v, ll j) {
+  if (j < 0 || j >= dp[v].size()) { return INF; } // invalid
   if (dp[v][j] != INF) { return dp[v][j]; }
+
   for (int nv : g[v]) {
-    ll precost = j - cost[nv][v];
+    // j = precost - cost[nv][v]
+    ll precost = j + cost[nv][v];
     if (precost >= 0 && precost <= MAX_A*MAX_N) { // Here, consume a[u][v]
       chmin(dp[v][j], rec(nv, precost) + t[nv][v]);
     }
