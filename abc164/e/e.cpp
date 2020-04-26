@@ -1,3 +1,5 @@
+// ref. https://img.atcoder.jp/abc164/editorial.pdf
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -56,23 +58,8 @@ const ll MAX_A = 55;
 const ll MAX_N = 55;
 
 vector<ll> g[MAX_N];
-vector<vector<ll>> dp;
-ll cost[MAX_A][MAX_A];
-ll t[MAX_A][MAX_A];
-ll n, m;
-
-ll rec(ll v, ll j) {
-  if (dp[v][j] != INF) { return dp[v][j]; }
-
-  for (ll u : g[v]) {
-    ll precost = j + cost[u][v];
-    if (precost >= 0 && precost < MAX_A * MAX_N) {
-      ll now = rec(u, precost) + t[u][v];
-      chmin(dp[v][j], now);
-    }
-  }
-  return dp[v][j];
-}
+ll cost[MAX_N][MAX_N]; // money
+ll t[MAX_N][MAX_N]; // time
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -80,8 +67,9 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll s;
+  ll n, m, s;
   cin >> n >> m >> s;
+  ll maxA = 0;
   rep(i, m) {
     ll u, v, a, b;
     cin >> u >> v >> a >> b;
@@ -92,6 +80,7 @@ int main(int argc, char** argv) {
     cost[v][u] = a;
     t[u][v] = b;
     t[v][u] = b;
+    chmax(maxA, a);
   }
   rep(i, n) {
     g[i].push_back(i); // add self
@@ -100,17 +89,44 @@ int main(int argc, char** argv) {
     ll a, b;
     cin >> a >> b;
     cost[i][i] = -a;
-    // cost[i][i] = -a;
     t[i][i] = b;
-    // t[i][i] = b;
   }
 
-  for (ll t = 1; t < n; ++t) {
-    dp.assign(n, vector<ll>(MAX_A * MAX_N + 5, INF));
-    rep(i, s+1) {
-      dp[0][i] = 0; // start from 0
+  // Do dijkstra
+  ll MAX_COIN = n * MAX_A + 5;
+  vector<ll> dp(n * (MAX_COIN+5), INF);
+  // (i,j) .. dp[i*MAX_COIN, j]. position i, coin j.
+  priority_queue<P, vector<P>, greater<P>> q;
+  chmin(s, MAX_COIN-1); // we don't need to consider large s
+  dp[s] = 0; // (0, s)
+  q.push({ 0, s });
+  while (!q.empty()) {
+    auto p = q.top(); q.pop();
+    ll nd = p.first;
+    ll vv = p.second;
+    if (nd > dp[vv]) { continue; } // already updated
+
+    ll v = vv / MAX_COIN; // vertex
+    ll j = vv % MAX_COIN; // remaining coin
+
+    for (int nv : g[v]) {
+      // Here, we consider v -> nv
+      ll nj = j - cost[v][nv];
+      if (nj < 0) { continue; } // invalid
+      chmin(nj, MAX_COIN-1); // we don't need to consider large s
+      // Here, 0 <= nj < MAX_COIN
+      if (dp[nv*MAX_COIN + nj] > nd + t[v][nv]) {
+        dp[nv*MAX_COIN + nj] = nd + t[v][nv];
+        q.push({ dp[nv*MAX_COIN + nj], nv*MAX_COIN + nj });
+      }
     }
-    rec(t, 0);
-    cout << dp[t][0] << endl;
+  }
+
+  for (ll v = 1; v < n; ++v) {
+    ll ans = INF;
+    rep(i, MAX_COIN) {
+      chmin(ans, dp[v*MAX_COIN + i]);
+    }
+    cout << ans << endl;
   }
 }
