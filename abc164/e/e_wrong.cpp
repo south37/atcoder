@@ -62,13 +62,18 @@ ll t[MAX_A][MAX_A];
 ll n, m;
 
 ll rec(ll v, ll j) {
+  if (j < 0 || j >= dp[v].size()) { return INF; } // invalid
+  assert(v >= 0 && v < n);
+  assert(j >= 0 && j < dp[v].size());
   if (dp[v][j] != INF) { return dp[v][j]; }
 
-  for (ll u : g[v]) {
-    ll precost = j + cost[u][v];
-    if (precost >= 0 && precost < MAX_A * MAX_N) {
-      ll now = rec(u, precost) + t[u][v];
-      chmin(dp[v][j], now);
+  for (ll nv : g[v]) {
+    // j = precost - cost[nv][v] <=> precost = j + cost[nv][v]
+    if (j + cost[nv][v] >= 0 && j + cost[nv][v] < MAX_A*MAX_N) { // Here, consume a[u][v]
+      ll now = rec(nv, j + cost[nv][v]) + t[nv][v];
+      if (dp[v][j] > now) {
+        dp[v][j] = now;
+      }
     }
   }
   return dp[v][j];
@@ -100,16 +105,14 @@ int main(int argc, char** argv) {
     ll a, b;
     cin >> a >> b;
     cost[i][i] = -a;
-    // cost[i][i] = -a;
+    cost[i][i] = -a;
     t[i][i] = b;
-    // t[i][i] = b;
+    t[i][i] = b;
   }
 
   for (ll t = 1; t < n; ++t) {
     dp.assign(n, vector<ll>(MAX_A * MAX_N + 5, INF));
-    rep(i, s+1) {
-      dp[0][i] = 0; // start from 0
-    }
+    dp[0][s] = 0; // start from 0
     rec(t, 0);
     cout << dp[t][0] << endl;
   }
