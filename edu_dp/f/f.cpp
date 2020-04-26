@@ -54,17 +54,8 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 const ll MAX_N = 3005;
 
-struct DP {
-  ll len;
-  ll preI;
-  ll preJ;
-  char c;
-  // DP(ll len, ll preI, ll preJ, char c) : len(len), preI(preI), preJ(preJ), c(c) {}
-  // DP(ll len, ll preI, ll preJ, char c) : len(len), preI(preI), preJ(preJ), c(c) {}
-};
-
 // dp[i][j] .. longest common substring in [0,i) and [0,j)
-DP dp[MAX_N][MAX_N];
+ll dp[MAX_N][MAX_N];
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -79,33 +70,31 @@ int main(int argc, char** argv) {
   ll n = s.size();
   ll m = t.size();
   rep(i, n) rep(j, m) {
-    if (dp[i+1][j+1].len < dp[i+1][j].len) {
-      dp[i+1][j+1] = { dp[i+1][j].len, i+1, j, ' ' };
-    }
-    if (dp[i+1][j+1].len < dp[i][j+1].len) {
-      dp[i+1][j+1] = { dp[i][j+1].len, i, j+1, ' ' };
-    }
     if (s[i] == t[j]) {
-      if (dp[i+1][j+1].len < dp[i][j].len+1) {
-        dp[i+1][j+1] = { dp[i][j].len+1, i, j, s[i] };
-      }
+      chmax(dp[i+1][j+1], dp[i][j]+1);
     } else {
-      if (dp[i+1][j+1].len < dp[i][j].len) {
-        dp[i+1][j+1] = { dp[i][j].len, i, j, ' ' };
-      }
+      chmax(dp[i+1][j+1], dp[i+1][j]);
+      chmax(dp[i+1][j+1], dp[i][j+1]);
     }
   }
   string ans;
   ll i = n;
   ll j = m;
   while (i > 0 && j > 0) {
-    DP now = dp[i][j];
-    if (now.c != ' ') {
-      ans += now.c;
+    if (dp[i][j] == dp[i-1][j]) {
+      --i;
+    } else if (dp[i][j] == dp[i][j-1]) {
+      --j;
+    } else { // Here, s[i-1] == t[j-1]
+      ans += s[i-1];
+      --i;
+      --j;
     }
-    i = now.preI;
-    j = now.preJ;
   }
   reverse(all(ans));
-  cout << ans << endl;
+
+  rep(i, ans.size()) {
+    cout << ans[i];
+  }
+  cout << endl;
 }
