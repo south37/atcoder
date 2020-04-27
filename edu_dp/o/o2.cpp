@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
       dp[i] = 1;
       continue;
     }
-    ll cnt = 0;
+    ll cnt = 0; // The number of selected pairs. cnt-1 is selected here.
     rep(j, n) {
       if (i&(1ll<<j)) { ++cnt; }
     }
