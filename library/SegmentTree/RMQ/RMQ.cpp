@@ -61,8 +61,8 @@ public:
     if (a <= l && r <= b) {  // [r, l) is completely included in [a, b)
       return dat[k];
     } else {
-      int vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
-      int vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
+      T vl = _query(a, b, k * 2 + 1, l, (l + r) / 2);
+      T vr = _query(a, b, k * 2 + 2, (l + r) / 2, r);
       return min(vl, vr);
     }
   }
