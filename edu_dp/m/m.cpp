@@ -1,3 +1,5 @@
+// ref. https://juppy.hatenablog.com/entry/2019/03/19/Educational_DP_Contest%28EDPC%29_M~P_Python_%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0_Atcoder
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
