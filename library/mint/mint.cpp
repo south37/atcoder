@@ -77,6 +77,8 @@ struct mint {
     return res /= a;
   }
 };
+istream& operator>>(istream& is, const mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
 
 int main(int argc, char** argv) {
   // int p;

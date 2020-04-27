@@ -101,6 +101,8 @@ struct mint {
     return res /= a;
   }
 };
+istream& operator>>(istream& is, const mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
 
 const ll N = 105;
 const ll K = 1e5 + 5;
@@ -138,5 +140,5 @@ int main(int argc, char** argv) {
       b[i+1][j+1] = b[i+1][j] + dp[i+1][j];
     }
   }
-  cout << dp[n][k].x << endl;
+  cout << dp[n][k] << endl;
 }
