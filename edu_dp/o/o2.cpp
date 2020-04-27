@@ -123,7 +123,6 @@ int main(int argc, char** argv) {
     cin >> a[i][j];
   }
   dp.resize(1ll<<n);
-  dp[0] = 1;
   rep(i, 1ll<<n) {
     if (i == 0) {
       dp[i] = 1;
