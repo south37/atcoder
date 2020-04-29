@@ -54,7 +54,7 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-class ConvexHullDynamic {
+class ConvexHullTrick {
   typedef long long coef_t;
   typedef long long coord_t;
   typedef long long val_t;
@@ -140,7 +140,7 @@ private:
   }
 
 public:
-  explicit ConvexHullDynamic(bool isMax = false) : isMax(isMax) {}
+  explicit ConvexHullTrick(bool isMax = false) : isMax(isMax) {}
 
   /*
   * INFO:        Adding line to the envelope
@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
 
   // dp[i] .. min cost of [0,i] when using i.
   vector<ll> dp(n);
-  ConvexHullDynamic cht;
+  ConvexHullTrick cht;
   dp[0] = 0;
   cht.addLine(-2*h[0], h[0]*h[0]+dp[0]); // line: -2h[i]x + h[i]*h[i]+dp[i]
 
