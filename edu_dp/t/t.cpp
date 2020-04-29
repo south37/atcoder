@@ -123,10 +123,10 @@ int main(int argc, char** argv) {
   }
   rep(i,n-1) {
     vector<mint> s(n+1); // cummulative sum
-    rep(j,n) {
+    rep(j,n-i) {
       s[j+1] = s[j] + dp[i][j];
     }
-    rep(j,n) {
+    rep(j,n-i-1) { // remaining is n-i-1. [0, n-i-1)
       if (S[i] == '<') {
         dp[i+1][j] += s[j+1]; // sum of [0, j]
       } else { // S[i] == '>'
