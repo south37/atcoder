@@ -77,6 +77,8 @@ struct mint {
     return res /= a;
   }
 };
+istream& operator>>(istream& is, const mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
 
 // Combination mod prime.
 // cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
