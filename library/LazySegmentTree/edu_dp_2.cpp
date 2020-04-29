@@ -55,7 +55,8 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-// Lazy SegmentTree
+// Lazy SegmentTree.
+// NV must be power of 2. (e.g. 1ll<<18 ~= 2.6e5)
 template<class V, int NV>
 struct LazySegTree { // [L,R)
   vector<V> dat, lazy;

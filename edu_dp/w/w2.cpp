@@ -101,6 +101,8 @@ struct LazySegTree { // [L,R)
   }
 };
 
+const ll N = 1ll<<18; // N must be power of 2.
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -117,7 +119,7 @@ int main(int argc, char** argv) {
     R[r].emplace_back(l, a);
   }
 
-  LazySegTree<ll, 1ll<<18> dp;
+  LazySegTree<ll, N> dp;
   rep(r, n) {
     ll now = dp.get(0, r); // maximum in [0, r)
     dp.update(r, r+1, now); // add now to r
