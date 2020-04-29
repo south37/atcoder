@@ -58,7 +58,7 @@ ll n;
 vector<vector<int>> s(2);
 vector<vector<ull>> u(2);
 vector<vector<int>> d;
-vector<vector<int>> val;
+vector<vector<int>> val(2);
 
 void flip() {
   rep(i,n)rep(j,i) {
@@ -142,11 +142,11 @@ int main(int argc, char** argv) {
   }
 
   vector<vector<ull>> ans(n, vector<ull>(n));
-  val.assign(n, vector<int>(n));
+  rep(i,2) { val[i].resize(n); }
   d.assign(n, vector<int>(n));
 
   rep(b,64) {
-    rep(i,2)rep(j,n) { val[i][j] = (u[i][j]>>b)&1ull; }
+    rep(i,2)rep(j,n) { val[i][j] = (u[i][j]>>b)&1; }
     if (!solve()) {
       cout << -1 << endl;
       return 0;
