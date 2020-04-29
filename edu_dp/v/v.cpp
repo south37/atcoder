@@ -110,17 +110,17 @@ vector<vector<ll>> g;
 vector<mint> dp;
 vector<mint> ans;
 
-void dfs(ll v, ll p=-1) {
+void dfs1(ll v, ll p=-1) {
   mint res(1);
   for (ll u : g[v]) {
     if (u == p) { continue; }
-    dfs(u, v);
+    dfs1(u, v);
     res *= dp[u]+1;
   }
   dp[v] = res;
 }
 
-void bfs(ll v, ll p=-1) {
+void dfs2(ll v, ll p=-1) {
   ans[v] = 1;
   for (ll u : g[v]) {
     ans[v] *= dp[u]+1;
@@ -147,7 +147,7 @@ void bfs(ll v, ll p=-1) {
     if (i) { now *= lft[i-1]; }
     if (i<m-1) { now *= rht[i+1]; }
     dp[v] = now;
-    bfs(u, v);
+    dfs2(u, v);
   }
 }
 
@@ -172,8 +172,8 @@ int main(int argc, char** argv) {
   }
 
   // Do rerooting
-  dfs(0);
-  bfs(0);
+  dfs1(0);
+  dfs2(0);
 
   rep(i,n) {
     cout << ans[i] << endl;
