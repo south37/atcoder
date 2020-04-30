@@ -66,14 +66,14 @@ int main(int argc, char** argv) {
   }
 
   // dp[i][j] .. using [0,i), j is the calculated num.
-  vector<vector<ll>> dp(n, vector<ll>(21));
-  dp[0][0] = 1;
-  rep(i, n-1) {
+  vector<vector<ull>> dp(n, vector<ull>(21));
+  dp[1][a[0]] = 1; // we use only + at first element.
+  for (ll i = 1; i < n-1; ++i) {
     rep(j, 21) {
       if (j + a[i] <= 20) { // +
         dp[i+1][j+a[i]] += dp[i][j];
       }
-      if (j - a[i] >= 0) { // -
+      if (j >= a[i]) { // -
         dp[i+1][j-a[i]] += dp[i][j];
       }
     }
