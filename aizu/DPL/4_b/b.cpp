@@ -1,3 +1,5 @@
+// ref. https://ferin-tech.hatenablog.com/entry/2017/03/29/155630
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -96,14 +98,11 @@ int main(int argc, char** argv) {
   ll n2 = n/2;
   ll remain = n-n2;
   vector<vector<vector<ll>>> dp(2);
-  vector<vector<ll>>& dp1 = dp[0];
-  vector<vector<ll>>& dp2 = dp[1];
-  dp1.assign(n2+1, vector<ll>(1ll<<n2)); // prev
-  dp2.assign(remain+1, vector<ll>(1ll<<remain)); // latter
+  dp[0].resize(n2+1); // prev
+  dp[1].resize(remain+1); // latter
 
   rep(k,2) {
-    auto& d = dp[k];
-    ll m = d[0].size();
+    ll m = dp[k].size()-1;
 
     rep(i,1ll<<m) {
       ll v = 0; // sum of value
@@ -114,27 +113,32 @@ int main(int argc, char** argv) {
           ++cnt;
         }
       }
-      d[cnt].push_back(v);
+      dp[k][cnt].push_back(v);
     }
     reverse(all(a));
   }
   rep(i,n2) {
-    sort(all(dp1[i]));
+    sort(all(dp[0][i]));
   }
+
+  vector<vector<ll>>& dp1 = dp[0];
+  vector<vector<ll>>& dp2 = dp[1];
+  // printtree(dp1);
+  // printtree(dp2);
 
   ll ans = 0;
   // Try all i in latter
-  rep(i, k+1) {
+  rep(i, k+1) { // loop in [0,k]
     if (i+n2 < k) { continue; } // too small
     if (i > remain) { continue; } // too large
     // Here, consider i and k-i.
     for (ll v : dp2[i]) {
       // Here, l <= lv+rv <= r
       // <=> l-rv <= lv <= r-rv
-      auto rit = upper_bound(all(dp1[k-i]), r-v);
-      auto lit = lower_bound(all(dp1[k-i]), l-v);
+      ll rdx = upper_bound(all(dp1[k-i]), r-v) - dp1[k-i].begin();
+      ll ldx = lower_bound(all(dp1[k-i]), l-v) - dp1[k-i].begin();
       // result is count of [lit, rit)
-      ans += rit-lit;
+      ans += rdx-ldx;
     }
   }
   cout << ans << endl;
