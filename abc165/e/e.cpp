@@ -58,6 +58,17 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, m;
+  cin >> n >> m;
+  if (n%2 == 1) { // odd
+    // Here, we use i , n-i
+    rep(i, m) {
+      cout << i+1 << " " << n-1-i << endl;
+    }
+  } else { // even
+    // Here, we use i,n-i
+    rep(i,m) {
+      cout << i+1 << " " << n-i << endl;
+    }
+  }
 }
