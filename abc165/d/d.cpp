@@ -58,6 +58,17 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll a, b, n;
+  cin >> a >> b >> n;
+
+  if (n < b) { // Here, max is n.
+    ll diff = (a*n)/b;
+    cout << diff << endl;
+    return 0;
+  }
+
+  // Here, n >= b.
+  // we use b-1.
+  ll diff = (a*(b-1))/b;
+  cout << diff << endl;
 }
