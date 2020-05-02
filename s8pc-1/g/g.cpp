@@ -61,8 +61,8 @@ struct edge {
 
 ll n, m;
 vector<vector<ll>> dp; // min cost
+vector<vector<ll>> cnt; // count
 vector<vector<edge>> g;
-
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -72,6 +72,7 @@ int main(int argc, char** argv) {
 
   cin >> n >> m;
   dp.assign(1ll<<n, vector<ll>(n, INF));
+  cnt.assign(1ll<<n, vector<ll>(n));
   g.resize(n);
 
   rep(iter,m) {
@@ -83,15 +84,21 @@ int main(int argc, char** argv) {
   }
 
   dp[0][0] = 0;
+  cnt[0][0] = 1;
   rep(i,1ll<<n) { // bit state
-    rep(v,n) {
-      // Here, consider (i,j) to other
+    rep(v,n) { // from vertex v
+      // Here, consider (i,v) to other
       if (dp[i][v] == INF) { continue; } // not updated
       for (edge& e : g[v]) {
         if (!(i&(1ll<<e.to))) { // e.to is not reached
           if (dp[i][v] + e.cost <= e.time) { // time is ok
             ll nex = i|(1ll<<e.to);
-            chmin(dp[nex][e.to], dp[i][v] + e.cost);
+            if (dp[nex][e.to] == dp[i][v] + e.cost) { // same cost
+              cnt[nex][e.to] += cnt[i][v];
+            } else if (dp[nex][e.to] > dp[i][v] + e.cost) { // lower cost
+              dp[nex][e.to] = dp[i][v] + e.cost;
+              cnt[nex][e.to] = cnt[i][v];
+            }
           }
         }
       }
@@ -101,7 +108,7 @@ int main(int argc, char** argv) {
 
   ll ans = dp[(1ll<<n)-1][0];
   if (ans != INF) {
-    cout << ans << endl;
+    cout << ans << " " << cnt[(1ll<<n)-1][0] << endl;
   } else {
     cout << "IMPOSSIBLE" << endl;
   }
