@@ -60,9 +60,37 @@ struct edge {
 };
 
 ll n, m;
-vector<vector<ll>> dp; // min cost
+vector<vector<P>> dp; // pair of <min cost, cnt>
 vector<vector<edge>> g;
 
+// state .. bit, v .. last visited vertex, cost .. current cost
+P rec(ll state, ll v, ll cost) {
+  if (dp[state][v].first != INF) {
+    return dp[state][v];
+  }
+  if ((state == (1ll<<n)-1) && v == 0) { // reached to last
+    return P(0,1);
+  }
+
+  bool found = false;
+  for (edge& e : g[v]) {
+    if (state&(1ll<<e.to)) { continue; } // already visited
+    if (cost + e.cost > e.time) { continue; } // cost is too large
+    P now = rec(state|(1ll<<e.to), e.to, cost+e.cost);
+    if (now.first >= 0) { // valid
+      found = true;
+      if (dp[state][v].first == now.first + e.cost) { // same
+        dp[state][v].second += now.second;;
+      } else if (dp[state][v].first > now.first + e.cost) {
+        dp[state][v] = P(now.first + e.cost, now.second);
+      }
+    }
+  }
+  if (!found) {
+    return dp[state][v] = P(-1,0);
+  }
+  return dp[state][v];
+}
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -71,7 +99,7 @@ int main(int argc, char** argv) {
   //cout << setprecision(10) << fixed;
 
   cin >> n >> m;
-  dp.assign(1ll<<n, vector<ll>(n, INF));
+  dp.assign(1ll<<n, vector<P>(n, P(INF,0)));
   g.resize(n);
 
   rep(iter,m) {
@@ -82,26 +110,11 @@ int main(int argc, char** argv) {
     g[v].push_back({ v, u, d, time });
   }
 
-  dp[0][0] = 0;
-  rep(i,1ll<<n) { // bit state
-    rep(v,n) {
-      // Here, consider (i,j) to other
-      if (dp[i][v] == INF) { continue; } // not updated
-      for (edge& e : g[v]) {
-        if (!(i&(1ll<<e.to))) { // e.to is not reached
-          if (dp[i][v] + e.cost <= e.time) { // time is ok
-            ll nex = i|(1ll<<e.to);
-            chmin(dp[nex][e.to], dp[i][v] + e.cost);
-          }
-        }
-      }
-    }
-  }
+  P ans = rec(0,0,0);
   // printtree(dp);
 
-  ll ans = dp[(1ll<<n)-1][0];
-  if (ans != INF) {
-    cout << ans << endl;
+  if (ans.first >= 0) {
+    cout << ans.first << " " << ans.second << endl;
   } else {
     cout << "IMPOSSIBLE" << endl;
   }
