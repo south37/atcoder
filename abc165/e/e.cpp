@@ -67,8 +67,16 @@ int main(int argc, char** argv) {
     }
   } else { // even
     // Here, we use i,n-i
-    rep(i,m) {
+    ll pre = (m+1)/2;
+    rep(i,pre) {
       cout << i+1 << " " << n-i << endl;
+    }
+    ll remain = m-pre;
+    ll l = pre+1;
+    ll r = n-pre;
+    // Here, we pick from [l,r]
+    rep(i,remain) {
+      cout << l+i << " " << r-1-i << endl;
     }
   }
 }
