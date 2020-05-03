@@ -52,22 +52,83 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+ll n, a, b, c;
+vector<string> ops;
+
+void solve_for_one() {
+  vector<char> ans;
+  rep(i,n) {
+    string& s = ops[i];
+
+    if (s == "AB") {
+      if (a == 0 && b == 0) {
+        cout << "No" << endl;
+        return;
+      }
+
+      if (a == 0) {
+        ++a; --b;
+        ans.push_back('A');
+      } else if (b == 0) {
+        --a; ++b;
+        ans.push_back('B');
+      }
+    } else if (s == "BC") {
+      if (b == 0 && c == 0) {
+        cout << "No" << endl;
+        return;
+      }
+
+      if (b == 0) {
+        ++b; --c;
+        ans.push_back('B');
+      } else if (c == 0) {
+        --b; ++c;
+        ans.push_back('C');
+      }
+    } else { // s == "AC"
+      if (c == 0 && a == 0) {
+        cout << "No" << endl;
+        return;
+      }
+
+      if (c == 0) {
+        --a; ++c;
+        ans.push_back('C');
+      } else if (a == 0) {
+        ++a; --c;
+        ans.push_back('A');
+      }
+    }
+  }
+
+  cout << "Yes" << endl;
+  rep(i,n) {
+    cout << ans[i] << endl;
+  }
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n, a, b, c;
   cin >> n >> a >> b >> c;
   if (a+b+c == 0) {
     cout << "No" << endl;
     return 0;
   }
-  vector<string> ops(n);
+  ops.resize(n);
   rep(i,n) {
     cin >> ops[i];
   }
+  if (a+b+c == 1) {
+    solve_for_one();
+    return 0;
+  }
+
+  // Here, a+b+c >= 2;
 
   vector<char> ans;
   rep(i,n) {
