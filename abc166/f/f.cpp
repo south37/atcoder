@@ -148,20 +148,32 @@ int main(int argc, char** argv) {
     if (op == 0) { // ab
       if (selectedOp == 1) { // a<->b, bc is selected, a->b.
         ans.push_back('B');
+        --rawVars[0];
+        ++rawVars[1];
       } else {
         ans.push_back('A');
+        ++rawVars[0];
+        --rawVars[1];
       }
     } else if (op == 1) { // bc
       if (selectedOp == 2) { // b<->c. ca is selected. b->c.
         ans.push_back('C');
+        --rawVars[1];
+        ++rawVars[2];
       } else {
         ans.push_back('B');
+        ++rawVars[1];
+        --rawVars[2];
       }
     } else { // ca
       if (selectedOp == 0) { // c<->a. ab is selected. c->a.
         ans.push_back('A');
+        --rawVars[2];
+        ++rawVars[0];
       } else {
         ans.push_back('C');
+        ++rawVars[2];
+        --rawVars[0];
       }
     }
   }
