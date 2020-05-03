@@ -51,7 +51,7 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ll INF = 1e15;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 ll n, W;
@@ -107,7 +107,7 @@ void solve_for_small_n() {
   cout << ans << endl;
 }
 
-void solve() {
+void solve_for_small_w() {
   vector<ll> dp(W+1);
   rep(i,n) {
     for (ll j = W; j >= 0; --j) {
@@ -118,6 +118,26 @@ void solve() {
   }
   ll ans = 0;
   rep(i,W+1) { chmax(ans, dp[i]); }
+  cout << ans << endl;
+}
+
+const ll MAX_V = 2e5+5;
+void solve_for_small_v() {
+  vector<ll> dp(MAX_V+1, INF); // min cost for v.
+  dp[0] = 0;
+  rep(i,n) {
+    for (ll j = MAX_V; j >= 0; --j) {
+      if (j-v[i] >= 0) {
+        chmin(dp[j], dp[j-v[i]] + w[i]);
+      }
+    }
+  }
+  ll ans = 0;
+  rep(i,MAX_V+1) {
+    if (dp[i] <= W) {
+      chmax(ans, i);
+    }
+  }
   cout << ans << endl;
 }
 
@@ -136,6 +156,14 @@ int main(int argc, char** argv) {
   if (n <= 30) {
     solve_for_small_n();
   } else {
-    solve();
+    bool flag = true;
+    rep(i,n) {
+      if (w[i] > 1000) { flag = false; break; }
+    }
+    if (flag) {
+      solve_for_small_w();
+    } else {
+      solve_for_small_v();
+    }
   }
 }
