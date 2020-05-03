@@ -52,6 +52,31 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+
+// op .. ab,bc,ca, selectedOp .. ab,bc,ca
+// returns decreasing one.
+ll selectedDecrease(ll op, ll selectedOp) {
+  if (op == 0) { // ab
+    if (selectedOp == 1) { // bc. a->b
+      return 0;
+    } else { // ca. b->a.
+      return 1;
+    }
+  } else if (op == 1) { // bc
+    if (selectedOp == 2) { // ca. b->c.
+      return 1;
+    } else { // ab. c->b
+      return 2;
+    }
+  } else { // ca
+    if (selectedOp == 0) { // ab. c->a
+      return 2;
+    } else { // bc. a->c
+      return 0;
+    }
+  }
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -95,10 +120,12 @@ int main(int argc, char** argv) {
       return 0;
     }
     --cnts[op]; // consume remaining.
+    // printvec(cnts);
 
     // Here, we can do this operation
     ll selectedOp = -1;
     ll larger = -1;
+    ll largerRaw = -1;
     rep(j,3) {
       if (j == op) { continue; }
       // Here, j is op. k is others
@@ -122,9 +149,18 @@ int main(int argc, char** argv) {
           if (rawVars[0] == 0) { continue; }
         }
       }
+      if (cnts[j] == larger) {
+        ll h = selectedDecrease(op, j); // decreasing one.
+        if (rawVars[h] > largerRaw) {
+          largerRaw = rawVars[h];
+          selectedOp = h;
+        }
+        continue;
+      }
       if (cnts[j] > larger) {
         larger = cnts[j];
         selectedOp = j; // select op with larger cnts.
+        continue;
       }
     }
     if (selectedOp == -1) {
@@ -176,6 +212,17 @@ int main(int argc, char** argv) {
         --rawVars[0];
       }
     }
+
+    // For Debug
+    // if (op == 0) {
+    //   cout << "AB: ";
+    // } else if (op == 1) {
+    //   cout << "BC: ";
+    // } else {
+    //   cout << "CA: ";
+    // }
+    // cout << ans[i] << endl;
+    // cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
   }
 
   cout << "Yes" << endl;
