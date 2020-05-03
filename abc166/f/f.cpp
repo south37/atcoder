@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   vector<char> ans;
   rep(i,n) {
     ll op = ops[i];
-    if (vars[op] == 0) { // we can not do this operation
+    if (vars[op] <= 0) { // we can not do this operation
       cout << "No" << endl;
       return 0;
     }
