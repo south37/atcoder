@@ -161,6 +161,10 @@ int main(int argc, char** argv) {
         ++vars[j];
       } else {
         --vars[j];
+        if (vars[j] < 0) {
+          cout << "No" << endl;
+          return 0;
+        }
       }
     }
 
@@ -197,15 +201,15 @@ int main(int argc, char** argv) {
     }
 
     // For Debug
-    //  if (op == 0) {
-    //    cout << "AB: ";
-    //  } else if (op == 1) {
-    //    cout << "BC: ";
-    //  } else {
-    //    cout << "CA: ";
-    //  }
-    //  cout << ans[i] << endl;
-    //  cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
+    // if (op == 0) {
+    //   cout << "AB: ";
+    // } else if (op == 1) {
+    //   cout << "BC: ";
+    // } else {
+    //   cout << "CA: ";
+    // }
+    // cout << ans[i] << endl;
+    // cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
 
     // cout << "vars:";  printvec(vars);
     // cout << "cnts:";  printvec(cnts);
