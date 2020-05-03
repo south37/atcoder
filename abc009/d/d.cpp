@@ -146,6 +146,11 @@ int main(int argc, char** argv) {
     cin >> c[i];
   }
 
+  if (m<=k) {
+    cout << a[m-1] << endl;
+    return 0;
+  }
+
   Matrix<ll> A(k,k);
   rep(j,k) { A[0][j] = c[j]; }
   rep(j,k-1) { A[j+1][j] = (1ll<<32)-1; }
