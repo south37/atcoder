@@ -153,7 +153,7 @@ int main(int argc, char** argv) {
         ll h = selectedDecrease(op, j); // decreasing one.
         if (rawVars[h] > largerRaw) {
           largerRaw = rawVars[h];
-          selectedOp = h;
+          selectedOp = j;
         }
         continue;
       }

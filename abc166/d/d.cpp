@@ -58,6 +58,17 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll x;
+  cin >> x;
+  for (ll i = -300; i <= 300; ++i) {
+    for (ll j = -300; j <= 300; ++j) {
+      ll a = i*i*i*i*i;
+      ll b = j*j*j*j*j;
+      if (a-b == x) {
+        cout << i << " " << j << endl;
+        return 0;
+      }
+    }
+  }
+  assert(false); // must not reach here
 }

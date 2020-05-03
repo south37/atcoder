@@ -58,6 +58,38 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, m;
+  cin >> n >> m;
+  vector<ll> h(n);
+  rep(i,n) {
+    cin >> h[i];
+  }
+  vector<vector<ll>> g(n);
+  rep(i,m) {
+    ll a, b;
+    cin >> a >> b;
+    --a; --b;
+    g[a].push_back(b);
+    g[b].push_back(a);
+  }
+  vector<ll> ans(n);
+  rep(v,n) {
+    if (g[v].size() == 0) {
+      ans[v] = 1;
+      continue;
+    }
+    bool high = true;
+    for (ll u : g[v]) {
+      if (h[u] >= h[v]) {
+        high = false;
+      }
+    }
+    if (high) {
+      ans[v] = 1;
+    }
+  }
+
+   ll cnt = 0;
+   rep(i,n) { if (ans[i]) ++cnt; }
+   cout << cnt << endl;
 }

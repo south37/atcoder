@@ -60,4 +60,18 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n);
+  rep(i,n) cin >> a[i];
+  // vector<ll> b(n);
+  // rep(i,n) { b[i] = a[i]-i; }
+
+  ll ans = 0;
+  map<ll,ll> cnts;
+  rep(i,n) {
+    if (cnts.find(a[i]-i) != cnts.end()) {
+      ans += cnts[a[i]-i];
+    }
+    ++cnts[-a[i]-i];
+  }
+  cout << ans << endl;
 }
