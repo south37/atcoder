@@ -52,6 +52,37 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+vector<ll> dp;
+vector<vector<ll>> g;
+vector<ll> a;
+
+void dfs(vector<ll>& now, ll v, ll p=-1) {
+  // Update now
+  ll pre;
+  ll len = now.size();
+  ll idx = lower_bound(all(now), a[v]) - now.begin();
+  if (idx == len) { // idx is end(), should be added.
+    now.push_back(a[v]);
+  } else { // idx < len. should replace.
+    pre = now[idx];
+    now[idx] = a[v];
+  }
+
+  dp[v] = now.size();
+
+  for (ll u : g[v]) {
+    if (u == p) { continue; }
+    dfs(now, u, v);
+  }
+
+  // Revert now
+  if (idx == len) {
+    now.pop_back();
+  } else {
+    now[idx] = pre;
+  }
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -60,4 +91,24 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  dp.resize(n);
+  g.resize(n);
+  a.resize(n);
+
+  rep(i,n) {
+    cin >> a[i];
+  }
+  rep(iter,n-1) {
+    ll u, v;
+    cin >> u >> v;
+    --u; --v;
+    g[u].push_back(v);
+    g[v].push_back(u);
+  }
+  vector<ll> now;
+  dfs(now, 0);
+
+  rep(i,n) {
+    cout << dp[i] << endl;
+  }
 }
