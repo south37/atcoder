@@ -54,18 +54,10 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-int main(int argc, char** argv) {
-  cin.tie(NULL);
-  cout.tie(NULL);
-  ios_base::sync_with_stdio(false);
-  //cout << setprecision(10) << fixed;
+ll n, W;
+vector<ll> v, w;
 
-  ll n, W;
-  cin >> n >> W;
-  vector<ll> v(n), w(n);
-  rep(i,n) {
-    cin >> v[i] >> w[i];
-  }
+void solve_for_small_n() {
   ll n2 = n/2;
   ll remain = n-n2;
 
@@ -113,4 +105,37 @@ int main(int argc, char** argv) {
     chmax(ans, nv + prev(it)->second);
   }
   cout << ans << endl;
+}
+
+void solve() {
+  vector<ll> dp(W+1);
+  rep(i,n) {
+    for (ll j = W; j >= 0; --j) {
+      if (j-w[i] >= 0) {
+        chmax(dp[j], dp[j-w[i]] + v[i]);
+      }
+    }
+  }
+  ll ans = 0;
+  rep(i,W+1) { chmax(ans, dp[i]); }
+  cout << ans << endl;
+}
+
+int main(int argc, char** argv) {
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ios_base::sync_with_stdio(false);
+  //cout << setprecision(10) << fixed;
+
+  cin >> n >> W;
+  v.resize(n); w.resize(n);
+  rep(i,n) {
+    cin >> v[i] >> w[i];
+  }
+
+  if (n <= 30) {
+    solve_for_small_n();
+  } else {
+    solve();
+  }
 }
