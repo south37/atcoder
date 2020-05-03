@@ -52,50 +52,51 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-const ll MAX_ROW = 105; // To be set appropriately.
-const ll MAX_COL = 105; // To be set appropriately.
-
-class BitMatrix {
+template<class T> struct Matrix {
 public:
-  BitMatrix(int h = 1, int w = 1) : H(h), W(w) {}
-  inline bitset<MAX_COL>& operator [] (int i) { return val[i]; }
-  inline const bitset<MAX_COL>& operator [] (int i) const { return val[i]; }
-  int H, W;
-  size_t size() const { return H; }
-  BitMatrix transpose() const {
-    BitMatrix R(W, H);
-    rep(r,H)rep(c,W) {
-      R[c][r] = val[r][c];
-    }
-    return R;
+  Matrix(int n, int m, T x = 0) : val(n, vector<T>(m, x)) {}
+
+  void init(int n, int m, T x = 0) {
+    val.assign(n, vector<T>(m, x));
+  }
+  size_t size() const {
+    return val.size();
+  }
+  inline vector<T>& operator [] (int i) {
+    return val[i];
   }
 
 private:
-  bitset<MAX_COL> val[MAX_ROW];
+  vector< vector<T> > val;
 };
 
-ostream& operator << (ostream& s, BitMatrix& A) {
+template<class T> ostream& operator << (ostream& s, Matrix<T> A) {
   s << endl;
-  rep(i, A.H) {
-    rep(j, A.W) { s << A[i][j] << ", "; }
+  rep(i, A.size()) {
+    rep(j, A[i].size()) {
+      s << A[i][j] << ", ";
+    }
     s << endl;
   }
   return s;
 }
 
-BitMatrix operator * (const BitMatrix& A, const BitMatrix& B) {
-  BitMatrix revB = B.transpose();
-  BitMatrix R(A.size(), B[0].size());
-  rep(r,A.H)rep(c,B[0].size()) {
-    R[r][c] = (A[r]&revB[c]).count()&1;
+template<class T> Matrix<T> operator * (Matrix<T> A, Matrix<T> B) {
+  Matrix<T> R(A.size(), B[0].size());
+  rep(i, A.size()) {
+    rep(j, B[0].size()) {
+      rep(k, B.size()) {
+        R[i][j] ^= A[i][k] & B[k][j];
+      }
+    }
   }
   return R;
 }
 
-BitMatrix pow(BitMatrix& A, ll n) {
-  BitMatrix R(A.size(), A.size());
+template<class T> Matrix<T> pow(Matrix<T> A, long long n) {
+  Matrix<T> R(A.size(), A.size());
   rep(i, A.size()) {
-    R[i][i] = 1;
+    R[i][i] = (1ll<<32)-1;
   }
   while (n > 0) {
     if (n & 1) { R = R * A; }
@@ -105,6 +106,29 @@ BitMatrix pow(BitMatrix& A, ll n) {
   return R;
 }
 
+// int main(int argc, char** argv) {
+//   cin.tie(NULL);
+//   cout.tie(NULL);
+//   ios_base::sync_with_stdio(false);
+//   //cout << setprecision(10) << fixed;
+//
+//   ll n, k;
+//   cin >> n >> k;
+//   Matrix<mint> a(n, n, 0);
+//   rep(i,n)rep(j,n) {
+//     ll v;
+//     cin >> v;
+//     a[i][j] = v;
+//   }
+//
+//   Matrix<mint> b = pow(a, k);
+//   mint ans = 0;
+//   rep(i,n)rep(j,n) {
+//     ans += b[i][j];
+//   }
+//   cout << ans << endl;
+// }
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -113,8 +137,8 @@ int main(int argc, char** argv) {
 
   ll k, m;
   cin >> k >> m;
-  vector<ull> a(k);
-  vector<ull> c(k);
+  vector<ll> a(k);
+  vector<ll> c(k);
   rep(i,k) {
     cin >> a[i];
   }
@@ -122,18 +146,19 @@ int main(int argc, char** argv) {
     cin >> c[i];
   }
 
-  ull ans = 0;
-  rep(i,32) {
-    BitMatrix A(k, k);
-    rep(j,k) { A[0][j] = (c[j]>>i)&1; }
-    rep(j,k-1) { A[j+1][j] = 1; }
-    BitMatrix B = pow(A, m-k);
+  Matrix<ll> A(k,k);
+  rep(j,k) { A[0][j] = c[j]; }
+  rep(j,k-1) { A[j+1][j] = (1ll<<32)-1; }
+  Matrix<ll> B = pow(A, m-k);
 
-    ull now = 0;
-    rep(j,k) {
-      now ^= B[0][j] & ((a[k-1-j]>>i)&1);
-    }
-    ans |= now<<i;
+  // cout << "A:" << endl;
+  // cout << A << endl;
+  // cout << "B:" << endl;
+  // cout << B << endl;
+
+  ll ans = 0;
+  rep(j,k) {
+    ans ^= B[0][j] & a[k-1-j];
   }
-  cout << ans <<endl;
+  cout << ans << endl;
 }
