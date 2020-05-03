@@ -52,34 +52,35 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-vector<ll> dp;
+vector<ll> ans;
 vector<vector<ll>> g;
 vector<ll> a;
+vector<ll> dp;
 
-void dfs(vector<ll>& now, ll v, ll p=-1) {
-  // Update now
+void dfs(ll v, ll p=-1) {
+  // Update dp
   ll pre;
-  ll len = now.size();
-  ll idx = lower_bound(all(now), a[v]) - now.begin();
+  ll len = dp.size();
+  ll idx = lower_bound(all(dp), a[v]) - dp.begin();
   if (idx == len) { // idx is end(), should be added.
-    now.push_back(a[v]);
+    dp.push_back(a[v]);
   } else { // idx < len. should replace.
-    pre = now[idx];
-    now[idx] = a[v];
+    pre = dp[idx];
+    dp[idx] = a[v];
   }
 
-  dp[v] = now.size();
+  ans[v] = dp.size();
 
   for (ll u : g[v]) {
     if (u == p) { continue; }
-    dfs(now, u, v);
+    dfs(u, v);
   }
 
-  // Revert now
+  // Revert dp
   if (idx == len) {
-    now.pop_back();
+    dp.pop_back();
   } else {
-    now[idx] = pre;
+    dp[idx] = pre;
   }
 }
 
@@ -91,7 +92,7 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
-  dp.resize(n);
+  ans.resize(n);
   g.resize(n);
   a.resize(n);
 
@@ -105,10 +106,9 @@ int main(int argc, char** argv) {
     g[u].push_back(v);
     g[v].push_back(u);
   }
-  vector<ll> now;
-  dfs(now, 0);
+  dfs(0);
 
   rep(i,n) {
-    cout << dp[i] << endl;
+    cout << ans[i] << endl;
   }
 }
