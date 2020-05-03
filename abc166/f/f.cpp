@@ -52,171 +52,111 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-
-// op .. ab,bc,ca, selectedOp .. ab,bc,ca
-// returns decreasing one.
-ll selectedDecrease(ll op, ll selectedOp) {
-  if (op == 0) { // ab
-    if (selectedOp == 1) { // bc. a->b
-      return 0;
-    } else { // ca. b->a.
-      return 1;
-    }
-  } else if (op == 1) { // bc
-    if (selectedOp == 2) { // ca. b->c.
-      return 1;
-    } else { // ab. c->b
-      return 2;
-    }
-  } else { // ca
-    if (selectedOp == 0) { // ab. c->a
-      return 2;
-    } else { // bc. a->c
-      return 0;
-    }
-  }
-}
-
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n,a, b, c;
+  ll n, a, b, c;
   cin >> n >> a >> b >> c;
-  vector<ll> rawVars(3); // 0..a, 1..b, 2..c
-  rawVars[0] = a; rawVars[1] = b; rawVars[2] = c;
-  vector<ll> vars(3); // 0 .. ab, 1..bc, 2..ca
-  ll& ab = vars[0]; ll& bc = vars[1]; ll& ca = vars[2];
-  ab = a+b, bc=b+c, ca=a+c;
-  vector<ll> cnts(3); // 0 .. ab, 1..bc, 2..ca
-  vector<ll> ops; // index
-  rep(i,n) {
-    string s;
-    cin >> s;
-    // ops.push_back(s);
-    if (s == "AB") {
-      ++cnts[0];
-      ops.push_back(0);
-    } else if (s == "BC") {
-      ++cnts[1];
-      ops.push_back(1);
-    } else {
-      ++cnts[2];
-      ops.push_back(2);
-    }
+  if (a+b+c == 0) {
+    cout << "No" << endl;
+    return 0;
   }
-
-  // printvec(vars);
-  // printvec(ops);
-  // printvec(cnts);
+  vector<string> ops(n);
+  rep(i,n) {
+    cin >> ops[i];
+  }
 
   vector<char> ans;
   rep(i,n) {
-    ll op = ops[i];
-    if (vars[op] <= 0) { // we can not do this operation
-      cout << "No" << endl;
-      return 0;
-    }
-    --cnts[op]; // consume remaining.
-    // printvec(cnts);
+    string& s = ops[i];
 
-    // Here, we can do this operation
-    ll selectedOp = -1;
-    ll larger = -1;
-    ll largerRaw = -1;
-    rep(j,3) {
-      if (j == op) { continue; }
-      // Here, j is op. k is others
-
-      ll h = selectedDecrease(op, j); // decreasing one.
-      if (rawVars[h] == 0) { continue; } // we can not select this.
-
-      if (cnts[j] == larger) {
-        if (rawVars[h] > largerRaw) {
-          largerRaw = rawVars[h];
-          selectedOp = j;
-        }
-        continue;
+    if (s == "AB") {
+      if (a == 0 && b == 0) {
+        cout << "No" << endl;
+        return 0;
       }
-      if (cnts[j] > larger) {
-        larger = cnts[j];
-        selectedOp = j; // select op with larger cnts.
-        continue;
-      }
-    }
-    if (selectedOp == -1) {
-      cout << "No" << endl;
-      return 0;
-    }
-    // cout << "i: " << i << endl;
-    // cout << "op: " << op << endl;
-    // cout << "selectedOp: " << selectedOp << endl;
-    // Here, selectedOp has "larger" info.
-    rep(j,3) {
-      if (j == op) { continue; }
-      // Here, j != op
-      if (j == selectedOp) {
-        ++vars[j];
-      } else {
-        --vars[j];
-        if (vars[j] < 0) {
-          cout << "No" << endl;
-          return 0;
+
+      if (a == 0) {
+        ++a; --b;
+        ans.push_back('A');
+      } else if (b == 0) {
+        --a; ++b;
+        ans.push_back('B');
+      } else { // a > 0 && b > 0
+        if (a == 1 && b == 1 && c == 0 && i < n-1 && ops[i] != ops[i+1]) {
+          if (ops[i+1] == "BC") { // use b
+            --a; ++b;
+            ans.push_back('B');
+          } else { // "AC". use a
+            ++a; --b;
+            ans.push_back('A');
+          }
+        } else { // Here, either one is selectable.
+          ++a; --b;
+          ans.push_back('A');
         }
       }
+    } else if (s == "BC") {
+      if (b == 0 && c == 0) {
+        cout << "No" << endl;
+        return 0;
+      }
+
+      if (b == 0) {
+        ++b; --c;
+        ans.push_back('B');
+      } else if (c == 0) {
+        --b; ++c;
+        ans.push_back('C');
+      } else { // b > 0 && c > 0
+        if (a == 0 && b == 1 && c == 1 && i < n-1 && ops[i] != ops[i+1]) {
+          if (ops[i+1] == "AC") { // use c
+            --b; ++c;
+            ans.push_back('C');
+          } else { // "AB". use a
+            ++b; --c;
+            ans.push_back('B');
+          }
+        } else { // Here, either one is selectable.
+          ++b; --c;
+          ans.push_back('B');
+        }
+      }
+    } else { // s == "AC"
+      if (c == 0 && a == 0) {
+        cout << "No" << endl;
+        return 0;
+      }
+
+      if (c == 0) {
+        --a; ++c;
+        ans.push_back('C');
+      } else if (a == 0) {
+        ++a; --c;
+        ans.push_back('A');
+      } else { // a > 0 && c > 0
+        if (a == 1 && b == 0 && c == 1 && i < n-1 && ops[i] != ops[i+1]) {
+          if (ops[i+1] == "AB") { // use a
+            ++a; --c;
+            ans.push_back('A');
+          } else { // "BC". use c
+            --a; ++c;
+            ans.push_back('C');
+          }
+        } else { // Here, either one is selectable.
+          --a; ++c;
+          ans.push_back('C');
+        }
+      }
     }
 
-    if (op == 0) { // ab
-      if (selectedOp == 1) { // a<->b, bc is selected, a->b.
-        ans.push_back('B');
-        --rawVars[0];
-        ++rawVars[1];
-      } else {
-        ans.push_back('A');
-        ++rawVars[0];
-        --rawVars[1];
-      }
-    } else if (op == 1) { // bc
-      if (selectedOp == 2) { // b<->c. ca is selected. b->c.
-        ans.push_back('C');
-        --rawVars[1];
-        ++rawVars[2];
-      } else {
-        ans.push_back('B');
-        ++rawVars[1];
-        --rawVars[2];
-      }
-    } else { // ca
-      if (selectedOp == 0) { // c<->a. ab is selected. c->a.
-        ans.push_back('A');
-        --rawVars[2];
-        ++rawVars[0];
-      } else {
-        ans.push_back('C');
-        ++rawVars[2];
-        --rawVars[0];
-      }
-    }
-
-    // For Debug
-    // if (op == 0) {
-    //   cout << "AB: ";
-    // } else if (op == 1) {
-    //   cout << "BC: ";
-    // } else {
-    //   cout << "CA: ";
-    // }
-    // cout << ans[i] << endl;
-    // cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
-
-    // cout << "vars:";  printvec(vars);
-    // cout << "cnts:";  printvec(cnts);
+    // cout << a << "," << b << "," << c << endl;
   }
-
   cout << "Yes" << endl;
   rep(i,n) {
-    cout << ans[i] <<endl;
+    cout << ans[i] << endl;
   }
 }
