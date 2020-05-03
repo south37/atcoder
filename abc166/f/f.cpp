@@ -207,8 +207,8 @@ int main(int argc, char** argv) {
     //  cout << ans[i] << endl;
     //  cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
 
-    cout << "vars:";  printvec(vars);
-    cout << "cnts:";  printvec(cnts);
+    // cout << "vars:";  printvec(vars);
+    // cout << "cnts:";  printvec(cnts);
   }
 
   cout << "Yes" << endl;
