@@ -130,27 +130,10 @@ int main(int argc, char** argv) {
       if (j == op) { continue; }
       // Here, j is op. k is others
 
-      if (op == 0) { // ab
-        if (j == 1) { // bc. a->b
-          if (rawVars[0] == 0) { continue; } // a is 0.
-        } else { // ca. b->a.
-          if (rawVars[1] == 0) { continue; } // b is 0.
-        }
-      } else if (op == 1) { // bc
-        if (j == 2) { // ca. b->c.
-          if (rawVars[1] == 0) { continue; }
-        } else { // ab. c->b
-          if (rawVars[2] == 0) { continue; }
-        }
-      } else { // ca
-        if (j == 0) { // ab. c->a
-          if (rawVars[2] == 0) { continue; }
-        } else { // bc. a->c
-          if (rawVars[0] == 0) { continue; }
-        }
-      }
+      ll h = selectedDecrease(op, j); // decreasing one.
+      if (rawVars[h] == 0) { continue; } // we can not select this.
+
       if (cnts[j] == larger) {
-        ll h = selectedDecrease(op, j); // decreasing one.
         if (rawVars[h] > largerRaw) {
           largerRaw = rawVars[h];
           selectedOp = j;
@@ -214,15 +197,18 @@ int main(int argc, char** argv) {
     }
 
     // For Debug
-    // if (op == 0) {
-    //   cout << "AB: ";
-    // } else if (op == 1) {
-    //   cout << "BC: ";
-    // } else {
-    //   cout << "CA: ";
-    // }
-    // cout << ans[i] << endl;
-    // cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
+    //  if (op == 0) {
+    //    cout << "AB: ";
+    //  } else if (op == 1) {
+    //    cout << "BC: ";
+    //  } else {
+    //    cout << "CA: ";
+    //  }
+    //  cout << ans[i] << endl;
+    //  cout << rawVars[0] << "," << rawVars[1] << "," << rawVars[2] << endl;
+
+    cout << "vars:";  printvec(vars);
+    cout << "cnts:";  printvec(cnts);
   }
 
   cout << "Yes" << endl;
