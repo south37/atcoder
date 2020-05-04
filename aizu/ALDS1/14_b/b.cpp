@@ -1,27 +1,53 @@
-// base: http://drken1215.hatenablog.com/entry/2019/09/16/014600
-// abc141/e
-
 #include <algorithm>
+#include <bitset>
 #include <cassert>
 #include <cmath>
+#include <functional>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <queue>
-#include <set>
 #include <unordered_map>
 #include <vector>
 #include <string.h>
+#include <set>
 
 using namespace std;
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
+#define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
+
+template<class T> void printvec(const vector<T>& v) {
+  for (auto x : v) { cout << x << " "; }
+  cout << endl;
+}
+template<class T> void printtree(const vector< vector<T> >& tree) {
+  for (long long i = 0; i < tree.size(); ++i) {
+    cout << i + 1 << ": "; printvec(tree[i]);
+  }
+}
+template<class T, class U> void printmap(const map<T, U>& mp) {
+  for (auto x : mp) { cout << x.first << "=>" << x.second << endl; }
+}
+
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
+
+#define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
+#define sz(x) (ll)(x).size()
+#define fr first
+#define sc second
+#define mp make_pair
+#define pb push_back
+#define eb emplace_back
 
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
+typedef vector<ll> vl;
+typedef vector<P> vp;
 
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
@@ -63,14 +89,21 @@ struct RollingHash {
 };
 
 int main(int argc, char** argv) {
-  string S("abcabc");
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ios_base::sync_with_stdio(false);
+  //cout << setprecision(10) << fixed;
 
-  RollingHash rh(S);
-
-  cout << (rh.get(0, 3) == rh.get(3, 6)) << endl; // abc == abc: true
-  cout << (rh.get(0, 3) == rh.get(3, 5)) << endl; // abc == ab: false
-
-  cout << rh.getLCP(0, 3) << endl; // abc, abc: 3
-  cout << rh.getLCP(1, 4) << endl; // bc, bc: 2
-  cout << rh.getLCP(0, 4) << endl; // abc, bc: 0
+  string t, p;
+  cin >> t;
+  cin >> p;
+  ll n = t.size();
+  ll m = p.size();
+  RollingHash rh1(t);
+  RollingHash rh2(p);
+  rep(i,n) {
+    if (rh1.get(i,i+m) == rh2.get(0,m)) {
+      cout << i << endl;
+    }
+  }
 }
