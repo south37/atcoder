@@ -54,7 +54,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 // Dinic's algorithm.
 
 typedef ll FLOW;       // Type of flow. int here.
-const ll MAX_V = 100;  // Maximum number of nodes in a graph.
+const ll MAX_V = 105;  // Maximum number of nodes in a graph.
 const FLOW INF = 1e9;
 
 struct Edge {
@@ -189,13 +189,12 @@ int main(int argc, char** argv) {
 
   ll n,k,m;
   cin >> n >> k >> m;
-  Graph g(n+k+1);
-  ll t = n+k; // sink.
+  Graph g(n+1);
+  ll t = n; // sink.
   rep(i,k) {
     ll p;
     cin >> p;
-    g.addedge(p,n+i,1); // add edge with capacity 1.
-    g.addedge(n+i,t,INF-5);
+    g.addedge(p,t,1); // add edge with capacity 1.
   }
   rep(i,m) {
     ll a, b;
