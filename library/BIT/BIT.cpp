@@ -55,6 +55,6 @@ int main(int argc, char** argv) {
     bit.add(i, v[i]);
   }
 
-  cout << bit.sum(4) << endl; // 24
-  cout << bit.sum(9) << endl; // 55
+  cout << bit.sum(4) << endl; // sum of [0,4]. 24
+  cout << bit.sum(9) << endl; // sum of [0,9]. 55
 }
