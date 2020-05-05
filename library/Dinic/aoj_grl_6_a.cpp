@@ -32,17 +32,16 @@ typedef double D;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 // Dinic's algorithm.
-// from https://qiita.com/drken/items/e805e3f514acceb87602
 
-typedef int FLOW;       // Type of flow. int here.
-const int MAX_V = 100;  // Maximum number of nodes in a graph.
+typedef ll FLOW;       // Type of flow. int here.
+const ll MAX_V = 100;  // Maximum number of nodes in a graph.
 const FLOW INF = 1e9;
 
 struct Edge {
-  int rev, from, to;
+  ll rev, from, to;
   FLOW cap, icap; // icap: initial cap
 
-  Edge(int r, int f, int t, FLOW c) : rev(r), from(f), to(t), cap(c), icap(c) {}
+  Edge(ll r, ll f, ll t, FLOW c) : rev(r), from(f), to(t), cap(c), icap(c) {}
 
   friend ostream& operator << (ostream& s, const Edge& E) {
     if (E.cap > 0) {
@@ -55,16 +54,16 @@ struct Edge {
 
 class Graph {
 public:
-  Graph(int n = 0) : V(n) {
+  Graph(ll n = 0) : V(n) {
     rep(i, MAX_V) { list[i].clear(); }
   }
 
-  void init(int n = 0) {
+  void init(ll n = 0) {
     V = n;
     rep(i, MAX_V) { list[i].clear(); }
   }
 
-  void resize(int n = 0) { V = n; }
+  void resize(ll n = 0) { V = n; }
 
   void reset() {
     rep(i, V) {
@@ -74,7 +73,7 @@ public:
     }
   }
 
-  inline vector<Edge>& operator [] (int i) {
+  inline vector<Edge>& operator [] (ll i) {
     return list[i];
   }
 
@@ -86,26 +85,26 @@ public:
     }
   }
 
-  void addedge(int from, int to, FLOW cap) {
-    list[from].push_back(Edge((int)list[to].size(), from, to, cap));
-    list[to].push_back(Edge((int)list[from].size() - 1, to, from, 0));
+  void addedge(ll from, ll to, FLOW cap) {
+    list[from].push_back(Edge((ll)list[to].size(), from, to, cap));
+    list[to].push_back(Edge((ll)list[from].size() - 1, to, from, 0));
   }
 
 private:
-  int V;
+  ll V;
   vector<Edge> list[MAX_V];
 };
 
-static int level[MAX_V];
-static int iter[MAX_V];
+static ll level[MAX_V];
+static ll iter[MAX_V];
 
-void dibfs(Graph &G, int s) {
+void dibfs(Graph &G, ll s) {
   rep(i, MAX_V) { level[i] = -1; }
   level[s] = 0;
-  queue<int> que;
+  queue<ll> que;
   que.push(s);
   while (!que.empty()) {
-    int v = que.front();
+    ll v = que.front();
     que.pop();
     rep(i, G[v].size()) {
       Edge &e = G[v][i];
@@ -117,10 +116,10 @@ void dibfs(Graph &G, int s) {
   }
 }
 
-FLOW didfs(Graph &G, int v, int t, FLOW f) {
+FLOW didfs(Graph &G, ll v, ll t, FLOW f) {
   if (v == t) { return f; }
 
-  for (int &i = iter[v]; i < G[v].size(); ++i) {
+  for (ll &i = iter[v]; i < G[v].size(); ++i) {
     Edge &e = G[v][i], &re = G.redge(e);
     if (level[v] < level[e.to] && e.cap > 0) {
       FLOW d = didfs(G, e.to, t, min(f, e.cap));
@@ -153,11 +152,11 @@ int main(int argc, char** argv) {
   cin >> V >> E;
   Graph g(V);
   rep(i, E) {
-    int u, v, c;
+    ll u, v, c;
     cin >> u >> v >> c;
     g.addedge(u, v, c);
   }
 
-  int r = Dinic(g, 0, V - 1);
+  ll r = Dinic(g, 0, V - 1);
   cout << r << endl;
 }
