@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
   rep(k, n) {
     rep(i, n) {
       rep(j, n) {
+        if (d[i][k] == INF || d[k][j] == INF) { continue; }
         d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
       }
     }
