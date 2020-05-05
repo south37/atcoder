@@ -49,7 +49,7 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = (1ll<<31)-1;
+const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 // Lazy SegmentTree.
@@ -80,7 +80,7 @@ struct LazySegTree { // [L,R)
   }
   V get(int a, int b, int k, int l, int r) {
     push(k, l, r);
-    if (r <= a || b <= l) { return def; }
+    if (r <= a || b <= l) { return INF; }
     if (a <= l && r <= b) { return dat[k]; }
     auto x = get(a, b, k * 2 + 1, l, (l + r) / 2);
     auto y = get(a, b, k * 2 + 2, (l + r) / 2, r);
@@ -88,15 +88,15 @@ struct LazySegTree { // [L,R)
   }
   // ---- Template ---------------------------------------------------------------------------------
 
-  // update, min
-  const V def = INF, ldef = -1;
-  V comp(V l, V r) { return min(l, r); } // min
-  void setLazy(int i, V v) { lazy[i] = v; } // update
+  // add, max
+  const V def = 0, ldef = 0;
+  V comp(V l, V r) { return min(l, r); } // mx
+  void setLazy(int i, V v) { lazy[i] += v; } // add
   void push(int k, int l, int r) {
     if (lazy[k] != ldef) { // check the update of lazy
-      dat[k] = lazy[k]; // update
+      dat[k] += lazy[k]; // add
       if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
-      lazy[k] = -1;
+      lazy[k] = ldef;
     }
   }
 };
@@ -143,12 +143,12 @@ int main(int argc, char** argv) {
   rep(iter,q) {
     ll type;
     cin >> type;
-    if (type==0) { // update
+    if (type == 0) { // update
       ll s,t,x;
       cin >> s >> t >> x;
       dp.update(s,t+1,x);
     } else { // query
-      ll s,t,x;
+      ll s,t;
       cin >> s >> t;
       cout << dp.get(s,t+1) << endl;
     }

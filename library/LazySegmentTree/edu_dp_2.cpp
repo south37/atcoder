@@ -83,7 +83,7 @@ struct LazySegTree { // [L,R)
   }
   V get(int a, int b, int k, int l, int r) {
     push(k, l, r);
-    if (r <= a || b <= l) { return def; }
+    if (r <= a || b <= l) { return def; } // TODO: Here, we should return INF when we need min.
     if (a <= l && r <= b) { return dat[k]; }
     auto x = get(a, b, k * 2 + 1, l, (l + r) / 2);
     auto y = get(a, b, k * 2 + 2, (l + r) / 2, r);
@@ -96,9 +96,11 @@ struct LazySegTree { // [L,R)
   V comp(V l, V r) { return max(l, r); } // max
   void setLazy(int i, V v) { lazy[i] += v; } // add
   void push(int k, int l, int r) {
-    dat[k] += lazy[k]; // add
-    if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
-    lazy[k] = ldef;
+    if (lazy[k] != ldef) { // check the update of lazy
+      dat[k] += lazy[k]; // add
+      if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
+      lazy[k] = ldef;
+    }
   }
 };
 
