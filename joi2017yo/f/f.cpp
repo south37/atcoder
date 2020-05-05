@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
 
   cin >> n >> m >> x;
   g.resize(n);
-  d.assign((n+1)*(x+5)*3, INF);
+  d.assign((n+1)*x*3, INF);
   vector<ll> t(n);
 
   rep(i,n) {
@@ -105,12 +105,12 @@ int main(int argc, char** argv) {
     auto p = q.top(); q.pop();
     ll dist = p.first;
     state s = p.second;
-    if (dist > d[s.room*(x+5)*3 + s.x*3 + s.te]) { continue; } // too large
+    if (dist > d[s.room*x*3 + s.x*3 + s.te]) { continue; } // too large
     for (edge& e : g[s.room]) {
       if (s.te == 0 && t[e.to] == 2 && (s.x+e.cost) < x) { continue; } // invalid
       if (s.te == 2 && t[e.to] == 0 && (s.x+e.cost) < x) { continue; } // invalid
       // Here, valid.
-      state nextS = state(e.to, s.te, min(s.x+e.cost, x));
+      state nextS = state(e.to, s.te, min(s.x+e.cost, x-1));
       if (s.te == 0) {
         if (t[e.to] == 2) { nextS.te = 2; nextS.x = 0; }
         if (t[e.to] == 0) { nextS.x = 0; }
@@ -119,8 +119,8 @@ int main(int argc, char** argv) {
         if (t[e.to] == 0) { nextS.te = 0; nextS.x = 0; }
         if (t[e.to] == 2) { nextS.x = 0; }
       }
-      if (d[nextS.room*(x+5)*3 + nextS.x*3 + nextS.te] > dist + e.cost) {
-        d[nextS.room*(x+5)*3 + nextS.x*3 + nextS.te] = dist + e.cost;
+      if (d[nextS.room*x*3 + nextS.x*3 + nextS.te] > dist + e.cost) {
+        d[nextS.room*x*3 + nextS.x*3 + nextS.te] = dist + e.cost;
         q.push({ dist + e.cost, nextS });
         // cout << "s(room,x): " << s.room << "," << s.x << endl;
         // cout << "d[s(room,x)]: " << dist << endl;
@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
   ll ans = INF;
   rep(i,x+1) {
     rep(j,3) {
-      chmin(ans, d[(n-1)*(x+5)*3 + i*3 + j]);
+      chmin(ans, d[(n-1)*x*3 + i*3 + j]);
     }
   }
   cout << ans << endl;
