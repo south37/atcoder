@@ -57,8 +57,12 @@ const ll MOD = 1000000007;  // 1e9 + 7
 template<class V, int NV>
 struct LazySegTree { // [L,R)
   vector<V> dat, lazy;
+  vector<ll> width; // Used only for sum.
   LazySegTree() {
-    dat.resize(NV * 2, def); lazy.resize(NV * 2, ldef);
+    dat.resize(NV * 2, def); lazy.resize(NV * 2, ldef); width.resize(NV * 2, 1);
+    for (ll i = NV-2; i >= 0; --i) {
+      width[i] = width[i*2+1] + width[i*2+2];
+    }
   }
   void update(int a, int b, V v) {
     update(a, b, v, 0, 0, NV);
@@ -80,7 +84,7 @@ struct LazySegTree { // [L,R)
   }
   V get(int a, int b, int k, int l, int r) {
     push(k, l, r);
-    if (r <= a || b <= l) { return def; }
+    if (r <= a || b <= l) { return def; } // TODO: Here, we should return INF when we need min.
     if (a <= l && r <= b) { return dat[k]; }
     auto x = get(a, b, k * 2 + 1, l, (l + r) / 2);
     auto y = get(a, b, k * 2 + 2, (l + r) / 2, r);
@@ -94,42 +98,12 @@ struct LazySegTree { // [L,R)
   void setLazy(int i, V v) { lazy[i] = v; } // update
   void push(int k, int l, int r) {
     if (lazy[k] != ldef) { // check the update of lazy
-      dat[k] = lazy[k]; // update
+      dat[k] = lazy[k]; // update.
       if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
-      lazy[k] = -1;
+      lazy[k] = ldef;
     }
   }
 };
-
-// int main(int argc, char** argv) {
-//   cin.tie(NULL);
-//   cout.tie(NULL);
-//   ios_base::sync_with_stdio(false);
-//   //cout << setprecision(10) << fixed;
-//
-//   ll n, m;
-//   cin >> n >> m;
-//   vector<vector<pair<ll, ll>>> R(n); // R[r] .. pair of <l, a>
-//   rep(iter, m) {
-//     ll l, r, a;
-//     cin >> l >> r >> a;
-//     --l; --r;
-//     R[r].emplace_back(l, a);
-//   }
-//
-//   LazySegTree<ll, 1ll<<18> dp;
-//   rep(r, n) {
-//     ll now = dp.get(0, r); // maximum in [0, r)
-//     dp.update(r, r+1, now); // add now to r
-//     for (auto& p : R[r]) {
-//       ll l, a;
-//       tie(l,a) = p;
-//       dp.update(l, r+1, a); // add a to [l, r]
-//     }
-//   }
-//   ll ans = dp.get(0, n); // maximum in [0, n)
-//   cout << ans << endl;
-// }
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -143,12 +117,12 @@ int main(int argc, char** argv) {
   rep(iter,q) {
     ll type;
     cin >> type;
-    if (type==0) { // update
+    if (type == 0) { // update
       ll s,t,x;
       cin >> s >> t >> x;
       dp.update(s,t+1,x);
-    } else { // query
-      ll s,t,x;
+    } else {
+      ll s,t;
       cin >> s >> t;
       cout << dp.get(s,t+1) << endl;
     }
