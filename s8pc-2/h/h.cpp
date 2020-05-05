@@ -1,3 +1,5 @@
+// ref. http://mayokoex.hatenablog.com/entry/2016/04/25/223326
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -92,13 +94,13 @@ struct LazySegTree { // [L,R)
   }
   // ---- Template ---------------------------------------------------------------------------------
 
-  // add, max
+  // xor, sum
   const V def = 0, ldef = 0;
-  V comp(V l, V r) { return max(l, r); } // max
-  void setLazy(int i, V v) { lazy[i] += v; } // add
+  V comp(V l, V r) { return l + r; } // sum
+  void setLazy(int i, V v) { lazy[i] ^= v; } // xor
   void push(int k, int l, int r) {
     if (lazy[k] != ldef) { // check the update of lazy
-      dat[k] += lazy[k]; // add. Use "dat[k] += lazy[k] * width[k]" when we need "sum".
+      dat[k] = r-l-dat[k]; // xor in this range. [l,r)
       if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
       lazy[k] = ldef;
     }
