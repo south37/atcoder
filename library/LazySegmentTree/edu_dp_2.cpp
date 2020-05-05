@@ -60,8 +60,12 @@ const ll MOD = 1000000007;  // 1e9 + 7
 template<class V, int NV>
 struct LazySegTree { // [L,R)
   vector<V> dat, lazy;
+  vector<ll> width; // Used only for sum.
   LazySegTree() {
-    dat.resize(NV * 2, def); lazy.resize(NV * 2, ldef);
+    dat.resize(NV * 2, def); lazy.resize(NV * 2, ldef); width.resize(NV * 2, 1);
+    for (ll i = NV-2; i >= 0; --i) {
+      width[i] = width[i*2+1] + width[i*2+2];
+    }
   }
   void update(int a, int b, V v) {
     update(a, b, v, 0, 0, NV);
@@ -97,7 +101,7 @@ struct LazySegTree { // [L,R)
   void setLazy(int i, V v) { lazy[i] += v; } // add
   void push(int k, int l, int r) {
     if (lazy[k] != ldef) { // check the update of lazy
-      dat[k] += lazy[k]; // add
+      dat[k] += lazy[k]; // add. Use "dat[k] += lazy[k] * width[k]" when we need "sum".
       if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
       lazy[k] = ldef;
     }
