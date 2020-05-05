@@ -89,13 +89,15 @@ struct LazySegTree { // [L,R)
   // ---- Template ---------------------------------------------------------------------------------
 
   // add, max
-  const V def = INF, ldef = INF;
+  const V def = INF, ldef = -1;
   V comp(V l, V r) { return min(l, r); } // min
   void setLazy(int i, V v) { lazy[i] = v; } // update
   void push(int k, int l, int r) {
-    dat[k] = lazy[k]; // update
-    if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
-    lazy[k] = ldef;
+    if (lazy[k] >= 0) {
+      dat[k] = lazy[k]; // update
+      if (r - l > 1) { setLazy(k * 2 + 1, lazy[k]); setLazy(k * 2 + 2, lazy[k]); }
+      lazy[k] = -1;
+    }
   }
 };
 
