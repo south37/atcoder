@@ -99,19 +99,18 @@ int main(int argc, char** argv) {
   // printvec(t);
   // printtree(g);
 
-  priority_queue<pair<ll,state>, vector<pair<ll,state>>, greater<pair<ll,state>>> q;
+  priority_queue<state, vector<state>> q;
   d[0] = 0;
-  q.push({ 0, state(0,0, 0) });
+  q.push(state(0,0,0,0));
   while (!q.empty()) {
-    auto p = q.top(); q.pop();
-    ll dist = p.first;
-    state s = p.second;
+    state s = q.top(); q.pop();
+    ll dist = s.dist;
     if (dist > d[s.room*x*3 + s.x*3 + s.te]) { continue; } // too large
     for (edge& e : g[s.room]) {
       if (s.te == 0 && t[e.to] == 2 && (s.x+e.cost) < x) { continue; } // invalid
       if (s.te == 2 && t[e.to] == 0 && (s.x+e.cost) < x) { continue; } // invalid
       // Here, valid.
-      state nextS = state(e.to, s.te, min(s.x+e.cost, x-1));
+      state nextS = state(e.to, s.te, min(s.x+e.cost, x-1), dist+e.cost);
       if (s.te == 0) {
         if (t[e.to] == 2) { nextS.te = 2; nextS.x = 0; }
         if (t[e.to] == 0) { nextS.x = 0; }
@@ -122,7 +121,7 @@ int main(int argc, char** argv) {
       }
       if (d[nextS.room*x*3 + nextS.x*3 + nextS.te] > dist + e.cost) {
         d[nextS.room*x*3 + nextS.x*3 + nextS.te] = dist + e.cost;
-        q.push({ dist + e.cost, nextS });
+        q.push(nextS);
         // cout << "s(room,x): " << s.room << "," << s.x << endl;
         // cout << "d[s(room,x)]: " << dist << endl;
         // cout << "nextS(room,x): " << nextS.room << "," << nextS.x << endl;
