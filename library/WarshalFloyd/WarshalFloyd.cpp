@@ -29,14 +29,14 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
-  ll N, M;
-  cin >> N >> M;
+  ll n, m;
+  cin >> n >> m;
 
   // d[u][v] .. The cost between u .. v.
-  vector< vector<ll> > d(N, vector<ll>(N, INF));
+  vector< vector<ll> > d(n, vector<ll>(n, INF));
 
   // initialization
-  rep(i, M) {
+  rep(i, m) {
     int a, b, c;
     cin >> a >> b >> c;
     --a; --b; // 0-indexed
@@ -45,9 +45,9 @@ int main(int argc, char** argv) {
   }
 
   // WarshalFloyd
-  rep(k, N) {
-    rep(i, N) {
-      rep(j, N) {
+  rep(k, n) {
+    rep(i, n) {
+      rep(j, n) {
         d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
       }
     }
