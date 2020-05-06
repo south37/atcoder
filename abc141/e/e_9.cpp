@@ -114,36 +114,11 @@ int main(int argc, char** argv) {
   RollingHash rh(S);
 
   ll ans = 0;
-  for (ll len = n/2; len >= 1; --len) {
-    if (ans > 0) { break; } // already found
-
-    map<ull,ll> hashes; // all hashes in [s, n)
-    ll s = len;
-    for (ll s = len; s < n; ++s) {
-      // Here, consider [s, s+len)
-      if (s+len > n) { break; }
-      ull hsh = rh.get(s,s+len);
-      ++hashes[hsh];
-    }
-    rep(s,n) {
-      // Here, consider [s, s+len)
-      if (s+len > n) { break; }
-      {
-        ull hsh = rh.get(s,s+len);
-        if (hashes.find(hsh) != hashes.end()) { // found
-          chmax(ans, len);
-          break;
-        }
-      }
-      // Here, remove [s+len, s+2*len)
-      if (s+2*len > n) { break; }
-      {
-        ull hsh = rh.get(s+len,s+2*len);
-        --hashes[hsh];
-        if (hashes[hsh] == 0) {
-          hashes.erase(hsh);
-        }
-      }
+  rep(l,n) {
+    for (ll r = l+1; r < n; ++r) {
+      ll lcp = rh.getLCP(l,r);
+      lcp = min(lcp, r-l); // NOTE: overlap is not allowed
+      chmax(ans, lcp);
     }
   }
   cout << ans << endl;
