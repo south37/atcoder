@@ -75,7 +75,7 @@ struct RollingHash {
     return res1;
   }
 
-  // get lcp of S[a:] and T[b:]
+  // get lcp of S[a,n) and T[b,n)
   inline int getLCP(int a, int b) const {
     int len = min((int)_hash.size()-a, (int)_hash.size()-b);
     int low = 0, high = len;
