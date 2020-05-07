@@ -52,169 +52,54 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-ll n, a, b, c;
-vector<string> ops;
-
-void solve_for_one() {
-  vector<char> ans;
-  rep(i,n) {
-    string& s = ops[i];
-
-    if (s == "AB") {
-      if (a == 0 && b == 0) {
-        cout << "No" << endl;
-        return;
-      }
-
-      if (a == 0) {
-        ++a; --b;
-        ans.push_back('A');
-      } else if (b == 0) {
-        --a; ++b;
-        ans.push_back('B');
-      }
-    } else if (s == "BC") {
-      if (b == 0 && c == 0) {
-        cout << "No" << endl;
-        return;
-      }
-
-      if (b == 0) {
-        ++b; --c;
-        ans.push_back('B');
-      } else if (c == 0) {
-        --b; ++c;
-        ans.push_back('C');
-      }
-    } else { // s == "AC"
-      if (c == 0 && a == 0) {
-        cout << "No" << endl;
-        return;
-      }
-
-      if (c == 0) {
-        --a; ++c;
-        ans.push_back('C');
-      } else if (a == 0) {
-        ++a; --c;
-        ans.push_back('A');
-      }
-    }
-  }
-
-  cout << "Yes" << endl;
-  rep(i,n) {
-    cout << ans[i] << endl;
-  }
-}
-
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  cin >> n >> a >> b >> c;
-  if (a+b+c == 0) {
-    cout << "No" << endl;
-    return 0;
-  }
-  ops.resize(n);
+  ll n;
+  cin >> n;
+  vector<int> d(3);
+  rep(i,3) { cin >> d[i]; }
+  vector<P> q;
   rep(i,n) {
-    cin >> ops[i];
+    string s;
+    cin >> s;
+    int a, b;
+    if (s == "AB") { a = 0, b = 1; } // (0,1)
+    if (s == "AC") { a = 0, b = 2; } // (0,2)
+    if (s == "BC") { a = 1, b = 2; } // (1,2)
+    q.emplace_back(a,b);
   }
-  if (a+b+c == 1) {
-    solve_for_one();
-    return 0;
-  }
+  string ans;
+  auto add = [&](int a, int b) { // b->a.
+    ++d[a];
+    --d[b];
+    ans += 'A'+a;
+  };
+  q.emplace_back(0,1); // sentinel.
 
-  // Here, a+b+c >= 2;
-
-  vector<char> ans;
   rep(i,n) {
-    string& s = ops[i];
-
-    if (s == "AB") {
-      if (a == 0 && b == 0) {
-        cout << "No" << endl;
-        return 0;
-      }
-
-      if (a == 0) {
-        ++a; --b;
-        ans.push_back('A');
-      } else if (b == 0) {
-        --a; ++b;
-        ans.push_back('B');
-      } else { // a > 0 && b > 0
-        if (a == 1 && b == 1 && c == 0 && i < n-1 && ops[i] != ops[i+1]) {
-          if (ops[i+1] == "BC") { // use b
-            --a; ++b;
-            ans.push_back('B');
-          } else { // "AC". use a
-            ++a; --b;
-            ans.push_back('A');
-          }
-        } else { // Here, either one is selectable.
-          ++a; --b;
-          ans.push_back('A');
-        }
-      }
-    } else if (s == "BC") {
-      if (b == 0 && c == 0) {
-        cout << "No" << endl;
-        return 0;
-      }
-
-      if (b == 0) {
-        ++b; --c;
-        ans.push_back('B');
-      } else if (c == 0) {
-        --b; ++c;
-        ans.push_back('C');
-      } else { // b > 0 && c > 0
-        if (a == 0 && b == 1 && c == 1 && i < n-1 && ops[i] != ops[i+1]) {
-          if (ops[i+1] == "AC") { // use c
-            --b; ++c;
-            ans.push_back('C');
-          } else { // "AB". use a
-            ++b; --c;
-            ans.push_back('B');
-          }
-        } else { // Here, either one is selectable.
-          ++b; --c;
-          ans.push_back('B');
-        }
-      }
-    } else { // s == "AC"
-      if (c == 0 && a == 0) {
-        cout << "No" << endl;
-        return 0;
-      }
-
-      if (c == 0) {
-        --a; ++c;
-        ans.push_back('C');
-      } else if (a == 0) {
-        ++a; --c;
-        ans.push_back('A');
-      } else { // a > 0 && c > 0
-        if (a == 1 && b == 0 && c == 1 && i < n-1 && ops[i] != ops[i+1]) {
-          if (ops[i+1] == "AB") { // use a
-            ++a; --c;
-            ans.push_back('A');
-          } else { // "BC". use c
-            --a; ++c;
-            ans.push_back('C');
-          }
-        } else { // Here, either one is selectable.
-          --a; ++c;
-          ans.push_back('C');
-        }
+    int a = q[i].first;
+    int b = q[i].second;
+    if (!d[a] && !d[b]) { // invalid. both is 0.
+      cout << "No" << endl;
+      return 0;
+    }
+    if (!d[a]) {
+      add(a,b);
+    } else if (!d[b]) {
+      add(b,a);
+    } else {
+      int na = q[i+1].first;
+      int nb = q[i+1].second;
+      if (a == na || a == nb) { // a is used in next tern.
+        add(a,b);
+      } else {
+        add(b,a);
       }
     }
-
-    // cout << a << "," << b << "," << c << endl;
   }
   cout << "Yes" << endl;
   rep(i,n) {
