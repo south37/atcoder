@@ -69,7 +69,9 @@ int main(int argc, char** argv) {
     --a; --b;
     if (a > b) { swap(a,b); }
     pairs.insert(P(a,b));
+    // pairs.insert(P(b,a));
   }
+
   ll n2 = n/2;
   // dp[s] .. s is stable set. true or false.
   vector<vector<bool>> dp(2);
@@ -85,20 +87,24 @@ int main(int argc, char** argv) {
       dp[1][(1ll<<(p.first-n2))|(1ll<<(p.second-n2))] = false;
     }
   }
-  vector<ll> ns = { n2, n-n2 };
-  rep(k,2) {
-    rep(i,1ll<<ns[k]) {
-      if (!dp[k][i]) { // i is false
-        rep(j,ns[k]) {
-          if (!(i&(1ll<<j))) { // j is not in i
-            dp[k][i|(1ll<j)] = false;
-          }
+  rep(i,1ll<<n2) {
+    if (!dp[0][i]) {
+      rep(j,n2) {
+        if (!(i&(1ll<<j))) { // j is not in i
+          dp[0][i|(1ll<<j)] = false;
         }
       }
     }
   }
-  // printvec(dp[0]);
-  // printvec(dp[1]);
+  rep(i,1ll<<(n-n2)) {
+    if (!dp[1][i]) {
+      rep(j,(n-n2)) {
+        if (!(i&(1ll<<j))) { // j is not in i
+          dp[1][i|(1ll<<j)] = false;
+        }
+      }
+    }
+  }
 
   // dp1[i] .. set of vs in v2 which are not connected with i.
   vector<ll> dp1(1ll<<n2);
@@ -121,10 +127,10 @@ int main(int argc, char** argv) {
   vector<ll> dp2(1ll<<(n-n2));
   rep(i,1ll<<(n-n2)) {
     if (dp[1][i]) { // stable set
-      dp2[i] = __builtin_popcount(i);
+      dp2[i] = __builtin_popcountl(i);
     }
   }
-  // printvec(dp2);
+  // cout << "dp2: "; printvec(dp2);
   rep(i,1ll<<(n-n2)) {
     rep(j,n-n2) {
       if (!(i&(1ll<<j))) { // j is not in i
@@ -141,7 +147,7 @@ int main(int argc, char** argv) {
       // cout << "i: " << i << endl;
       // cout << "j: " << j << endl;
       // cout << "dp2[j]: " << dp2[j] << endl;
-      chmax(ans, __builtin_popcount(i) + dp2[j]);
+      chmax(ans, __builtin_popcountl(i) + dp2[j]);
     }
   }
   cout << ans << endl;
