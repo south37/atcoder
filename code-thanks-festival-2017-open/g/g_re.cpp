@@ -54,6 +54,10 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+// dp[k][s] .. s is stable set. true or false.
+bool dp[2][1<<20];
+int dp1[1<<20], dp2[1<<20];
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -72,11 +76,9 @@ int main(int argc, char** argv) {
     // pairs.insert(P(b,a));
   }
 
-  int n1 = n/2, n2 = n-n1;
-  // dp[s] .. s is stable set. true or false.
-  vector<vector<bool>> dp(2);
-  dp[0].assign(1ll<<n1, true);
-  dp[1].assign(1ll<<n2, true);
+  int n1 = (n+1)/2, n2 = n-n1;
+  fill(dp[0], dp[0]+(1<<n1), true);
+  fill(dp[1], dp[1]+(1<<n2), true);
   for (auto& p : pairs) {
     if (p.first < n1 && p.second < n1) {
       dp[0][(1ll<<p.first)|(1ll<<p.second)] = false;
@@ -90,41 +92,36 @@ int main(int argc, char** argv) {
   rep(i,1ll<<n1) {
     if (!dp[0][i]) {
       rep(j,n1) {
-        if (!(i&(1ll<<j))) { // j is not in i
-          dp[0][i|(1ll<<j)] = false;
-        }
+        dp[0][i|(1ll<<j)] = false;
       }
     }
   }
   rep(i,1ll<<n2) {
     if (!dp[1][i]) {
       rep(j,n2) {
-        if (!(i&(1ll<<j))) { // j is not in i
-          dp[1][i|(1ll<<j)] = false;
-        }
+        dp[1][i|(1ll<<j)] = false;
       }
     }
   }
 
   // dp1[i] .. set of vs in v2 which are not connected with i.
-  vector<ll> dp1(1ll<<n1);
   dp1[0] = (1ll<<n2)-1;
-  rep(i,n1)rep(j,n2) {
-    if (pairs.find(P(i,j+n1)) == pairs.end()) { // (i,j+n1) is not in pairs
-      dp1[1ll<<i] |= 1ll<<j;
+  rep(i,n1) {
+    dp1[1<<i] = (1ll<<n2)-1;
+    for (auto& p : pairs) {
+      if (p.first == i && p.second >= n1) {
+        dp1[1<<i] ^= 1<<(p.second-n1);
+      }
     }
   }
   rep(i,1ll<<n2) {
     rep(j,n2) {
-      if (!(i&(1ll<<j))) { // j is not in i
-        dp1[i|(1ll<<j)] = dp1[i]&dp1[1ll<<j];
-      }
+      dp1[i|(1ll<<j)] = dp1[i]&dp1[1ll<<j];
     }
   }
   // cout << "dp1: "; printvec(dp1);
 
   // dp2[i] .. max value in subset of i.
-  vector<int> dp2(1ll<<n2);
   rep(i,1ll<<n2) {
     if (dp[1][i]) { // stable set
       dp2[i] = __builtin_popcountll(i);
@@ -133,9 +130,7 @@ int main(int argc, char** argv) {
   // cout << "dp2: "; printvec(dp2);
   rep(i,1ll<<n2) {
     rep(j,n2) {
-      if (!(i&(1ll<<j))) { // j is not in i
-        chmax(dp2[i|(1ll<<j)], dp2[i]);
-      }
+      chmax(dp2[i|(1ll<<j)], dp2[i]);
     }
   }
   // cout << "dp2: "; printvec(dp2);
