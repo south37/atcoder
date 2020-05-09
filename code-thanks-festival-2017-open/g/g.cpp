@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
   vector<int> dp2(1ll<<(n-n2));
   rep(i,1ll<<(n-n2)) {
     if (dp[1][i]) { // stable set
-      dp2[i] = __builtin_popcountl(i);
+      dp2[i] = __builtin_popcountll(i);
     }
   }
   // cout << "dp2: "; printvec(dp2);
@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
       // cout << "i: " << i << endl;
       // cout << "j: " << j << endl;
       // cout << "dp2[j]: " << dp2[j] << endl;
-      chmax(ans, __builtin_popcountl(i) + dp2[j]);
+      chmax(ans, __builtin_popcountll(i) + dp2[j]);
     }
   }
   cout << ans << endl;
