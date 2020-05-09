@@ -60,11 +60,11 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n, m;
+  int n, m;
   cin >> n >> m;
   set<P> pairs;
   rep(i,m) {
-    ll a, b;
+    int a, b;
     cin >> a >> b;
     --a; --b;
     if (a > b) { swap(a,b); }
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
     // pairs.insert(P(b,a));
   }
 
-  ll n2 = n/2;
+  int n2 = n/2;
   // dp[s] .. s is stable set. true or false.
   vector<vector<bool>> dp(2);
   dp[0].assign(1ll<<n2, true);
@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
   // cout << "dp1: "; printvec(dp1);
 
   // dp2[i] .. max value in subset of i.
-  vector<ll> dp2(1ll<<(n-n2));
+  vector<int> dp2(1ll<<(n-n2));
   rep(i,1ll<<(n-n2)) {
     if (dp[1][i]) { // stable set
       dp2[i] = __builtin_popcountl(i);
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
   }
   // cout << "dp2: "; printvec(dp2);
 
-  ll ans = 0;
+  int ans = 0;
   rep(i,1ll<<n2) {
     if (dp[0][i]) { // stable set
       ll j = dp1[i]; // set in v2.
