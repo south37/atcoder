@@ -72,33 +72,33 @@ int main(int argc, char** argv) {
     // pairs.insert(P(b,a));
   }
 
-  int n2 = n/2;
+  int n1 = n/2, n2 = n-n1;
   // dp[s] .. s is stable set. true or false.
   vector<vector<bool>> dp(2);
-  dp[0].assign(1ll<<n2, true);
-  dp[1].assign(1ll<<(n-n2), true);
+  dp[0].assign(1ll<<n1, true);
+  dp[1].assign(1ll<<n2, true);
   for (auto& p : pairs) {
-    if (p.first < n2 && p.second < n2) {
+    if (p.first < n1 && p.second < n1) {
       dp[0][(1ll<<p.first)|(1ll<<p.second)] = false;
     }
   }
   for (auto& p : pairs) {
-    if (n2 <= p.first && n2 <= p.second) {
-      dp[1][(1ll<<(p.first-n2))|(1ll<<(p.second-n2))] = false;
+    if (n1 <= p.first && n1 <= p.second) {
+      dp[1][(1ll<<(p.first-n1))|(1ll<<(p.second-n1))] = false;
     }
   }
-  rep(i,1ll<<n2) {
+  rep(i,1ll<<n1) {
     if (!dp[0][i]) {
-      rep(j,n2) {
+      rep(j,n1) {
         if (!(i&(1ll<<j))) { // j is not in i
           dp[0][i|(1ll<<j)] = false;
         }
       }
     }
   }
-  rep(i,1ll<<(n-n2)) {
+  rep(i,1ll<<n2) {
     if (!dp[1][i]) {
-      rep(j,(n-n2)) {
+      rep(j,n2) {
         if (!(i&(1ll<<j))) { // j is not in i
           dp[1][i|(1ll<<j)] = false;
         }
@@ -107,15 +107,15 @@ int main(int argc, char** argv) {
   }
 
   // dp1[i] .. set of vs in v2 which are not connected with i.
-  vector<ll> dp1(1ll<<n2);
-  dp1[0] = (1ll<<(n-n2))-1;
-  rep(i,n2)rep(j,n-n2) {
-    if (pairs.find(P(i,j+n2)) == pairs.end()) { // (i,j+n2) is not in pairs
+  vector<ll> dp1(1ll<<n1);
+  dp1[0] = (1ll<<n2)-1;
+  rep(i,n1)rep(j,n2) {
+    if (pairs.find(P(i,j+n1)) == pairs.end()) { // (i,j+n1) is not in pairs
       dp1[1ll<<i] |= 1ll<<j;
     }
   }
-  rep(i,1ll<<(n-n2)) {
-    rep(j,n-n2) {
+  rep(i,1ll<<n2) {
+    rep(j,n2) {
       if (!(i&(1ll<<j))) { // j is not in i
         dp1[i|(1ll<<j)] = dp1[i]&dp1[1ll<<j];
       }
@@ -124,15 +124,15 @@ int main(int argc, char** argv) {
   // cout << "dp1: "; printvec(dp1);
 
   // dp2[i] .. max value in subset of i.
-  vector<int> dp2(1ll<<(n-n2));
-  rep(i,1ll<<(n-n2)) {
+  vector<int> dp2(1ll<<n2);
+  rep(i,1ll<<n2) {
     if (dp[1][i]) { // stable set
       dp2[i] = __builtin_popcountll(i);
     }
   }
   // cout << "dp2: "; printvec(dp2);
-  rep(i,1ll<<(n-n2)) {
-    rep(j,n-n2) {
+  rep(i,1ll<<n2) {
+    rep(j,n2) {
       if (!(i&(1ll<<j))) { // j is not in i
         chmax(dp2[i|(1ll<<j)], dp2[i]);
       }
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
   // cout << "dp2: "; printvec(dp2);
 
   int ans = 0;
-  rep(i,1ll<<n2) {
+  rep(i,1ll<<n1) {
     if (dp[0][i]) { // stable set
       ll j = dp1[i]; // set in v2.
       // cout << "i: " << i << endl;
