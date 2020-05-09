@@ -54,9 +54,9 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-// dp[k][s] .. s is stable set. true or false.
-bool dp[2][1<<20];
-int dp1[1<<20], dp2[1<<20];
+// ok1[s] .. s is stable set. true or false.
+bool ok1[1<<20], ok2[1<<20];
+int ok3[1<<20], dp[1<<20];
 vector<int> g[40];
 
 int main(int argc, char** argv) {
@@ -65,87 +65,80 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  int n, m;
+  int n,m;
   cin >> n >> m;
   rep(i,m) {
-    int a, b;
+    int a,b;
     cin >> a >> b;
     --a; --b;
     g[a].push_back(b);
     g[b].push_back(a);
   }
 
-  int n1 = (n+1)/2, n2 = n-n1;
-  fill(dp[0], dp[0]+(1<<n1), true);
-  fill(dp[1], dp[1]+(1<<n2), true);
-  rep(v,n1) {
-    for (auto u : g[v]) {
+  int n1 = (n+1)/2, n2 = n/2;
+  fill(ok1, ok1+(1<<n1), true);
+  fill(ok2, ok2+(1<<n2), true);
+  rep(i,n1) {
+    for (auto u : g[i]) {
       if (u < n1) {
-        dp[0][(1<<u)|(1<<v)] = false;
+        ok1[(1<<u)|(1<<i)] = false;
       }
     }
   }
-  for (ll v = n1; v < n; ++v) {
-    for (auto u : g[v]) {
+  for (ll i = n1; i < n; ++i) {
+    for (auto u : g[i]) {
       if (u >= n1) {
-        dp[1][(1<<(u-n1))|(1<<(v-n1))] = false;
+        ok2[(1<<(u-n1))|(1<<(i-n1))] = false;
       }
     }
   }
   rep(i,1<<n1) {
-    if (!dp[0][i]) {
+    if (!ok1[i]) {
       rep(j,n1) {
-        dp[0][i|(1<<j)] = false;
+        ok1[i|(1<<j)] = false;
       }
     }
   }
   rep(i,1<<n2) {
-    if (!dp[1][i]) {
+    if (!ok2[i]) {
       rep(j,n2) {
-        dp[1][i|(1<<j)] = false;
+        ok2[i|(1<<j)] = false;
       }
     }
   }
 
-  // dp1[i] .. set of vs in v2 which are not connected with i.
-  dp1[0] = (1<<n2)-1;
+  ok3[0] = (1<<n2)-1;
   rep(i,n1) {
-    dp1[1<<i] = (1<<n2)-1;
+    ok3[1<<i] = (1<<n2)-1;
     for (auto u : g[i]) { // loop for all u connected with i.
       if (u >= n1) {
-        dp1[1<<i] ^= (1<<(u-n1));
+        ok3[1<<i] ^= (1<<(u-n1));
       }
     }
   }
-  rep(i,1<<n2) {
-    rep(j,n2) {
-      dp1[i|(1<<j)] = dp1[i]&dp1[1<<j];
+  rep(i,1<<n1) {
+    rep(j,n1) {
+      ok3[i|(1<<j)] = ok3[i]&ok3[1<<j];
     }
   }
-  // cout << "dp1: "; printvec(dp1);
 
-  // dp2[i] .. max value in subset of i.
+  // dp[i] .. max value in subset of i.
   rep(i,1<<n2) {
-    if (dp[1][i]) { // stable set
-      dp2[i] = __builtin_popcountll(i);
+    if (ok2[i]) { // stable set
+      dp[i] = __builtin_popcountll(i);
     }
   }
-  // cout << "dp2: "; printvec(dp2);
   rep(i,1<<n2) {
     rep(j,n2) {
-      chmax(dp2[i|(1<<j)], dp2[i]);
+      chmax(dp[i|(1<<j)], dp[i]);
     }
   }
-  // cout << "dp2: "; printvec(dp2);
 
   int ans = 0;
   rep(i,1<<n1) {
-    if (dp[0][i]) { // stable set
-      ll j = dp1[i]; // set in v2.
-      // cout << "i: " << i << endl;
-      // cout << "j: " << j << endl;
-      // cout << "dp2[j]: " << dp2[j] << endl;
-      chmax(ans, __builtin_popcountll(i) + dp2[j]);
+    if (ok1[i]) { // stable set
+      int cnt = __builtin_popcountll(i);
+      chmax(ans, cnt + dp[ok3[i]]);
     }
   }
   cout << ans << endl;
