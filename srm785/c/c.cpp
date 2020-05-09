@@ -52,9 +52,32 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-class Class {
+class EllysNimDiv2 {
 public:
-  int method() {
+  int getMin(vector<int>& A) {
+    ll n = A.size();
+    ll x = 0; // xor of A
+    rep(i,n) {
+      x ^= A[i];
+    }
+
+    sort(all(A));
+    reverse(all(A)); // decreasing order
+
+    ll ans = INF;
+    rep(i,n) {
+      ll y = A[i];
+      rep(j,10) {
+        if (x&(1ll<<j)) {
+          y ^= 1ll<<j;
+        }
+      }
+      if (y >= A[i]) {
+        chmin(ans, y-A[i]);
+      }
+    }
+
+    return ans;
   }
 };
 
@@ -63,7 +86,9 @@ int main(int argc, char** argv) {
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
 
-  Class a0;
-  std::cout << "a0: Expected ~, Got \"" << a0.method() << "\"" << std::endl;
+  vector<int> input = {42, 13, 123, 55, 666, 17};
+  // vector<int> input = {42, 13+11, 123+389, 55+73, 666+6, 17+1};
+  EllysNimDiv2 a0;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(input) << "\"" << std::endl;
   // std::cout << "a0: Expected ~, Got \"" << setprecision(10) << a0.method() << "\"" << std::endl;
 }

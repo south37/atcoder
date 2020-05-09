@@ -52,9 +52,31 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-class Class {
+class EllysPalMulDiv2 {
 public:
-  int method() {
+  int getMin(int x) {
+    for (ll y = 1; y <= 1000; ++y) {
+      if (isPalindrom(y*x)) {
+        return y;
+      }
+    }
+    return -1;
+  }
+
+  bool isPalindrom(ll n) {
+    vector<ll> ds;
+    while (n>0){
+      ds.push_back(n%10);
+      n /= 10;
+    }
+    ll m = ds.size();
+
+    rep(i,m) {
+      if (ds[i] != ds[m-1-i]) {
+        return false;
+      }
+    }
+    return true;
   }
 };
 
@@ -64,6 +86,11 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
 
   Class a0;
-  std::cout << "a0: Expected ~, Got \"" << a0.method() << "\"" << std::endl;
-  // std::cout << "a0: Expected ~, Got \"" << setprecision(10) << a0.method() << "\"" << std::endl;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(42) << "\"" << std::endl;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(121) << "\"" << std::endl;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(1337) << "\"" << std::endl;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(13) << "\"" << std::endl;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(100) << "\"" << std::endl;
+  std::cout << "a0: Expected ~, Got \"" << a0.getMin(39325) << "\"" << std::endl;
+  // std::cout << "a0: Expected ~, Got \"" << setprecision(10) << a0.getMin() << "\"" << std::endl;
 }
