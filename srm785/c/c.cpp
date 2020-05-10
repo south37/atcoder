@@ -1,3 +1,5 @@
+// ref. https://community.topcoder.com/stat?c=problem_solution&cr=40986386&rd=17965&pm=16135
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -49,34 +51,40 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ll INF = 1e12;
 const ll MOD = 1000000007;  // 1e9 + 7
+
+// dp[i][j] .. using [i,n), current is j, min cost to achieve j=0 at i=n.
+ll dp[55][50005];
+int n;
+vector<int> v;
+
+ll solve(int i, int cur) {
+  if (i >= n) { // reached to last
+    if (cur == 0) { // ok
+      return 0;
+    } else { // ng
+      return INF;
+    }
+  }
+  if (dp[i][cur] != -1) { return dp[i][cur]; } // already calculated
+  dp[i][cur] = INF;
+  rep(add, 1001) {
+    chmin(dp[i][cur], solve(i+1, cur^(v[i]+add)) + add);
+  }
+  return dp[i][cur];
+}
 
 class EllysNimDiv2 {
 public:
-  int getMin(vector<int>& A) {
-    ll n = A.size();
-    ll x = 0; // xor of A
-    rep(i,n) {
-      x ^= A[i];
-    }
-
-    sort(all(A));
-    reverse(all(A)); // decreasing order
-
+  int getMin(vector<int>& a) {
+    n = a.size();
+    v = a; // copy
+    memset(dp,-1,sizeof(dp));
     ll ans = INF;
-    rep(i,n) {
-      ll y = A[i];
-      rep(j,10) {
-        if (x&(1ll<<j)) {
-          y ^= 1ll<<j;
-        }
-      }
-      if (y >= A[i]) {
-        chmin(ans, y-A[i]);
-      }
+    rep(add, 1001) { // loop in [0,1000]
+      chmin(ans, solve(1,v[0]+add)+add);
     }
-
     return ans;
   }
 };
