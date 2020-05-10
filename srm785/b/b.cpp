@@ -54,22 +54,24 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 class EllysConjectureDiv2 {
 public:
-  ll getSum(int L, int R) {
-    ll n = R-(L-1);
-    ll tripleCnt = R/3 - (L-1)/3;
-    ll ans = tripleCnt * 6;
-    ans += (n-tripleCnt)*4;
+  ll f(ll x) {
+    ll s = 0;
+    if (x >= 1) { s += 1; }
+    if (x >= 2) { s += 2; }
+    if (x >= 3) { s += 3; }
 
-    if (L<=3) {
-      if (L == 3) {
-        ans -= 3; // 6-3
-      } else if (L == 2) {
-        ans -= 5; // 6-3,4-2
-      } else { // L == 1
-        ans -= 8; // 6-3,4-2,4-1
-      }
+    if (x <= 3) {
+      return s;
+    } else {
+      ll num3 = (x-3)/3;
+      ll rem = (x-3)-num3;
+      s += num3*6;
+      s += rem*4;
+      return s;
     }
-    return ans;
+  }
+  ll getSum(int L, int R) {
+    return f(R) - f(L-1);
   }
 };
 
