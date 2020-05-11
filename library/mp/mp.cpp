@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
   cin >> t;
   cin >> s;
 
-  // Find all t in s. |t| <= |s|
+  // Find all offsets of t in s. |t| <= |s|
   MP<string> mp(t);
   rep(i, t.size()+1) {
     cout << mp[i] << ' ';
