@@ -52,12 +52,59 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+// dp[i] .. position from 0 by i.
+vector<vector<ll>> dp;
+
+// nex[i][j] .. position from i by 2^j
+vector<vector<ll>> nex;
+
+vector<vector<ll>> g;
+vector<ll> visited;
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, k;
+  cin >> n >> k;
+  dp.resize(n+1);
+
+  vector<ll> a(n);
+  rep(i,n) {
+    cin >> a[i];
+    --a[i];
+  }
+  // printvec(a);
+
+  ll l;
+  {
+    l = 0;
+    while ((1ll<<l) < k) {
+      //cout << l << endl;
+      ++l;
+    }
+    nex.assign(n, vector<ll>(l));
+  }
+  // cout << "l: " << l << endl;
+  {
+    rep(i,n) {
+      nex[i][0] = a[i];
+    }
+    rep(i, l-1) {
+      rep(v, n) {
+        nex[v][i+1] = nex[nex[v][i]][i];
+      }
+    }
+  }
+  // Here, nex is calculated
+
+  ll now = 0;
+  for (ll i = l; i >= 0; --i) {
+    if (k&(1ll<<i)) { // k has i
+      now = nex[now][i];
+    }
+  }
+  cout << now+1 << endl;
 }

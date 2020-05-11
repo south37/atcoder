@@ -58,6 +58,45 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,m,x;
+  cin >> n >> m >> x;
+  vector<ll> c(n);
+  vector<vector<ll>> a(n, vector<ll>(m));
+  rep(i,n) {
+    cin >> c[i];
+    rep(j,m) {
+      cin >> a[i][j];
+    }
+  }
+
+  ll ans = INF;
+  rep(i,1ll<<n) {
+    ll now = 0;
+    vector<ll> b(m);
+    rep(j,n) {
+      if (i&(1ll<<j)) { // j is in i
+        now += c[j];
+        rep(k,m) {
+          b[k] += a[j][k];
+        }
+      }
+    }
+    // Here, check b.
+    bool ok = true;
+    rep(j,m) {
+      if (b[j] < x) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) {
+      chmin(ans, now);
+    }
+  }
+
+  if (ans == INF) {
+    cout << -1 << endl;
+  } else {
+    cout << ans << endl;
+  }
 }

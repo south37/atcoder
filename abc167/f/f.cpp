@@ -60,4 +60,76 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+
+  set<P> bigs; // sum is plus
+  set<P> smalls; // sum is minus
+
+  vector<string> S(n);
+  rep(i,n) {
+    cin >> S[i];
+    ll minV = 0;
+    ll now = 0;
+    rep(j, S[i].size()) {
+      if (S[i][j] == '(') {
+        ++now;
+      } else {
+        --now;
+      }
+      chmin(minV, now);
+    }
+    ll minCost = 0;
+    if (minV < 0) { // In this case, we need minCost to enter.
+      minCost = -minV;
+    }
+    // cout << S[i] << endl;
+    // cout << "minCost,now: " << minCost << "," << now << endl;
+    if (now >= 0) { // positive or 0
+      bigs.insert(P(minCost, now));
+    } else { // negative
+      smalls.insert(P(minCost, now));
+    }
+  }
+
+  ll now = 0;
+  while (!bigs.empty()) {
+    auto it = bigs.upper_bound(P(now, INF)); // try larger one.
+    if (it == bigs.begin()) { // not found
+      cout << "No" << endl;
+      return 0;
+    }
+    now += prev(it)->second;
+    bigs.erase(prev(it));
+  }
+
+  vector<P> sms; // pair of <diff, minCost>
+  for (auto it = smalls.begin(); it != smalls.end(); ++it) {
+    // sms.push_back(P(it->second, it->first));
+    sms.push_back(*it);
+  }
+  sort(all(sms));
+  // reverse(all(sms)); // decreasing order of diff.
+  for (auto& p : sms) {
+    ll diff = p.second;
+    ll minCost = p.first;
+    if (now < minCost) {
+      cout << "No" << endl;
+      return 0;
+    }
+    now += diff;
+  }
+  // while (!smalls.empty()) {
+  //   auto it = smalls.upper_bound(P(now, INF));
+  //   if (it == smalls.begin()) { // not found
+  //     cout << "No" << endl;
+  //     return 0;
+  //   }
+  //   now += prev(it)->second;
+  //   smalls.erase(prev(it));
+  // }
+  // Here, bigs and smalls are empty
+  if (now != 0) { // invalid
+    cout << "No" << endl;
+  } else {
+    cout << "Yes" << endl;
+  }
 }

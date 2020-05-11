@@ -58,6 +58,17 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll a, b, c, k;
+  cin >> a >> b >> c >> k;
+  ll res = 0;
+  ll useA = min(a,k);
+  res += useA;
+  k -= useA;
+  ll useB = min(b,k);
+  k -= useB;
+  ll useC = min(c,k);
+  res -= useC;
+  k -= useC;
+
+  cout << res << endl;
 }
