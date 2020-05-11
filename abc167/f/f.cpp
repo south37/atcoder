@@ -1,3 +1,5 @@
+// ref. https://www.youtube.com/watch?v=ENSOy8u9K9I&feature=youtu.be
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -52,6 +54,16 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+bool check(const vector<P>& s) {
+  int h = 0;
+  for (const P& p : s) {
+    int b = h+p.first; // proceed to min.
+    if (b < 0) { return false; }
+    h += p.second;
+  }
+  return true;
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -61,75 +73,32 @@ int main(int argc, char** argv) {
   ll n;
   cin >> n;
 
-  set<P> bigs; // sum is plus
-  set<P> smalls; // sum is minus
-
-  vector<string> S(n);
+  int total = 0;
+  vector<P> ls, rs;
   rep(i,n) {
-    cin >> S[i];
-    ll minV = 0;
-    ll now = 0;
-    rep(j, S[i].size()) {
-      if (S[i][j] == '(') {
-        ++now;
+    string s;
+    cin >> s;
+    int h = 0, b = 0; // h .. sum, b .. min
+    for (char c : s) {
+      if (c == '(') {
+        ++h;
       } else {
-        --now;
+        --h;
       }
-      chmin(minV, now);
+      chmin(b, h);
     }
-    ll minCost = 0;
-    if (minV < 0) { // In this case, we need minCost to enter.
-      minCost = -minV;
+    if (h>0) {
+      ls.emplace_back(b,h);
+    } else {
+      rs.emplace_back(b-h,-h); // from right.
     }
-    // cout << S[i] << endl;
-    // cout << "minCost,now: " << minCost << "," << now << endl;
-    if (now >= 0) { // positive or 0
-      bigs.insert(P(minCost, now));
-    } else { // negative
-      smalls.insert(P(minCost, now));
-    }
+    total += h;
   }
-
-  ll now = 0;
-  while (!bigs.empty()) {
-    auto it = bigs.upper_bound(P(now, INF)); // try larger one.
-    if (it == bigs.begin()) { // not found
-      cout << "No" << endl;
-      return 0;
-    }
-    now += prev(it)->second;
-    bigs.erase(prev(it));
-  }
-
-  vector<P> sms; // pair of <diff, minCost>
-  for (auto it = smalls.begin(); it != smalls.end(); ++it) {
-    // sms.push_back(P(it->second, it->first));
-    sms.push_back(*it);
-  }
-  sort(all(sms));
-  // reverse(all(sms)); // decreasing order of diff.
-  for (auto& p : sms) {
-    ll diff = p.second;
-    ll minCost = p.first;
-    if (now < minCost) {
-      cout << "No" << endl;
-      return 0;
-    }
-    now += diff;
-  }
-  // while (!smalls.empty()) {
-  //   auto it = smalls.upper_bound(P(now, INF));
-  //   if (it == smalls.begin()) { // not found
-  //     cout << "No" << endl;
-  //     return 0;
-  //   }
-  //   now += prev(it)->second;
-  //   smalls.erase(prev(it));
-  // }
-  // Here, bigs and smalls are empty
-  if (now != 0) { // invalid
-    cout << "No" << endl;
-  } else {
+  sort(ls.rbegin(), ls.rend()); // decreasing order
+  sort(rs.rbegin(), rs.rend()); // decreasing order
+  if (check(ls) && check(rs) && total == 0) {
     cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
   }
 }
