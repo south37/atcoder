@@ -67,7 +67,7 @@ ll rec(ll i, ll j) {
   if (dp[i][j] != INF) { return dp[i][j]; }
 
   if ((i+j)%2 == 0) { // first. get max
-    ll res = 0;
+    ll res = -INF;
     if (i < A) {
       chmax(res, rec(i+1,j) + a[i]);
     }
