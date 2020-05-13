@@ -1,3 +1,5 @@
+// ref. https://suikaba.hatenablog.com/entry/2017/07/03/024221
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -58,6 +60,10 @@ const ll B = 40; // 3
 const ll C = 30; // 5
 double dp[N][A][B][C];
 
+vector<ll> da = { 0, 1, 0, 2, 0, 1 };
+vector<ll> db = { 0, 0, 1, 0, 0, 1 };
+vector<ll> dc = { 0, 0, 0, 0, 1, 0 };
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -80,40 +86,21 @@ int main(int argc, char** argv) {
     return 0;
   }
 
+  ll a = factors[0];
+  ll b = factors[1];
+  ll c = factors[2];
   // Here, we calculate the probability.
   dp[0][0][0][0] = 1.0;
   rep(i,n) {
     rep(j,A)rep(k,B)rep(l,C) {
-      // 1. unchange.
-      dp[i+1][j][k][l] += dp[i][j][k][l] / 6;
-      // 2. 2
-      if (j < A-1) {
-        dp[i+1][j+1][k][l] += dp[i][j][k][l] / 6;
-      }
-      // 3. 3
-      if (k < B-1) {
-        dp[i+1][j][k+1][l] += dp[i][j][k][l] / 6;
-      }
-      // 4. 2^2
-      if (j < A-2) {
-        dp[i+1][j+2][k][l] += dp[i][j][k][l] / 6;
-      }
-      // 5. 5
-      if (l < C-1) {
-        dp[i+1][j][k][l+1] += dp[i][j][k][l] / 6;
-      }
-      // 6. 2,3
-      if (j < A-1 && k < B-1) {
-        dp[i+1][j+1][k+1][l] += dp[i][j][k][l] / 6;
+      rep(m,6) {
+        ll nj = min(a, j + da[m]);
+        ll nk = min(b, k + db[m]);
+        ll nl = min(c, l + dc[m]);
+        dp[i+1][nj][nk][nl] += dp[i][j][k][l] / 6;
       }
     }
   }
 
-  double ans = 0;
-  rep(j,A)rep(k,B)rep(l,C) {
-    if (j >= factors[0] && k >= factors[1] && l >= factors[2]) {
-      ans += dp[n][j][k][l];
-    }
-  }
-  cout << ans << endl;
+  cout << dp[n][a][b][c] << endl;
 }
