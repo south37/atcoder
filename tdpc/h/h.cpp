@@ -52,11 +52,10 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-const ll MAX_N = 105;
 const ll MAX_W = 10005;
 const ll MAX_C = 55;
-// dp[i][j][k][c] .. using [0,i), j is weight, k is last selected position, c is count.
-int dp[MAX_W][MAX_N][MAX_C];
+// dp[j][k][c] .. using [0,i), j is weight, k is last selected color, c is count of colors.
+int dp[MAX_W][MAX_C][MAX_C];
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -80,8 +79,8 @@ int main(int argc, char** argv) {
   //   cout << w << "," << v << "," << c << endl;
   // }
 
-  rep(j,W+1)rep(k,N+1)rep(c,C+1) {
-    dp[j][k][c] = -1;
+  rep(j,W+1)rep(c,C+1)rep(last_c,MAX_C) {
+    dp[j][c][last_c] = -1;
   }
   dp[0][0][0] = 0;
 
@@ -89,33 +88,26 @@ int main(int argc, char** argv) {
     int w,v,ci;
     tie(ci,w,v) = ts[i];
 
-    for (int j = W; j >= 0; --j) {
-      rep(k,i+1)rep(c,C+1) {
-        int nj = j+w;
-        int nk = i+1; // 1-indexed
-        int nc = c;
-        if (k == 0 || ci != get<0>(ts[k-1])) { // different color
-          ++nc;
-        }
-        if (nj > W) { continue; }
-        if (nc > C) { continue; }
-        // cout << "nj:" << nj << endl;
-        // cout << "nk:" << nk << endl;
-        // cout << "nc:" << nc << endl;
-        // cout << "j:" << j << endl;
-        // cout << "k:" << k << endl;
-        // cout << "c:" << c << endl;
-        // cout << "c:" << c << endl;
-        if (dp[j][k][c] != -1) {
-          chmax(dp[nj][nk][nc], dp[j][k][c] + v);
+    for (int j = W-w; j >= 0; --j) {
+      for (int c = C; c >= 0; --c) {
+        rep(last_c, ci+1) { // Here, we need to check only colors in [0,ci].
+          int nj = j+w;
+          int nc = c;
+          if (last_c != ci) { // different color.
+            ++nc;
+          }
+          if (nc > C) { continue; }
+          if (dp[j][c][last_c] != -1) {
+            chmax(dp[nj][nc][ci], dp[j][c][last_c] + v);
+          }
         }
       }
     }
   }
 
   int ans = 0;
-  rep(j,W+1)rep(k,N+1)rep(c,C+1) {
-    chmax(ans, dp[j][k][c]);
+  rep(j,W+1)rep(c,C+1)rep(last_c,MAX_C) {
+    chmax(ans, dp[j][c][last_c]);
   }
   cout << ans << endl;
 }
