@@ -80,6 +80,11 @@ int main(int argc, char** argv) {
   //   cout << w << "," << v << "," << c << endl;
   // }
 
+  rep(j,W+1)rep(k,N+1)rep(c,C+1) {
+    dp[j][k][c] = -1;
+  }
+  dp[0][0][0] = 0;
+
   rep(i,N) {
     int w,v,ci;
     tie(ci,w,v) = ts[i];
@@ -101,7 +106,9 @@ int main(int argc, char** argv) {
         // cout << "k:" << k << endl;
         // cout << "c:" << c << endl;
         // cout << "c:" << c << endl;
-        chmax(dp[nj][nk][nc], dp[j][k][c] + v);
+        if (dp[j][k][c] != -1) {
+          chmax(dp[nj][nk][nc], dp[j][k][c] + v);
+        }
       }
     }
   }
