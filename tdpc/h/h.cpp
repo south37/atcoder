@@ -1,3 +1,5 @@
+// ref. https://suikaba.hatenablog.com/entry/2017/08/21/022215
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -89,7 +91,7 @@ int main(int argc, char** argv) {
     tie(ci,w,v) = ts[i];
 
     for (int j = W-w; j >= 0; --j) {
-      for (int c = C; c >= 0; --c) {
+      rep(c,C+1) {
         rep(last_c, ci+1) { // Here, we need to check only colors in [0,ci].
           int nj = j+w;
           int nc = c;
