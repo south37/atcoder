@@ -32,7 +32,7 @@ template<class T, class U> void printmap(const map<T, U>& mp) {
 template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
 template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
 
-#define rep(i, n) for(ll i = 0; i < n; ++i)
+#define rep(i, n) for(int i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
 #define sz(x) (ll)(x).size()
 #define fr first
@@ -56,7 +56,7 @@ const ll MAX_N = 105;
 const ll MAX_W = 10005;
 const ll MAX_C = 55;
 // dp[i][j][k][c] .. using [0,i), j is weight, k is last selected position, c is count.
-ll dp[MAX_W][MAX_N][MAX_C];
+int dp[MAX_W][MAX_N][MAX_C];
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -64,11 +64,11 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll N,W,C;
+  int N,W,C;
   cin >> N >> W >> C;
   vector<triple> ts; // tuple of <color, weight, value>
   rep(i,N) {
-    ll w,v,c;
+    int w,v,c;
     cin >> w >> v >> c;
     ts.emplace_back(c,w,v);
   }
@@ -81,14 +81,14 @@ int main(int argc, char** argv) {
   // }
 
   rep(i,N) {
-    ll w,v,ci;
+    int w,v,ci;
     tie(ci,w,v) = ts[i];
 
-    for (ll j = W; j >= 0; --j) {
+    for (int j = W; j >= 0; --j) {
       rep(k,i+1)rep(c,C+1) {
-        ll nj = j+w;
-        ll nk = i+1; // 1-indexed
-        ll nc = c;
+        int nj = j+w;
+        int nk = i+1; // 1-indexed
+        int nc = c;
         if (k == 0 || ci != get<0>(ts[k-1])) { // different color
           ++nc;
         }
@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  ll ans = 0;
+  int ans = 0;
   rep(j,W+1)rep(k,N+1)rep(c,C+1) {
     chmax(ans, dp[j][k][c]);
   }
