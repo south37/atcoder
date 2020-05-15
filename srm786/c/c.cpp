@@ -11,6 +11,7 @@
 #include <vector>
 #include <string.h>
 #include <set>
+#include <stack>
 
 using namespace std;
 
@@ -109,7 +110,7 @@ class SuffixDecomposition {
 public:
   long long findTotalFun(vector <int> P, int A0, int X, int Y, int B0, int X1, int Y1, int N) {
     vector<ll> S = buildS(P, A0, X, Y, B0, X1, Y1, N);
-    printvec(S);
+    // printvec(S);
     return calcCount(S);
   }
 
@@ -141,15 +142,19 @@ public:
   ll calcCount(const vector<ll>& s) {
     ll ans = 0;
     ll n = s.size();
-    ll curMin = INF;
+
+    stack<ll> st; // contains all min values. st
+    st.push(INF);
     int i = n-1;
-    ll now = 0;
     while (i >= 0) {
-      if (s[i] < curMin) { // smaller
-        ++now;
-        curMin = s[i];
+      ll now = s[i];
+      while (!st.empty() && st.top() <= s[i]) {
+        chmin(now, st.top());
+        st.pop();
       }
-      ans += now;
+      // Here, st is valid.
+      st.push(now);
+      ans += st.size()-1;
       --i;
     }
     return ans;
