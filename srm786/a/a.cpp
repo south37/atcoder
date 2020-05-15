@@ -52,9 +52,15 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-class Class {
+class CutTheCube {
 public:
-  void method(ll n) {
+  int findWinner(int L, int B, int H) {
+    ll remain = (ll)L*B*H-1;
+    if (remain%2 == 0) { // first lose
+      return 2; // Vivek loose.
+    } else {
+      return 1;
+    }
   }
 };
 
@@ -63,7 +69,7 @@ int main(int argc, char** argv) {
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
 
-  Class a0;
-  std::cout << "a0: Expected ~, Got \"" << a0.method() << "\"" << std::endl;
+  CutTheCube a0;
+  std::cout << "a0: Expected ~, Got \"" << a0.findWinner(100000,100000,100000) << "\"" << std::endl;
   // std::cout << "a0: Expected ~, Got \"" << setprecision(10) << a0.getMin() << "\"" << std::endl;
 }
