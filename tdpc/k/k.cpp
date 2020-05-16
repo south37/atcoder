@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
   rep(i,n) {
     ll r = p[i].second;
     ll idx = mp[p[i].first];
-    rs.emplace_back(r,-idx);
+    rs.emplace_back(-r,-idx);
   }
   sort(all(rs));
 
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
   //   cout << p[i].first << "," << p[i].second << endl;
   // }
   // rep(i,n) {
-  //   cout << rs[i].first << "," << rs[i].second << endl;
+  //   cout << - rs[i].first << "," << - rs[i].second << endl;
   // }
 
   vector<ll> dp;
