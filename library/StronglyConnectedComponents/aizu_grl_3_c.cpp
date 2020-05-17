@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
     g[s].push_back(t);
   }
 
-  UnWeightedGraph buff; // result graph. unused in this problem.
+  UnWeightedGraph buff; // result graph. index of vertices are topologicaly sorted. contains duplicated edges.
   StronglyConnectedComponents<UnWeightedGraph> scc(g);
   scc.build(buff);
 
