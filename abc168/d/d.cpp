@@ -52,12 +52,55 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+vector<vector<ll>> g;
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,m;
+  cin >> n >> m;
+  g.resize(n);
+  rep(i,m) {
+    ll a,b;
+    cin >> a >> b;
+    --a; --b;
+    g[a].push_back(b);
+    g[b].push_back(a);
+  }
+
+  vector<int> dp(n, -1); // source
+  // Do bfs
+  queue<int> q;
+  q.push(0);
+  dp[0] = INF; // set sentinel
+  while (!q.empty()) {
+    int v = q.front(); q.pop();
+    for (int u : g[v]) {
+      if (dp[u] == -1) {
+        dp[u] = v; // source if v.
+        q.push(u);
+      }
+    }
+  }
+
+  // Here, all travere is completed.
+  bool ok = true;
+  rep(i,n) {
+    if (dp[i] == -1) { // unvisited
+      ok = false;
+      break;
+    }
+  }
+  if (!ok) {
+    cout << "No" << endl;
+    return 0;
+  }
+
+  cout << "Yes" << endl;
+  for (int i = 1; i < n; ++i) {
+    cout << dp[i]+1 << endl; // 1-indexed
+  }
 }
