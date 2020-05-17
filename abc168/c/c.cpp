@@ -56,8 +56,34 @@ int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
-  //cout << setprecision(10) << fixed;
+  cout << setprecision(15) << fixed;
 
-  ll n;
-  cin >> n;
+  double a, b, h,m;
+  cin >> a >> b >> h >> m;
+  double mD = m/60        * M_PI * 2;
+  double hD = (h+m/60)/12 * M_PI * 2;
+
+  // cout << "mD:" << mD / (2*M_PI) << endl;
+  // cout << "hD:" << hD / (2*M_PI) << endl;
+
+  double deg = abs(hD - mD);
+  // if (deg > M_PI) {
+  //   deg -= M_PI;
+  // }
+  // cout << "deg/(2PI):" << deg / (2*M_PI) << endl;
+  // cout << "deg/(PI):" << deg / (M_PI) << endl;
+  // cout << "deg:" << deg << endl;
+  // // cout << "2PI/6:" << (2*M_PI) / 6.0  << endl;
+
+  // // Here, deg is smaller degree.
+
+  // cout << "cos(60/180): " << cos(60/180 * M_PI) << endl;
+  // cout << "cos(deg): " << cos(deg) << endl;
+  // cout << "a: " << a << endl;
+  // cout << "b: " << b << endl;
+
+  double c2 = (double)(a*a) + (double)(b*b) - (double)2*a*b* cos(deg);
+  // cout << "c2:" << c2 << endl;
+  double ans = sqrt(c2);
+  cout << ans << endl;
 }

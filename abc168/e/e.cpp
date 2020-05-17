@@ -152,19 +152,18 @@ int main(int argc, char** argv) {
   rep(i,n) {
     double deg90 = M_PI/2;
     double deg270 = M_PI*3/2;
-    ll cnt90;
-    ll cnt270;
-    {
-      auto uit90 = upper_bound(all(v), v[i]-deg90+eps);
-      auto lit90 = lower_bound(all(v), v[i]-deg90-eps)
-      cnt90 = uit90 - lit90;
-      // cnt90 = upper_bound(all(v), v[i]-deg90+eps) - lower_bound(all(v), v[i]-deg90-eps);
-      auto uit270 = upper_bound(all(v), v[i]-deg90+eps);
-      auto lit270 = lower_bound(all(v), v[i]-deg90-eps);
-      cnt270 = uit270 - lit270;
-      // cnt270 = upper_bound(all(v), v[i]-deg270+eps) - lower_bound(all(v), v[i]-deg270-eps);
-    }
-    for (auto it = lower_bound(all(v), v[i]-deg90-eps); it !=
+    // ll cnt90;
+    // ll cnt270;
+    // {
+    //   auto uit90 = upper_bound(all(v), v[i]-deg90+eps);
+    //   auto lit90 = lower_bound(all(v), v[i]-deg90-eps)
+    //   cnt90 = uit90 - lit90;
+    //   auto uit270 = upper_bound(all(v), v[i]-deg90+eps);
+    //   auto lit270 = lower_bound(all(v), v[i]-deg90-eps);
+    //   cnt270 = uit270 - lit270;
+    // }
+    ll cnt90 = upper_bound(all(v), v[i]-deg90+eps) - lower_bound(all(v), v[i]-deg90-eps);
+    ll cnt270 = upper_bound(all(v), v[i]-deg270+eps) - lower_bound(all(v), v[i]-deg270-eps);
     // cout << "i:" << i << endl;
     cout << "cnt90:" << cnt90 << endl;
     cout << "cnt270:" << cnt270 << endl;
