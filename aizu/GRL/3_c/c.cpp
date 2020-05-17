@@ -77,23 +77,25 @@ struct StronglyConnectedComponents {
   }
 
   void dfs(ll idx) {
-    if(used[idx]) return;
+    if (used[idx]) return;
     used[idx] = true;
-    for(ll to : gg[idx]) dfs(to);
+    for (ll to : gg[idx]) dfs(to);
     order.push_back(idx);
   }
 
   void rdfs(ll idx, ll cnt) {
-    if(comp[idx] != -1) return;
+    if (comp[idx] != -1) return;
     comp[idx] = cnt;
-    for(ll to : rg[idx]) rdfs(to, cnt);
+    for (ll to : rg[idx]) rdfs(to, cnt);
   }
 
   void build(UnWeightedGraph& t) {
-    for(ll i = 0; i < gg.size(); i++) dfs(i);
-    reverse(begin(order), end(order));
+    rep(i,gg.size()) { dfs(i); }
+    reverse(all(order));
     ll ptr = 0;
-    for(ll i : order) if(comp[i] == -1) rdfs(i, ptr), ptr++;
+    for(ll i : order) {
+      if (comp[i] == -1) { rdfs(i, ptr), ptr++; }
+    }
 
     t.resize(ptr);
     rep(i,g.size()) {
