@@ -1,4 +1,4 @@
-// ref. https://www.utakata.work/entry/2015/06/07/195042
+// ref. https://atcoder.jp/contests/atc001/submissions/7462530
 
 #include <algorithm>
 #include <bitset>
@@ -56,39 +56,65 @@ const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 // FFT (Fast Fourier transform)
-// inverse = 1 .. DFT, inverse = -1 .. IDFT
-const double PI = 4.0*atan(1.0);
-const complex<double> I(0,1);
-
-void fft(vector<complex<double>>& a, int inverse = 1) {
+// Cooley–Tukey FFT algorithm O(N log N)
+vector<complex<double>> fft(vector<complex<double>> a, bool inverse = false) {
   int n = a.size();
-  double theta = 2*inverse*PI / n; // theta = 2pi/n
-
-  for (int m = n; m >= 2; m >>= 1) {
-    int mh = m >> 1;
-    rep(i,mh) {
-      complex<double> w = exp(i*theta*I);
-      for (int j = i; j < n; j += m) {
-        int k = j + mh;
-        complex<double> x = a[j] - a[k];
-        a[j] += a[k];
-        a[k] = w * x;
+  int h = 0; // h = log_2(n)
+  for (int i = 0; (1<<i) < n; ++i) { ++h; }
+  // Rearrangement for butterfly calculation
+  rep(i,n) {
+    int j = 0;
+    for (int k = 0; k < h; k++) j |= (i >> k & 1) << (h - 1 - k);
+    if (i < j) swap(a[i], a[j]);
+  }
+  // Butterfly calculation
+  for (int b = 1; b < n; b *= 2) {
+    // log_2(b) + 1
+    // block size = b*2
+    for (int j = 0; j < b; j++) {
+      // w = (2b root)^j
+      complex<double> w =
+        polar(1.0, (2 * M_PI) / (2 * b) * j * (inverse ? 1 : -1));
+      for (int k = 0; k < n; k += b * 2) {
+        // Block of k
+        complex<double> s = a[j + k];         // front
+        complex<double> t = a[j + k + b] * w; // back
+        a[j + k] = s + t;                     // Update front
+        a[j + k + b] = s - t;                 // Update back
       }
     }
-    theta *= 2;
   }
-  int i = 0;
-  for (int j = 1; j < n - 1; ++j) {
-    for (int k = n >> 1; k > (i ^= k); k >>= 1);
-    if (j < i) swap(a[i], a[j]);
+  // For IDFT
+  if (inverse) {
+    rep(i,n) { a[i] /= n; }
   }
+  return a;
+}
 
-  if (inverse == -1) {
-    complex<double> d(n,0);
-    rep(i,n) {
-      a[i] = a[i] / d;
-    }
+// Cooley–Tukey FFT algorithm O(N log N)
+vector<complex<double>> fft(vector<double> a, bool inverse = false) {
+  vector<complex<double>> a_complex(a.size());
+  rep(i,a.size()) { a_complex[i] = complex<double>(a[i], 0); }
+  return fft(a_complex, inverse);
+}
+
+// Combolution by FFT O(N log N)
+vector<double> convolve(vector<double> a, vector<double> b) {
+  int s = a.size() + b.size() - 1; // Result size
+  int t = 1; // Array size for FFT (power of 2)
+  while (t < s) t *= 2;
+  a.resize(t); // Resize for FFT
+  b.resize(t); // Resize for FFT
+  vector<complex<double>> A = fft(a);
+  vector<complex<double>> B = fft(b);
+  rep(i,t) {
+    A[i] *= B[i]; // FFT of Combolution Result
   }
+  A = fft(A, true); // IFFT
+
+  vector<double> ans(s);
+  rep(i,s) { ans[i] = A[i].real(); } // answer is real part
+  return ans;
 }
 
 int main(int argc, char** argv) {
@@ -99,37 +125,18 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
-  vector<ll> g(n);
-  vector<ll> h(n);
+  vector<double> a(n+1);
+  vector<double> b(n+1);
+  // Here, a[0] and b[0] is dummy.
   rep(i,n) {
-    cin >> g[i] >> h[i];
+    cin >> a[i+1] >> b[i+1];
   }
-  // result of k .. combolution of g and h. We use FFT.
+  // result of k .. combolution of a and h. We use FFT.
 
-  ll n2 = 1;
-  while (n2 < 2*n) {
-    n2 *= 2;
-  }
-  // Here, n2 is 2^i and n2 >= 2*n
+  vector<double> ans = convolve(a,b);
 
-  vector<complex<double>> gg(n2);
-  vector<complex<double>> hh(n2);
-  rep(i,n){
-    gg[i] = g[i];
-    hh[i] = h[i];
-  }
-  fft(gg);
-  fft(hh);
-  // Here, gg and hh is the result of FFT.
-
-  vector<complex<double>> ff(n2);
-  rep(i,n2) {
-    ff[i] = gg[i]*hh[i];
-  }
-  fft(ff,-1); // inverse IDFT
-
-  cout << 0 << endl;
-  rep(i,2*n-1) {
-    cout << ff[i].real() << endl;
+  for (int i = 1; i < ans.size(); ++i) {
+    // Here, rouding result by adding 0.5.
+    cout << (int)(ans[i] + 0.5) << endl;
   }
 }
