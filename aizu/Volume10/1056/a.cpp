@@ -1,3 +1,5 @@
+// ref. https://nanikaka.hatenadiary.org/entry/20120430/1335746061
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
