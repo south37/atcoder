@@ -95,9 +95,8 @@ int main(int argc, char** argv) {
       rep(j,k) {
         if (i>>j&1) { now *= ds[j]; }
       }
-      if (now > 1) {
-        ++cnt[now];
-      }
+      if (now == 1) { continue; } // skip 1.
+      ++cnt[now];
     }
   }
   // printvec(cnt);
@@ -112,7 +111,6 @@ int main(int argc, char** argv) {
       rep(j,k) {
         if (i>>j&1) { now *= ds[j]; }
       }
-      if (now == 1) { continue; }
 
       if (__builtin_popcountll(i)%2 == 0) { // even. plus
         ans += cnt[now];
