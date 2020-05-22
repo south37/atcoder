@@ -69,40 +69,40 @@ int main(int argc, char** argv) {
   // printvec(ws);
   // printvec(vs);
 
-  double ans = 0;
-  rep(iter,m+1) {
-    vector<pair<double,double>> ps; // pair of <weight, value>
-    rep(j,n) {
-      ps.emplace_back(ws[j],-vs[j]);
-    }
-    if (iter == m) { // with no special
-      // Do nothing
-    } else {
-      ps.emplace_back(ws[n+iter],-vs[n+iter]);
-    }
-    sort(all(ps));
+  vector<vector<double>> dp(n+1, vector<double>(6,-1));
+  vector<vector<double>> dpV(n+1, vector<double>(6,-1));
+  vector<vector<double>> dpW(n+1, vector<double>(6,-1));
+  dp[0][0] = 0;
+  dpV[0][0] = 0;
+  dpW[0][0] = 0;
 
-    // rep(i,ps.size()) {
-    //   cout << ps[i].first << "," << ps[i].second << endl;
-    // }
-
-    vector<double> dp(6,-1);
-    vector<double> dpV(6);
-    vector<double> dpW(6);
-    dp[0] = 0;
-    rep(i,ps.size()) {
-      for (ll j = 4; j >= 0; --j) { // loop in [0,4]
-        double wi = ps[i].first;
-        double vi = - ps[i].second;
-        double now = (dpV[j]+vi)/(dpW[j]+wi);
-        if (dp[j] >= 0 && dp[j+1] < now) {
-          dp[j+1]  = now;
-          dpV[j+1] = dpV[j] + vi;
-          dpW[j+1] = dpW[j] + wi;
+  rep(i,n) {
+    double wi = ws[i];
+    double vi = vs[i];
+    for (ll j = 4; j >= 0; --j) { // loop in [0,4]
+      rep(k,i+1) { // loop in [0,i]
+        if (dpV[k][j] >= 0 && dpW[k][j] >= 0) {
+          double now = (dpV[k][j]+vi)/(dpW[k][j]+wi);
+          if (dp[i+1][j+1] < now) {
+            dp[i+1][j+1]  = now;
+            dpV[i+1][j+1] = dpV[k][j]+vi;
+            dpW[i+1][j+1] = dpW[k][j]+wi;
+          }
         }
       }
     }
-    chmax(ans, dp[5]);
+  }
+
+  double ans = dp[n][5];
+  rep(i,m) { // try adding i
+    double wi = ws[n+i];
+    double vi = vs[n+i];
+    rep(k,n+1) {
+      if (dpV[k][4] > 0 && dpW[k][4] > 0) {
+        double now = (dpV[k][4]+vi)/(dpW[k][4]+wi);
+        chmax(ans, now);
+      }
+    }
   }
   cout << ans << endl;
 }
