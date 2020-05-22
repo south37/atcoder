@@ -60,14 +60,22 @@ int main(int argc, char** argv) {
 
   ll n,m;
   cin >> n >> m;
-  vector<double> vs(n+m);
-  vector<double> ws(n+m);
-  rep(i,n+m) {
-    cin >> ws[i] >> vs[i];
+  // vector<double> vs(n);
+  // vector<double> ws(n);
+  // rep(i,n) {
+  //   cin >> ws[i] >> vs[i];
+  // }
+  vector<pair<double,double>> ps(n); //pair of weight, value
+  rep(i,n) {
+    cin >> ps[i].first >> ps[i].second;
   }
+  sort(all(ps)); // increasing order in weight
 
-  // printvec(ws);
-  // printvec(vs);
+  vector<double> Vs(m); // for m
+  vector<double> Ws(m);
+  rep(i,m) {
+    cin >> Ws[i] >> Vs[i];
+  }
 
   vector<vector<double>> dp(n+1, vector<double>(6,-1));
   vector<vector<double>> dpV(n+1, vector<double>(6,-1));
@@ -77,8 +85,8 @@ int main(int argc, char** argv) {
   dpW[0][0] = 0;
 
   rep(i,n) {
-    double wi = ws[i];
-    double vi = vs[i];
+    double wi = ps[i].first;
+    double vi = ps[i].second;
     for (ll j = 4; j >= 0; --j) { // loop in [0,4]
       rep(k,i+1) { // loop in [0,i]
         if (dpV[k][j] >= 0 && dpW[k][j] >= 0) {
@@ -95,10 +103,10 @@ int main(int argc, char** argv) {
 
   double ans = dp[n][5];
   rep(i,m) { // try adding i
-    double wi = ws[n+i];
-    double vi = vs[n+i];
+    double wi = Ws[i];
+    double vi = Vs[i];
     rep(k,n+1) {
-      if (dpV[k][4] > 0 && dpW[k][4] > 0) {
+      if (dpV[k][4] >= 0 && dpW[k][4] >= 0) {
         double now = (dpV[k][4]+vi)/(dpW[k][4]+wi);
         chmax(ans, now);
       }
