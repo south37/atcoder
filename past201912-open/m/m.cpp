@@ -73,12 +73,12 @@ int main(int argc, char** argv) {
   rep(iter,m+1) {
     vector<pair<double,double>> ps; // pair of <weight, value>
     rep(j,n) {
-      ps.emplace_back(ws[j],vs[j]);
+      ps.emplace_back(ws[j],-vs[j]);
     }
     if (iter == m) { // with no special
       // Do nothing
     } else {
-      ps.emplace_back(ws[n+iter],vs[n+iter]);
+      ps.emplace_back(ws[n+iter],-vs[n+iter]);
     }
     sort(all(ps));
 
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
     rep(i,ps.size()) {
       for (ll j = 4; j >= 0; --j) { // loop in [0,4]
         double wi = ps[i].first;
-        double vi = ps[i].second;
+        double vi = - ps[i].second;
         double now = (dpV[j]+vi)/(dpW[j]+wi);
         if (dp[j] >= 0 && dp[j+1] < now) {
           dp[j+1]  = now;
