@@ -1,6 +1,3 @@
-// https://www.youtube.com/watch?v=8uowVvQ_-Mo&t=10050s
-// base: https://atcoder.jp/contests/abc133/tasks/abc133_f
-
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -19,14 +16,41 @@ using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
+template<class T> void printvec(const vector<T>& v) {
+  for (auto x : v) { cout << x << " "; }
+  cout << endl;
+}
+template<class T> void printtree(const vector< vector<T> >& tree) {
+  for (long long i = 0; i < tree.size(); ++i) {
+    cout << i + 1 << ": "; printvec(tree[i]);
+  }
+}
+template<class T, class U> void printmap(const map<T, U>& mp) {
+  for (auto x : mp) { cout << x.first << "=>" << x.second << endl; }
+}
+
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
+
+#define rep(i, n) for(ll i = 0; i < n; ++i)
 #define all(s) s.begin(), s.end()
+#define sz(x) (ll)(x).size()
+#define fr first
+#define sc second
+#define mp make_pair
+#define pb push_back
+#define eb emplace_back
 
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
+typedef vector<ll> vl;
+typedef vector<P> vp;
+
+const ll INF = 1e9;
+const ll MOD = 1000000007;  // 1e9 + 7
 
 // LCA
 template<typename T>
@@ -99,26 +123,64 @@ struct lca {
   }
 };
 
+// int main(int argc, char** argv) {
+//   ll N, Q;
+//   cin >> N >> Q;
+//
+//   lca<ll> g(N);
+//
+//   rep(i, N-1) {
+//     ll a, b, d;
+//     cin >> a >> b >> d;
+//     --a; --b;
+//     g.addedge(a, b, d);
+//   }
+//   g.init(0);
+//
+//   rep(i, Q) {
+//     ll a, b;
+//     cin >> a >> b;
+//     --a; --b;
+//     ll c = g(a, b); // c is the lowest common ancestor of a and b.
+//     ll ans = g.costs[a] + g.costs[b] - g.costs[c] * 2; // The distance between a and b.
+//     cout << a + 1 << "-" << b + 1 << ": " << ans << endl; // e.g. 1-4: 40
+//   }
+// }
+
 int main(int argc, char** argv) {
-  ll N, Q;
-  cin >> N >> Q;
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ios_base::sync_with_stdio(false);
+  //cout << setprecision(10) << fixed;
 
-  lca<ll> g(N);
+  ll n;
+  cin >> n;
 
-  rep(i, N-1) {
-    ll a, b, d;
-    cin >> a >> b >> d;
-    --a; --b;
-    g.addedge(a, b, d); // add edge "a->b" and "b->a" with weight d.
+  ll lead;
+  lca<ll> g(n);
+  rep(i,n) {
+    ll p;
+    cin >> p;
+    --p;
+    if (p >= 0) {
+      g.addedge(p,i,0); // edge p->i
+    } else {
+      lead = i;
+    }
   }
-  g.init(0);
+  g.init(lead);
 
-  rep(i, Q) {
+  ll q;
+  cin >> q;
+  rep(iter,q) {
     ll a, b;
     cin >> a >> b;
     --a; --b;
     ll c = g(a, b); // c is the lowest common ancestor of a and b.
-    ll ans = g.costs[a] + g.costs[b] - g.costs[c] * 2; // The distance between a and b.
-    cout << a + 1 << "-" << b + 1 << ": " << ans << endl; // e.g. 1-4: 40
+    if (c == b) {
+      cout << "Yes" << endl;
+    } else {
+      cout << "No" << endl;
+    }
   }
 }
