@@ -92,11 +92,13 @@ int main(int argc, char** argv) {
     dp[0] = 0;
     rep(i,ps.size()) {
       for (ll j = 4; j >= 0; --j) { // loop in [0,4]
-        double now = (dpV[j]+vs[i])/(dpW[j]+ws[i]);
+        double wi = ps[i].first;
+        double vi = ps[i].second;
+        double now = (dpV[j]+vi)/(dpW[j]+wi);
         if (dp[j] >= 0 && dp[j+1] < now) {
           dp[j+1]  = now;
-          dpV[j+1] = dpV[j] + vs[i];
-          dpW[j+1] = dpW[j] + ws[i];
+          dpV[j+1] = dpV[j] + vi;
+          dpW[j+1] = dpW[j] + wi;
         }
       }
     }
