@@ -49,11 +49,11 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ll INF = 1e15;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 ll n;
-ll ans;
+ll ans = -INF;
 vector<vector<ll>> a;
 
 void solve(vector<ll>& v) {
@@ -69,7 +69,9 @@ void solve(vector<ll>& v) {
     }
   }
   now /= 2; // (j,k) is duplicated
-  chmax(ans,now);
+  if (now > ans) {
+    chmax(ans,now);
+  }
 }
 
 void backtrack(ll i, vector<ll>& v) {
