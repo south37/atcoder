@@ -52,12 +52,63 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+vector<ll> dp;
+vector<ll> p;
+
+ll dfs(ll v) {
+  if (dp[v] >= 0) { return dp[v]; }
+  dp[v] = dfs(p[v]);
+  return dp[v];
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,q;
+  cin >> n >> q;
+  p.assign(2*n,-1);
+  // [0,n) .. table, [n,2*n] .. container
+  rep(i,n) {
+    p[i+n] = i;
+  }
+
+  vector<ll> top(n); // top of each table
+  rep(i,n) {
+    top[i] = i+n;
+  }
+
+  // printvec(p);
+  // printvec(top);
+
+  rep(iter,q) {
+    ll from,to,x;
+    cin >> from >> to >> x;
+    --from;--to;--x;
+    x += n; // offset
+    // move container x from f to t.
+    ll prevTop = top[from];
+
+    ll newTop = p[x]; // newTop in from.
+    top[from] = newTop;
+
+    // set.
+    p[x] = top[to];
+    top[to] = prevTop;
+  }
+
+  // printvec(p);
+
+  // Here, p has all information
+  dp.assign(2*n,-1);
+  rep(i,n) { dp[i] = i; } // table
+  rep(i,n) {
+    dfs(i+n);
+  }
+
+  rep(i,n) {
+    cout << dp[i+n]+1 << endl;
+  }
 }
