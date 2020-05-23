@@ -58,6 +58,25 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ull a,r,n;
+  cin >> a >> r >> n;
+  if (r == 1) {
+    if (a > INF) {
+      cout << "large" << endl;
+    } else {
+      cout << a << endl;
+    }
+    return 0;
+  }
+
+  // Simulate
+  ull now = a;
+  rep(i,n-1) {
+    now *= r;
+    if (now > INF) {
+      cout << "large" << endl;
+      return 0;
+    }
+  }
+  cout << now << endl;
 }

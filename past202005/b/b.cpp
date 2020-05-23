@@ -58,6 +58,30 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,m,q;
+  cin >> n >> m >> q;
+  vector<set<ll>> solved(n); // solved problems by player
+  vector<ll> problem(m,n); // score by solving problem i
+
+  rep(iter,q) {
+    ll t;
+    cin >> t;
+    if (t == 1) {
+      ll a;
+      cin >> a;
+      --a;
+      ll score = 0;
+      for (ll b : solved[a]) {
+        score += problem[b];
+      }
+      cout << score << endl;
+    } else { // t == 2
+      ll a,b;
+      cin >> a >> b;
+      --a; --b;
+      // problem b is solved by player a.
+      solved[a].insert(b);
+      --problem[b];
+    }
+  }
 }

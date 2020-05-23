@@ -58,6 +58,34 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  string s;
+  string t;
+  cin >> s;
+  cin >> t;
+  if (s==t) {
+    cout << "same" << endl;
+    return 0;
+  }
+
+  string ss;
+  string tt;
+  rep(i,3) {
+    if ('A' <= s[i] && s[i] <= 'Z') {
+      ss += (char)(s[i]-'A'+'a');
+    } else {
+      ss += s[i];
+    }
+  }
+  rep(i,3) {
+    if ('A' <= t[i] && t[i] <= 'Z') {
+      tt += (char)(t[i]-'A'+'a');
+    } else {
+      tt += t[i];
+    }
+  }
+  if (ss == tt) {
+    cout << "case-insensitive" << endl;
+    return 0;
+  }
+  cout << "different" << endl;
 }
