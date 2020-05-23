@@ -49,7 +49,7 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ll INF = 1e15;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
@@ -58,6 +58,36 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,l;
+  cin >> n >> l;
+  vector<bool> isObj(l+1);
+  rep(i,n) {
+    ll x;
+    cin >> x;
+    isObj[x] = true;
+  }
+  // printvec(isObj);
+
+  ll t1,t2,t3;
+  cin >> t1 >> t2 >> t3;
+
+  vector<ll> dp(l+1,INF);
+  dp[0] = 0;
+  for (ll i = 1; i <= l; ++i) {
+    ll w = 0;
+    if (isObj[i]) {
+      w += t3;
+    }
+    // 1.
+    chmin(dp[i], dp[i-1] + t1 + w);
+    // 2.
+    if (i-2 >= 0) {
+      chmin(dp[i], dp[i-2] + t1 + t2 + w);
+    }
+    // 3.
+    if (i-4 >= 0) {
+      chmin(dp[i], dp[i-4] + t1 + 3*t2 + w);
+    }
+  }
+  cout << dp[l] << endl;
 }
