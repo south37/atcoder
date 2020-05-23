@@ -71,15 +71,17 @@ int main(int argc, char** argv) {
   ll t1,t2,t3;
   cin >> t1 >> t2 >> t3;
 
-  vector<ll> dp(l+1,INF);
+  // vector<ll> dp(l+1,INF);
+  vector<ll> dp(l+5);
   dp[0] = 0;
-  for (ll i = 1; i <= l; ++i) {
+  for (ll i = 1; i <= l+4; ++i) {
     ll w = 0;
-    if (isObj[i]) {
+    if (i <= l && isObj[i]) {
       w += t3;
     }
     // 1.
-    chmin(dp[i], dp[i-1] + t1 + w);
+    dp[i] = dp[i-1] + t1 + w;
+    // chmin(dp[i], dp[i-1] + t1 + w);
     // 2.
     if (i-2 >= 0) {
       chmin(dp[i], dp[i-2] + t1 + t2 + w);
@@ -89,5 +91,17 @@ int main(int argc, char** argv) {
       chmin(dp[i], dp[i-4] + t1 + 3*t2 + w);
     }
   }
-  cout << dp[l] << endl;
+
+  ll ans = dp[l];
+  // 2. consider
+  chmin(ans, dp[l-1] + t1/2 + t2/2);
+  // 3. consider
+  if (l-3 >= 0) {
+    chmin(ans, dp[l-3] + t1/2 + t2*5/2);
+  }
+  if (l-2 >= 0) {
+    chmin(ans, dp[l-2] + t1/2 + t2*3/2);
+  }
+  chmin(ans, dp[l-1] + t1/2 + t2*1/2);
+  cout << ans << endl;
 }

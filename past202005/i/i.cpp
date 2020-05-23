@@ -58,6 +58,46 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
+  // a[i][j] .. n*i+j
   ll n;
   cin >> n;
+  vector<ll> row(n);
+  vector<ll> col(n);
+  rep(i,n) { row[i] = i; }
+  rep(i,n) { col[i] = i; }
+  bool isInverted = 0;
+
+  ll q;
+  cin >> q;
+  rep(iter,q) {
+    ll t;
+    cin >> t;
+    if (t == 1) { // swap row
+      ll a,b;
+      cin >> a >> b;
+      --a; --b;
+      swap(row[a],row[b]);
+    } else if (t == 2) { // swap col
+      ll a,b;
+      cin >> a >> b;
+      --a; --b;
+      swap(col[a],col[b]);
+    } else if (t == 3) { // invert
+      isInverted ^= 1;
+      swap(row,col);
+    } else { // t == 4
+      ll a,b;
+      cin >> a >> b;
+      --a; --b;
+      ll r = row[a];
+      ll c = col[b];
+      if (isInverted) {
+        swap(r,c);
+      }
+      // printvec(col);
+      // printvec(row);
+      // cout << "isInverted: " << isInverted << endl;
+      cout << n*(r)+c << endl;
+    }
+  }
 }
