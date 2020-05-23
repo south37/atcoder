@@ -58,6 +58,27 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,m;
+  cin >> n >> m;
+  vector<ll> a(m);
+  rep(i,m) {
+    cin >> a[i];
+    a[i] *= -1; // treat as minus
+  }
+
+  vector<ll> dp;
+  rep(i,m) {
+    ll idx = upper_bound(all(dp), a[i]) - dp.begin();
+    if (idx >= n) { // too large
+      cout << -1 << endl;
+    } else {
+      if (dp.size() <= idx) {
+        dp.push_back(a[i]);
+      } else {
+        dp[idx] = a[i];
+      }
+      cout << idx+1 << endl; // index with 1-indexed
+    }
+    // printvec(dp);
+  }
 }
