@@ -37,7 +37,6 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true
 #define sz(x) (ll)(x).size()
 #define fr first
 #define sc second
-#define mp make_pair
 #define pb push_back
 #define eb emplace_back
 
@@ -49,8 +48,58 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ll INF = 1e18;
 const ll MOD = 1000000007;  // 1e9 + 7
+
+map<ll,ll> mp; // dp map
+ll n,a,b,c,d;
+vector<ll> costs;
+vector<ll> nums = { 2, 3, 5 };
+
+ll dfs(ll n) {
+  if (n == 0) { return 0; }
+  if (n == 1) { return d; }
+  if (mp.find(n) != mp.end()) {
+    return mp[n];
+  }
+
+  // Here, we skip
+  ll res = INF;
+  // try D(+/- 1)
+  if (n < res/d) { // n*d < res
+    chmin(res, n*d);
+  }
+  // try A,B,C
+  rep(i,3) {
+    ll cost = costs[i];
+    ll num  = nums[i];
+    {
+      // floor
+      ll t = n/num; // target
+      ll now = dfs(t) + cost;
+      now += abs(n-(num*t))*d;
+      chmin(res,now);
+    }
+    {
+      // ceil
+      ll t = (n+num-1)/num; // target
+      ll now = dfs(t) + cost;
+      now += abs(n-(num*t))*d;
+      chmin(res,now);
+    }
+  }
+  return mp[n] = res;
+}
+
+void solve() {
+  cin >> n >> a >> b >> c >> d;
+  costs = { a, b, c };
+  mp.clear();
+  // printvec(costs);
+  // printvec(nums);
+  // printmap(mp);
+  cout << dfs(n) << endl;
+}
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -58,6 +107,9 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll t;
+  cin >> t;
+  rep(i,t) {
+    solve();
+  }
 }
