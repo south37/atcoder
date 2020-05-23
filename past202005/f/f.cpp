@@ -52,6 +52,15 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+char isCommon(set<char>& a, set<char>& b) {
+  for (char c : a) {
+    if (b.find(c) != b.end()) { // c exists in b
+      return c;
+    }
+  }
+  return ' '; // ' ' means not found
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -60,4 +69,27 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<string> a(n);
+  rep(i,n) {
+    cin >> a[i];
+  }
+
+  vector<set<char>> b(n);
+  rep(i,n) {
+    rep(j,n) {
+      b[i].insert(a[i][j]);
+    }
+  }
+
+  string ans(n,' ');
+  rep(i,n) {
+    char c = isCommon(b[i],b[n-1-i]);
+    if (c == ' ') {
+      cout << -1 << endl;
+      return 0;
+    } else {
+      ans[i] = c;
+    }
+  }
+  cout << ans << endl;
 }

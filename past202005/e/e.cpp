@@ -52,12 +52,48 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+vector<vector<ll>> g;
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,m,q;
+  cin >> n >> m >> q;
+  g.resize(n);
+  rep(iter,m) {
+    ll u,v;
+    cin >> u >> v;
+    --u; --v;
+    g[u].push_back(v);
+    g[v].push_back(u);
+  }
+
+  vector<ll> c(n);
+  rep(i,n) {
+    cin >> c[i];
+  }
+
+  rep(iter,q) {
+    ll t;
+    cin >> t;
+    if (t == 1) {
+      ll x;
+      cin >> x;
+      --x;
+      // paint all adjacent nodes
+      cout << c[x] << endl;
+      for (ll u : g[x]) {
+        c[u] = c[x];
+      }
+    } else { // t == 2
+      ll x,y;
+      cin >> x >> y;
+      --x;
+      cout << c[x] << endl;
+      c[x] = y;
+    }
+  }
 }
