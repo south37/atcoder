@@ -69,8 +69,9 @@ ll lcm(ll a, ll b) {
 }
 
 // Mevius Transform.
+// cf. http://compro.tsutajiro.com/archive/181015_incexc.pdf
 // - dp.size() == 1ll<<n.
-// - dp must be initialzed by g
+// - dp must be initialzed by g.
 void MeviusTransform(vector<ll>& dp, ll n) {
   rep(i,n)rep(bit,1ll<<n) {
     if (bit>>i&1) {
