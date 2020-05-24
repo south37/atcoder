@@ -52,6 +52,9 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+ll dr[4] = { 1, -1, 0, 0 };
+ll dc[4] = { 0, 0, 1, -1 };
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -60,4 +63,57 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<vector<ll>> dp(n,vector<ll>(n));
+  rep(r,n)rep(c,n) {
+    ll minR = min(r,n-1-r);
+    ll minC = min(c,n-1-c);
+    dp[r][c] = min(minR,minC);
+  }
+
+  vector<vector<bool>> isBlank(n,vector<bool>(n));
+
+  // printtree(dp);
+
+  ll ans = 0;
+  rep(iter,n*n) {
+    ll p;
+    cin >> p;
+    --p;
+    ll r = p/n;
+    ll c = p%n;
+    ans += dp[r][c];
+
+    // Update (r,c)
+    isBlank[r][c] = true;
+
+    // Update by BFS
+    P s = P(r,c);
+    queue<P> q;
+    q.push(s);
+    while (!q.empty()) {
+      P p = q.front(); q.pop();
+      ll r = p.first;
+      ll c = p.second;
+      ll newCost; // candidate cost for surroundings
+      if (isBlank[r][c]) {
+        newCost = dp[r][c];
+      } else { // is not blank
+        newCost = dp[r][c] + 1; // 1 by (r,c)
+      }
+      // Update surroundings
+      rep(i,4) {
+        ll nr = r+dr[i];
+        ll nc = c+dc[i];
+        if (nr < 0 || nr >= n || nc < 0 || nc >= n) { continue; }
+        if (dp[nr][nc] > newCost) {
+          dp[nr][nc] = newCost;
+          q.emplace(nr,nc);
+        }
+      }
+    }
+
+    // cout << "(r,c):" << r << "," << c << endl;
+    // printtree(dp);
+  }
+  cout << ans << endl;
 }
