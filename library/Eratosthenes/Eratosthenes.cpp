@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
   ll n;
   cin >> n;
 
-  // Calculate primes by Eratosthenes
+  // Calculate primes by Shieve of Eratosthenes
   vector<bool> is_prime(n+1, true);
   is_prime[0] = false;
   is_prime[1] = false;
