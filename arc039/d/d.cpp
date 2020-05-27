@@ -97,13 +97,13 @@ struct LowLink {
   }
 };
 
-// BiconectedGraph
+// BiEdgeConectedGraph
 template<typename G>
-struct BiconectedGraph : LowLink<G> {
+struct BiEdgeConectedGraph : LowLink<G> {
   using LL = LowLink<G>;
   vector<int> comp; // { original vertex => tree vertex }
 
-  BiconectedGraph(const G& g) : LL(g) {}
+  BiEdgeConectedGraph(const G& g) : LL(g) {}
 
   int operator[](const int &k) {
     return comp[k];
@@ -199,7 +199,7 @@ int main(int argc, char** argv) {
     g[u].push_back(v);
     g[v].push_back(u);
   }
-  BiconectedGraph<vector<vector<int>>> bcc(g);
+  BiEdgeConectedGraph<vector<vector<int>>> bcc(g);
   vector<vector<int>> t; // template
   bcc.build(t);
 
