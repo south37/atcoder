@@ -271,7 +271,7 @@ int main(int argc, char** argv) {
   ll n,m,k;
   cin >> n >> m >> k;
   vector<vector<int>> g(n);
-  Combination comb(k+5);
+  Combination comb(101010);
 
   rep(iter,m) {
     int a,b;
@@ -290,9 +290,7 @@ int main(int argc, char** argv) {
       vertex.emplace(p.first);
       vertex.emplace(p.second);
     }
-    if (vertex.size() == vs.size() + 1) {
-      ans *= k;
-    } else if (vertex.size() == vs.size()) { // simple cycle
+    if (vertex.size() == vs.size()) { // simple cycle
       mint now = 0;
       for (int i = 1; i <= vertex.size(); ++i) {
         if (vertex.size()%i == 0) {
