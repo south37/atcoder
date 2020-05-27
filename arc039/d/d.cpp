@@ -133,90 +133,55 @@ struct BiconectedGraph : LowLink<G> {
   }
 };
 
-// LCA
-struct lca {
-  ll n, root, l;
-  vector< vector<ll> > to;
-  vector<ll> dep; // depth from root.
-  vector< vector<ll> > par; // par[i][j] .. i's anccestor. The distance from i is 2**j.
+template< typename G >
+struct DoublingLowestCommonAncestor {
+  const int LOG;
+  vector< int > dep;
+  const G &g;
+  vector< vector< int > > table;
 
-  lca(ll n) : n(n), to(n), dep(n) {
-    l = 0;
-    while ((1ll<<l) < n) { ++l; }
-    par = vector< vector<ll> >(n+1, vector<ll>(l, n));
+  DoublingLowestCommonAncestor(const G &g) : g(g), dep(g.size()), LOG(32 - __builtin_clz(g.size())) {
+    table.assign(LOG, vector< int >(g.size(), -1));
   }
-  void addedge(ll a, ll b) {
-    to[a].push_back(b);
-    to[b].push_back(a);
+
+  void dfs(int idx, int par, int d) {
+    table[0][idx] = par;
+    dep[idx] = d;
+    for(auto &to : g[idx]) {
+      if(to != par) dfs(to, idx, d + 1);
+    }
   }
-  void init(ll _root) {
-    root = _root;
-    dfs(root);
-    rep(i, l-1) {
-      rep(v, n) {
-        par[v][i+1] = par[par[v][i]][i];
+
+  void build() {
+    dfs(0, -1, 0);
+    for(int k = 0; k + 1 < LOG; k++) {
+      for(int i = 0; i < table[k].size(); i++) {
+        if(table[k][i] == -1) table[k + 1][i] = -1;
+        else table[k + 1][i] = table[k][table[k][i]];
       }
     }
   }
-  void dfs(ll v, ll d = 0, ll p = -1) {
-    if (p != -1) { par[v][0] = p; }
-    dep[v] = d;
-    rep(i, to[v].size()) {
-      ll u = to[v][i];
-      if (u == p) { continue; }
-      dfs(u, d + 1, v);
+
+  int query(int u, int v) {
+    if(dep[u] > dep[v]) swap(u, v);
+    for(int i = LOG - 1; i >= 0; i--) {
+      if(((dep[v] - dep[u]) >> i) & 1) v = table[i][v];
     }
-  }
-  ll operator()(ll a, ll b) { // lca between a and b
-    if (dep[a] > dep[b]) { swap(a, b); }
-    ll gap = dep[b] - dep[a];
-    for (ll i = l-1; i >= 0; --i) {
-      ll len = 1ll<<i;
-      if (gap >= len) {
-        gap -= len;
-        b = par[b][i];
+    if(u == v) return u;
+    for(int i = LOG - 1; i >= 0; i--) {
+      if(table[i][u] != table[i][v]) {
+        u = table[i][u];
+        v = table[i][v];
       }
     }
-    if (a == b) { return a; }
-    for (ll i = l-1; i>=0; --i) {
-      ll na = par[a][i];
-      ll nb = par[b][i];
-      if (na != nb) {
-        a = na;
-        b = nb;
-      }
-    }
-    return par[a][0];
+    return table[0][u];
   }
-  ll length(ll a, ll b) {
-    ll c = (*this)(a, b);
-    return dep[a] + dep[b] - dep[c]*2;
+
+  int length(int x, int y) {
+    return dep[x] + dep[y] - 2 * dep[query(x,y)];
   }
 };
 
-// int main(int argc, char** argv) {
-//   ll N, Q;
-//   cin >> N >> Q;
-//
-//   lca<ll> g(N);
-//
-//   rep(i, N-1) {
-//     ll a, b, d;
-//     cin >> a >> b >> d;
-//     --a; --b;
-//     g.addedge(a, b, d); // add edge "a->b" and "b->a" with weight d.
-//   }
-//   g.init(0);
-//
-//   rep(i, Q) {
-//     ll a, b;
-//     cin >> a >> b;
-//     --a; --b;
-//     ll c = g(a, b); // c is the lowest common ancestor of a and b.
-//     ll ans = g.costs[a] + g.costs[b] - g.costs[c] * 2; // The distance between a and b.
-//     cout << a + 1 << "-" << b + 1 << ": " << ans << endl; // e.g. 1-4: 40
-//   }
-// }
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -238,13 +203,8 @@ int main(int argc, char** argv) {
   vector<vector<int>> t; // template
   bcc.build(t);
 
-  lca t2(t.size()); // LCA tree
-  rep(v,t.size()) {
-    for (int u : t[v]) {
-      t2.addedge(v,u);
-    }
-  }
-  t2.init(0);
+  DoublingLowestCommonAncestor<vector<vector<int>>> t2(t);
+  t2.build();
 
   ll q;
   cin >> q;
