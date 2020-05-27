@@ -134,25 +134,20 @@ struct BiconectedGraph : LowLink<G> {
 };
 
 // LCA
-template<typename T>
 struct lca {
   ll n, root, l;
   vector< vector<ll> > to;
-  vector< vector<T> > co; // co[i][j] .. costs between i - to[i][j]
   vector<ll> dep; // depth from root.
-  vector<T> costs; // cumulative cost from root.
   vector< vector<ll> > par; // par[i][j] .. i's anccestor. The distance from i is 2**j.
 
-  lca(ll n) : n(n), to(n), co(n), dep(n), costs(n) {
+  lca(ll n) : n(n), to(n), dep(n) {
     l = 0;
     while ((1ll<<l) < n) { ++l; }
     par = vector< vector<ll> >(n+1, vector<ll>(l, n));
   }
-  void addedge(ll a, ll b, T c = 0) {
+  void addedge(ll a, ll b) {
     to[a].push_back(b);
-    co[a].push_back(c);
     to[b].push_back(a);
-    co[b].push_back(c);
   }
   void init(ll _root) {
     root = _root;
@@ -163,14 +158,13 @@ struct lca {
       }
     }
   }
-  void dfs(ll v, ll d = 0, T c = 0, ll p = -1) {
+  void dfs(ll v, ll d = 0, ll p = -1) {
     if (p != -1) { par[v][0] = p; }
     dep[v] = d;
-    costs[v] = c;
     rep(i, to[v].size()) {
       ll u = to[v][i];
       if (u == p) { continue; }
-      dfs(u, d + 1, c + co[v][i], v);
+      dfs(u, d + 1, v);
     }
   }
   ll operator()(ll a, ll b) { // lca between a and b
@@ -197,10 +191,6 @@ struct lca {
   ll length(ll a, ll b) {
     ll c = (*this)(a, b);
     return dep[a] + dep[b] - dep[c]*2;
-  }
-  ll cost(ll a, ll b) {
-    ll c = (*this)(a, b);
-    return costs[a] + costs[b] - costs[c]*2;
   }
 };
 
@@ -248,13 +238,13 @@ int main(int argc, char** argv) {
   vector<vector<int>> t; // template
   bcc.build(t);
 
-  lca<int> t2(t.size()); // LCA tree
+  lca t2(t.size()); // LCA tree
   rep(v,t.size()) {
     for (int u : t[v]) {
       t2.addedge(v,u);
     }
   }
-  t2.init(bcc[0]);
+  t2.init(0);
 
   ll q;
   cin >> q;
