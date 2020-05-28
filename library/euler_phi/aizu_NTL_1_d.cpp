@@ -1,3 +1,5 @@
+// ref. https://ei1333.github.io/luzhiled/snippets/math/euler-phi.html
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
