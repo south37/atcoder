@@ -1,3 +1,5 @@
+// ref. https://ei1333.github.io/luzhiled/snippets/dp/largest-rectangle.html
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -54,6 +56,25 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+template<typename T>
+ll largest_rectangle(vector<T> height)
+{
+  stack<ll> st;
+  height.push_back(0);
+  vector<ll> left(height.size());
+  ll ret = 0;
+  rep(i, height.size()) {
+    while(!st.empty() && height[st.top()] >= height[i]) {
+      ret = max(ret, (i - left[st.top()] - 1) * height[st.top()]);
+      st.pop();
+    }
+    left[i] = st.empty() ? -1 : st.top();
+    st.emplace(i);
+  }
+  return (ret);
+}
+
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -62,4 +83,11 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> h(n);
+  rep(i,n) {
+    cin >> h[i];
+  }
+
+  ll ans = largest_rectangle(h);
+  cout << ans << endl;
 }
