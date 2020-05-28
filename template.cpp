@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <unordered_map>
 #include <vector>
