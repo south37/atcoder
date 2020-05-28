@@ -1,3 +1,5 @@
+// ref. https://ei1333.github.io/luzhiled/snippets/dp/slide-min.html
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -55,6 +57,7 @@ const ll MOD = 1000000007;  // 1e9 + 7
 
 // SlideMin
 // res[i] .. min value in [i-m+1,i]
+// res.size() == v.size()-m+1. (m-1 elements in front are used only for calculating first result). We need offset if we want to get all as result.
 template<typename T>
 vector<T> slide_min(const vector<T> &v, int k)
 {
