@@ -51,7 +51,7 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ll INF = 1e16;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
@@ -66,6 +66,19 @@ int main(int argc, char** argv) {
   rep(i,n+1) {
     cin >> a[i];
   }
+  if (a[0] >= 2) {
+    cout << -1 << endl;
+    return 0;
+  }
+  assert(a[0] <= 1);
+
+  vector<ll> maxNodes(n+1);
+  maxNodes[0] = 1-a[0];
+  for (int i = 1; i <= n; ++i) {
+    maxNodes[i] = 2*maxNodes[i-1] - a[i];
+    chmin(maxNodes[i], INF); // for avoiding overflow
+  }
+  // printvec(maxNodes);
 
   ll ans = 0; // TODO: update
 
@@ -75,34 +88,36 @@ int main(int argc, char** argv) {
     // node must be in [minNode,cnt]
     ll minNode = (cnt+1)/2;
 
-    ll node = cnt; // initial value
+    ll node = min(cnt, maxNodes[i]); // initial value
     ll leaf = a[i];
 
-    ll all = pow(2,i);
-    // ll all = 1;
-    // {
-    //   ll j = 0;
-    //   while (j < i && all < node + leaf) { // all-leaf < node
-    //     all *= 2;
-    //     ++j;
-    //   }
-    // }
-    cout << "cnt: " << cnt << endl;
-    cout << "all: " << all << endl;
-    cout << "leaf: " << leaf << endl;
-    cout << "node: " << node << endl;
-    cout << "all-leaf: " << all-leaf << endl;
-    cout << "minNode: " << minNode << endl;
+    // // TODO: update logic of all
+    // ll all = pow(2,i);
+    // // ll all = 1;
+    // // {
+    // //   ll j = 0;
+    // //   while (j < i && all < node + leaf) { // all-leaf < node
+    // //     all *= 2;
+    // //     ++j;
+    // //   }
+    // // }
+    // cout << "cnt: " << cnt << endl;
+    // cout << "all: " << all << endl;
+    // cout << "leaf: " << leaf << endl;
+    // cout << "node: " << node << endl;
+    // cout << "all-leaf: " << all-leaf << endl;
+    // cout << "minNode: " << minNode << endl;
 
-    if (all < node + leaf) { // Here, all == 2^i
-      ll node = all - leaf;
-      if (node < minNode) { // check size of node. node is too small.
-        cout << -1 << endl;
-        return 0;
-      }
-      // Here, node >=minNode. OK>
-    } else { // Here, all is large. node <= all - leaf
-      assert(node == cnt);
+    // if (all < cnt + leaf) { // Here, all == 2^i
+    //   chmin(node, all - leaf);
+    //   // Here, node >=minNode. OK>
+    // } else { // Here, all is large. node <= all - leaf
+    //   // Do nothing
+    // }
+
+    if (node < minNode) { // check size of node. node is too small.
+      cout << -1 << endl;
+      return 0;
     }
 
     cnt = node + leaf; // update cnt

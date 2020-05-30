@@ -60,6 +60,23 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  string t;
+  cin >> t;
+
+  int n = t.size();
+  ll ans = 0;
+
+  int i = n-1;
+  while (i >= 0) {
+    if (t[i] == '?') { // scan.
+      // if (i+1 < n && t[i+1] == 'D') {
+      //   t[i] = 'P';
+      // } else { // not D
+      //   t[i] = 'D';
+      // }
+      t[i] = 'D';
+    }
+    --i;
+  }
+  cout << t << endl;
 }

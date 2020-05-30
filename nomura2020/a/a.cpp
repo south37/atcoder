@@ -60,6 +60,9 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll h1,m1,h2,m2,k;
+  cin >> h1 >> m1 >> h2 >> m2 >> k;
+  ll t1 = h1*60 + m1;
+  ll t2 = h2*60 + m2;
+  cout << (t2-t1-k) << endl;
 }
