@@ -1,3 +1,6 @@
+// ref. https://ei1333.github.io/luzhiled/snippets/dp/knapsack-limitations.html
+// ref. https://scrapbox.io/nojima/%E5%80%8B%E6%95%B0%E5%88%B6%E9%99%90%E4%BB%98%E3%81%8D%E3%83%8A%E3%83%83%E3%83%97%E3%82%B5%E3%83%83%E3%82%AF
+
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -54,7 +57,12 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-// Knapsack with limitation
+// Knapsack with limitation.
+// w[i] .. weight
+// m[i] .. limitation of count
+// v[i] .. value
+// W .. total weight
+// NG .. initial value of dp vector
 template<typename T, typename Compare = greater<T>>
 vector<T> knapsack_limitations(const vector<ll> &w, const vector<ll> &m, const vector<T> &v,
                                const ll& W, const T& NG, const Compare &comp = Compare()) {
@@ -63,15 +71,15 @@ vector<T> knapsack_limitations(const vector<ll> &w, const vector<ll> &m, const v
   dp[0] = T();
   rep(i,n) {
     rep(a,w[i]) {
-      ll s = 0, t = 0;
-      for (ll j = 0; w[i] * j + a <= W; j++) {
+      ll s = 0, t = 0; // [s,t) is valid range. deqv[s] is used as slide max.
+      for (ll j = 0; w[i] * j + a <= W; j++) { // Here, we get slide max of j in [j-m[i],j].
         if (dp[w[i] * j + a] != NG) {
-          auto val = dp[w[i] * j + a] - j * v[i];
+          auto val = dp[w[i] * j + a] - j * v[i]; // value with out contribution of (v[i]*j).
           while(s < t && comp(val, deqv[t - 1])) --t;
-          deq[t] = j;
-          deqv[t++] = val;
+          deq[t] = j;      // push
+          deqv[t++] = val; // push
         }
-        if (s < t) {
+        if (s < t) { // [s,t) is not blank
           dp[w[i] * j + a] = deqv[s] + j * v[i];
           if(deq[s] == j - m[i]) ++s;
         }
