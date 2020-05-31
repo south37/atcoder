@@ -93,6 +93,7 @@ int main(int argc, char** argv) {
     if (n == 0) { break; }
 
     rep(i,n)rep(j,n) { d1[i][j] = INF; }
+    rep(i,n) { d1[i][i] = 0; }
     while (m--) {
       int u,v,d;
       cin >> u >> v >> d;

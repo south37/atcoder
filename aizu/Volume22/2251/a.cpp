@@ -199,6 +199,7 @@ int main(int argc, char** argv) {
     memset(iter, 0, sizeof(iter));
 
     vector<vector<ll>> d1(n, vector<ll>(n,INF));
+    rep(i,n) { d1[i][i] = 0; }
     while (m--) {
       ll u,v,d;
       cin >> u >> v >> d;
