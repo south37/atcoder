@@ -53,8 +53,33 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e15;
+// const ll INF = 1e15;
+const int INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
+
+int n,m,l;
+int d1[100][100];
+int t[1000],pl[1000];
+vector<vector<int>> g;
+
+int p[2000];
+bool used[2000];
+
+bool rec(int v) {
+  if (v < 0) { return true; }
+
+  for (int u : g[v]) {
+    if (!used[u]) {
+      used[u] = true;
+      if (rec(p[u])) {
+        p[v] = u;
+        p[u] = v;
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
@@ -63,13 +88,13 @@ int main(int argc, char** argv) {
   //cout << setprecision(10) << fixed;
 
   while (true) {
-    ll n,m,l;
+    int n,m,l;
     cin >> n >> m >> l;
     if (n == 0) { break; }
 
-    vector<vector<ll>> d1(n, vector<ll>(n,INF));
+    rep(i,n)rep(j,n) { d1[i][j] = INF; }
     while (m--) {
-      ll u,v,d;
+      int u,v,d;
       cin >> u >> v >> d;
       d1[u][v] = d;
       d1[v][u] = d;
@@ -82,48 +107,26 @@ int main(int argc, char** argv) {
     }
     // printtree(d1);
 
-    vector<ll> p(l);
-    vector<ll> t(l);
     rep(i,l) {
-      cin >> p[i] >> t[i];
+      cin >> pl[i] >> t[i];
     }
 
     // Calculate maximum matching.
-    vector<vector<ll>> g(2*l);
+    g.clear(); g.resize(2*l);
     rep(i,l)rep(j,l) {
       if (i==j) { continue; }
-      if (t[i]+d1[p[i]][p[j]] <= t[j]) { // i->j is ok.
+      if (t[i]+d1[pl[i]][pl[j]] <= t[j]) { // i->j is ok.
         g[i].push_back(l+j);
         g[l+j].push_back(i);
       }
     }
 
-    ll ans = l;
-    {
-      vector<ll> p(2*l, -1); // p[i] .. pair of i
-      vector<bool> used(2*l);
-
-      auto rec = [&](auto self, ll v) -> bool {
-        if (v < 0) { return true; }
-
-        for (ll u : g[v]) {
-          if (!used[u]) {
-            used[u] = true;
-            if (self(self, p[u])) {
-              p[v] = u;
-              p[u] = v;
-              return true;
-            }
-          }
-        }
-        return false;
-      };
-
-      rep(i,l) {
-        used.assign(2*l,false); // reset
-        if (rec(rec, i)) {
-          --ans;
-        }
+    int ans = l;
+    rep(i,2*l)p[i]=-1;
+    rep(i,l) {
+      rep(i,2*l) { used[i] = false; } // reset
+      if (rec(i)) {
+        --ans;
       }
     }
     cout << ans << endl;
