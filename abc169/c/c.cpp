@@ -60,6 +60,11 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll a;
+  cin >> a;
+  double b;
+  cin >> b;
+
+  double ans = b*a;
+  cout << (ll)ans << endl;
 }

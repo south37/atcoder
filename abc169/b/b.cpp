@@ -51,7 +51,7 @@ typedef double D;
 typedef vector<ll> vl;
 typedef vector<P> vp;
 
-const ll INF = 1e9;
+const ull INF = 1e18;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 int main(int argc, char** argv) {
@@ -62,4 +62,30 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ull> a(n);
+  rep(i,n) {
+    cin >> a[i];
+    if (a[i] == 0) {
+      cout << 0 << endl;
+      return 0;
+    }
+  }
+
+  ll ans = 1;
+  rep(i,n) {
+    // if (ans * a[i] > INF) {
+    //if (ans > INF) {
+    if (ans > (INF / a[i])) {
+      cout << -1 << endl;
+      return 0;
+    }
+    ans *= a[i];
+
+    // cout << ans << endl;
+    if (ans > INF) {
+      cout << -1 << endl;
+      return 0;
+    }
+  }
+  cout << ans << endl;
 }

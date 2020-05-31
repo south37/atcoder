@@ -60,11 +60,18 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
+  vector<ll> dp(100);
+  dp[0] = 0;
+  for (int i = 1; i < 100; ++i) {
+    dp[i] = i*(i+1)/2;
+  }
+  // printvec(dp);
+
   ll n;
   cin >> n;
   map<ll,ll> fs; // count of prime factors
   {
-    int i = 2;
+    ll i = 2;
     while (i*i <=n) {
       if (n%i == 0) {
         while (n%i == 0) {
@@ -83,14 +90,20 @@ int main(int argc, char** argv) {
   for (auto& p : fs) {
     ll cnt = p.second;
 
-    ll tot = 0;
-    ll i = 1;
-    while (tot + i <= cnt) {
-      tot += i;
-      ++i;
-    }
-    // Here, i is available
+    ll i = upper_bound(all(dp), cnt) - dp.begin();
     ans += i-1;
+
+    // cout << "cnt:" << cnt << endl;
+    // cout << "i:" << i << endl;
+
+    // ll tot = 0;
+    // ll i = 1;
+    // while (tot + i <= cnt) {
+    //   tot += i;
+    //   ++i;
+    // }
+    // // Here, i is available
+    // ans += i-1;
   }
 
   cout << ans << endl;
