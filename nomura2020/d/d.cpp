@@ -209,7 +209,7 @@ int main(int argc, char** argv) {
   ans -= mint(already) * mint(n-1).pow(k); // already is cycle, so decrease it .
 
   // Next, decrease the contribution of cycles without already.
-  // dp[j] .. sum of vs[i] when total count is j (pick j elements from vs).
+  // dp[j] .. sum of pi_i(vs[i]) when total count is j (pick j elements from vs).
   vector<mint> dp(k+1);
   dp[0] = 1;
   for (auto x : vs) {
