@@ -62,4 +62,36 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  map<ll,ll> fs; // count of prime factors
+  {
+    int i = 2;
+    while (i*i <=n) {
+      if (n%i == 0) {
+        while (n%i == 0) {
+          n /= i;
+          ++fs[i];
+        }
+      }
+      ++i;
+    }
+    if (n>1) {
+      ++fs[n];
+    }
+  }
+
+  ll ans = 0;
+  for (auto& p : fs) {
+    ll cnt = p.second;
+
+    ll tot = 0;
+    ll i = 1;
+    while (tot + i <= cnt) {
+      tot += i;
+      ++i;
+    }
+    // Here, i is available
+    ans += i-1;
+  }
+
+  cout << ans << endl;
 }
