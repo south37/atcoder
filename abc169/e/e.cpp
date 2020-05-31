@@ -62,4 +62,26 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n);
+  vector<ll> b(n);
+  rep(i,n) {
+    cin >> a[i] >> b[i];
+  }
+
+  if (n%2 == 0) { // even
+    sort(all(a));
+    ll minX2 = a[n/2] + a[n/2-1];
+
+    sort(all(b));
+    ll maxX2 = b[n/2] + b[n/2-1];
+
+    ll ans = (maxX2 - minX2) + 1;
+    cout << ans << endl;
+  } else { // odd
+    sort(all(a));
+    ll minX = a[n/2];
+    sort(all(b));
+    ll maxX = b[n/2];
+    cout << (maxX - minX) + 1 << endl;
+  }
 }
