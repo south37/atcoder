@@ -91,23 +91,23 @@ int main(int argc, char** argv) {
   }
   // printtree(d);
 
-  vector<vector<ll>> d2 = d; // copy
-  rep(k,n)rep(v,n)rep(u,n) {
-    chmin(d2[v][u], d2[v][k] + d2[k][u]);
-  }
+  // vector<vector<ll>> d2 = d; // copy
+  // rep(k,n)rep(v,n)rep(u,n) {
+  //   chmin(d2[v][u], d2[v][k] + d2[k][u]);
+  // }
 
-  // Check the equality of d2 and a.
-  bool ok = true;
-  rep(r,n)rep(c,n) {
-    if (d2[r][c] != a[r][c]) {
-      ok = false;
-      break;
-    }
-  }
-  if (!ok) { // not valid
-    cout << -1 << endl;
-    return 0;
-  }
+  // // Check the equality of d2 and a.
+  // bool ok = true;
+  // rep(r,n)rep(c,n) {
+  //   if (d2[r][c] != a[r][c]) {
+  //     ok = false;
+  //     break;
+  //   }
+  // }
+  // if (!ok) { // not valid
+  //   cout << -1 << endl;
+  //   return 0;
+  // }
 
   ll ans = 0;
   rep(r,n)rep(c,r) {
