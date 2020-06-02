@@ -76,13 +76,13 @@ int main() {
     cin >> h[i] >> s[i];
   }
 
-  ll l = *max_element(all(h)), r = INF;
-  while (r-l > 0) {
-    ll m = (l+r) / 2;
+  ll l = -1, r = INF;
+  while (r-l>1) {
+    ll m = (l+r)/2;
     if (f(m)) {
       r = m;
     } else {
-      l = m+1;
+      l = m;
     }
   }
   cout << r << endl;
