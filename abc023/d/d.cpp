@@ -54,46 +54,39 @@ typedef vector<P> vp;
 const ll INF = 1e17;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-bool ok(const vector<ll>& h, const vector<ll>& s, ll x) {
-  ll n = h.size();
-
-  vector<ll> t(n); // t[i] .. threshold to achieve x as max.
-  rep(i,n) {
-    t[i] = (x-h[i])/s[i];
-  }
-  sort(all(t));
-
-  bool ret = true;
-  rep(i,n) {
-    ret &= (t[i] >= i);
-  }
-  return ret;
-}
-
-int main(int argc, char** argv) {
-  cin.tie(NULL);
-  cout.tie(NULL);
-  ios_base::sync_with_stdio(false);
-  //cout << setprecision(10) << fixed;
-
-  ll n;
+int main() {
+  int n;
   cin >> n;
-  vector<ll> h(n);
-  vector<ll> s(n);
+  vector<ll> h(n), s(n);
   rep(i,n) {
     cin >> h[i] >> s[i];
   }
 
-  ll l = 0, r = INF;
-  // find boundary in [f,..f,t,..,t]
-  while (r-l > 1) {
-    ll m = (r+l)/2;
-    if (ok(h,s,m)) {
+  auto ok = [&](ll x) -> bool {
+    vector<ll> t(n); // t[i] .. threshold to achieve x as max.
+    rep(i,n) {
+      t[i] = (x-h[i])/s[i];
+    }
+    sort(all(t));
+
+    bool ret = true;
+    rep(i,n) {
+      if (t[i] < i) { // invalid
+        ret = false;
+        break;
+      }
+    }
+    return ret;
+  };
+
+  ll l = *max_element(all(h)), r = (ll)1e15;
+  while(r-l > 0) {
+    ll m = (l+r) / 2;
+    if (ok(m)) {
       r = m;
     } else {
-      l = m;
+      l = m+1;
     }
   }
-  // Here, r is minimum ok
   cout << r << endl;
 }
