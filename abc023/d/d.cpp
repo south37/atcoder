@@ -54,35 +54,32 @@ typedef vector<P> vp;
 const ll INF = 1e17;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+ll n;
+vector<ll> h, s;
+
+bool f(ll x) {
+  vector<ll> t;
+  rep(i,n) {
+    if (h[i] > x) return false;
+    t.pb((x-h[i])/s[i]);
+  }
+  sort(all(t));
+  rep(i,sz(t)) if (t[i] < i) return false;
+  return true;
+}
+
 int main() {
-  int n;
   cin >> n;
-  vector<ll> h(n), s(n);
+  h.resize(n);
+  s.resize(n);
   rep(i,n) {
     cin >> h[i] >> s[i];
   }
 
-  auto ok = [&](ll x) -> bool {
-    vector<ll> t(n); // t[i] .. threshold to achieve x as max.
-    rep(i,n) {
-      t[i] = (x-h[i])/s[i];
-    }
-    sort(all(t));
-
-    bool ret = true;
-    rep(i,n) {
-      if (t[i] < i) { // invalid
-        ret = false;
-        break;
-      }
-    }
-    return ret;
-  };
-
   ll l = *max_element(all(h)), r = INF;
   while (r-l > 0) {
     ll m = (l+r) / 2;
-    if (ok(m)) {
+    if (f(m)) {
       r = m;
     } else {
       l = m+1;
