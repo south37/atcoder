@@ -76,7 +76,9 @@ int main() {
     cin >> h[i] >> s[i];
   }
 
-  ll l = -1, r = INF;
+  // search in (l,r]
+  // ll l = *max_element(all(h))-1, r = INF;
+  ll l = 0, r = INF;
   while (r-l>1) {
     ll m = (l+r)/2;
     if (f(m)) {
