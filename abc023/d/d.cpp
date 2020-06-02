@@ -79,8 +79,8 @@ int main() {
     return ret;
   };
 
-  ll l = *max_element(all(h)), r = (ll)1e15;
-  while(r-l > 0) {
+  ll l = *max_element(all(h)), r = INF;
+  while (r-l > 0) {
     ll m = (l+r) / 2;
     if (ok(m)) {
       r = m;
