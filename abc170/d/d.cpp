@@ -74,16 +74,18 @@ int main(int argc, char** argv) {
     ++cnts[a[i]];
   }
 
+  set<ll> seen;
   vector<ll> b;
   for (auto&p : cnts) {
     if (p.second == 1) { // unique
       b.push_back(p.first);
+    } else {
+      seen.insert(p.first);
     }
   }
   sort(all(b));
 
   ll ans = 0;
-  set<ll> seen;
   for (ll v : b) {
     bool found = false;
 
