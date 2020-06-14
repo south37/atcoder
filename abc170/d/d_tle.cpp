@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
     cin >> a[i];
   }
 
-  map<ll,ll> vs;
+  unordered_map<ll,ll> vs;
   rep(i,n) {
     ++vs[a[i]];
   }
@@ -80,13 +80,23 @@ int main(int argc, char** argv) {
     //   vs.erase(a[i]);
     // }
 
-    set<ll> divs;
+    bool found = false;
+    // set<ll> divs;
     {
       ll j = 1;
       while (j*j <= a[i]) {
         if (a[i] % j == 0) {
-          divs.insert(j);
-          divs.insert(a[i]/j);
+          // Chekc i and v/i
+          if (vs.find(j) != vs.end() && vs[j] != 0) {
+            found = true;
+            break;
+          }
+          if (vs.find(a[i]/j) != vs.end() && vs[a[i]/j] != 0) {
+            found = true;
+            break;
+          }
+          // divs.insert(j);
+          // divs.insert(a[i]/j);
         }
         ++j;
       }
@@ -94,12 +104,12 @@ int main(int argc, char** argv) {
     // Here, divs has all divisors
     // printvec(divs);
 
-    bool found = false;
-    for (ll v : divs) {
-      if (vs.find(v) != vs.end() && vs[v] != 0) {
-        found = true;
-      }
-    }
+    // bool found = false;
+    // for (ll v : divs) {
+    //   if (vs.find(v) != vs.end() && vs[v] != 0) {
+    //     found = true;
+    //   }
+    // }
     if (!found) { // not divisoble
       ++ans;
     }
