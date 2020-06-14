@@ -62,4 +62,50 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n);
+  rep(i,n) {
+    cin >> a[i];
+  }
+
+  map<ll,ll> vs;
+  rep(i,n) {
+    ++vs[a[i]];
+  }
+  // printmap(vs);
+
+  ll ans = 0;
+  rep(i,n) {
+    --vs[a[i]];
+    // if (vs[a[i]] == 0) { // reach to 0
+    //   vs.erase(a[i]);
+    // }
+
+    set<ll> divs;
+    {
+      ll j = 1;
+      while (j*j <= a[i]) {
+        if (a[i] % j == 0) {
+          divs.insert(j);
+          divs.insert(a[i]/j);
+        }
+        ++j;
+      }
+    }
+    // Here, divs has all divisors
+    // printvec(divs);
+
+    bool found = false;
+    for (ll v : divs) {
+      if (vs.find(v) != vs.end() && vs[v] != 0) {
+        found = true;
+      }
+    }
+    if (!found) { // not divisoble
+      ++ans;
+    }
+
+    ++vs[a[i]];
+  }
+
+  cout << ans << endl;
 }

@@ -60,6 +60,29 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll x,n;
+  cin >> x >> n;
+  set<ll> not_avail;
+  rep(i,n) {
+    ll v;
+    cin >> v;
+    not_avail.insert(v);
+  }
+
+  ll l = x;
+  ll r = x;
+  while (true) {
+    if (not_avail.find(l) == not_avail.end()) {
+      cout << l << endl;
+      return 0;
+    }
+    if (not_avail.find(r) == not_avail.end()) {
+      cout << r << endl;
+      return 0;
+    }
+    --l;
+    ++r;
+  }
+
+  // Must not reach here
 }

@@ -60,6 +60,22 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll x,y;
+  cin >> x >> y;
+
+  bool found = false;
+  rep(i,x+1) {
+    // Here, try i as 2
+    ll c = 0;
+    c += 2*i;
+    c += 4*(x-i);
+    if (c == y) {
+      found = true;
+    }
+  }
+  if (found) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
 }
