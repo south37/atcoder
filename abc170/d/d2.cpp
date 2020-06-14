@@ -72,13 +72,6 @@ int main(int argc, char** argv) {
     ++cnts[a[i]];
   }
 
-  auto check = [&](ll v) {
-    if (cnts[v] > 0) { // found
-      return true;
-    }
-    return false;
-  };
-
   ll ans = 0;
   rep(i,n) {
     --cnts[a[i]];
@@ -86,11 +79,11 @@ int main(int argc, char** argv) {
     bool found = false;
     for (ll j = 1; j*j <= a[i]; ++j) {
       if (a[i]%j == 0) {
-        if (check(j)) {
+        if (cnts[j] > 0) {
           found = true;
           break;
         }
-        if (check(a[i]/j)) {
+        if (cnts[a[i]/j] > 0) {
           found = true;
           break;
         }
