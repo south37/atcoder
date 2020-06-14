@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
     cin >> a[i];
   }
 
-  vector<ll> cnts;
+  vector<ll> cnts(1e6+5);
   rep(i,n) {
     ++cnts[a[i]];
   }
