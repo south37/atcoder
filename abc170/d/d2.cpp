@@ -67,55 +67,41 @@ int main(int argc, char** argv) {
     cin >> a[i];
   }
 
-  unordered_map<ll,ll> vs;
+  vector<ll> cnts;
   rep(i,n) {
-    ++vs[a[i]];
+    ++cnts[a[i]];
   }
-  // printmap(vs);
+
+  auto check = [&](ll v) {
+    if (cnts[v] > 0) { // found
+      return true;
+    }
+    return false;
+  };
 
   ll ans = 0;
   rep(i,n) {
-    --vs[a[i]];
-    // if (vs[a[i]] == 0) { // reach to 0
-    //   vs.erase(a[i]);
-    // }
+    --cnts[a[i]];
 
     bool found = false;
-    // set<ll> divs;
-    {
-      ll j = 1;
-      while (j*j <= a[i]) {
-        if (a[i] % j == 0) {
-          // Chekc i and v/i
-          if (vs.find(j) != vs.end() && vs[j] != 0) {
-            found = true;
-            break;
-          }
-          if (vs.find(a[i]/j) != vs.end() && vs[a[i]/j] != 0) {
-            found = true;
-            break;
-          }
-          // divs.insert(j);
-          // divs.insert(a[i]/j);
+    for (ll j = 1; j*j <= a[i]; ++j) {
+      if (a[i]%j == 0) {
+        if (check(j)) {
+          found = true;
+          break;
         }
-        ++j;
+        if (check(a[i]/j)) {
+          found = true;
+          break;
+        }
       }
     }
-    // Here, divs has all divisors
-    // printvec(divs);
 
-    // bool found = false;
-    // for (ll v : divs) {
-    //   if (vs.find(v) != vs.end() && vs[v] != 0) {
-    //     found = true;
-    //   }
-    // }
-    if (!found) { // not divisoble
+    if (!found) {
       ++ans;
     }
 
-    ++vs[a[i]];
+    ++cnts[a[i]];
   }
-
   cout << ans << endl;
 }
