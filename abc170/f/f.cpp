@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
       // cout << "c_left,c_right:" << left << "," << right << endl;
       auto it = lrs[r].upper_bound(c);
       // update left
-      if (it != lrs[r].begin() && *prev(it) >= left) {
+      if (it != lrs[r].begin()) {
         chmax(left, *prev(it));
       }
       // update right
@@ -127,6 +127,7 @@ int main(int argc, char** argv) {
         chmin(right, *it);
       }
       // cout << "c_left2,c_right2:" << left << "," << right << endl;
+      assert(left <= right);
 
       set<P> eraseTarget;
       auto it2 = rs[r].lower_bound(left);
@@ -149,7 +150,7 @@ int main(int argc, char** argv) {
     {
       // Seond, search in top and bottom
       // [r-k,r+k]
-      ll left = c-k, right = c+k;
+      ll left = r-k, right = r+k;
       // cout << "r_left,r_right:" << left << "," << right << endl;
       auto it = lcs[c].upper_bound(r);
       // update left
@@ -160,6 +161,7 @@ int main(int argc, char** argv) {
       if (it != lcs[c].end()) {
         chmin(right, *it);
       }
+      assert(left <= right);
       // cout << "r_left2,r_right2:" << left << "," << right << endl;
 
       set<P> eraseTarget;
