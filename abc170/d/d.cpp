@@ -69,9 +69,22 @@ int main(int argc, char** argv) {
 
   sort(all(a));
 
+  map<ll,ll> cnts;
+  rep(i,n) {
+    ++cnts[a[i]];
+  }
+
+  vector<ll> b;
+  for (auto&p : cnts) {
+    if (p.second == 1) { // unique
+      b.push_back(p.first);
+    }
+  }
+  sort(all(b));
+
   ll ans = 0;
   set<ll> seen;
-  for (ll v : a) {
+  for (ll v : b) {
     bool found = false;
 
     ll i = 1;
