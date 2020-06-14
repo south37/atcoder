@@ -95,6 +95,8 @@ int main(int argc, char** argv) {
     P child = P(vs[idx],idx);
     ll f = roomMap[idx];
 
+    // Here, rooms[f] must include child.
+
     // 1. remove from f.
     if (*prev(rooms[f].end()) == child) { // child is max. must update.
       ms.erase(child);
@@ -110,11 +112,12 @@ int main(int argc, char** argv) {
       rooms[toRoom].insert(child);
       ms.insert(child);
     } else {
-      if ((*prev(rooms[toRoom].end())).first < child.first) { // child is large. must update.
+      P prevMax = *prev(rooms[toRoom].end());
+      if (prevMax.first < child.first) { // child is large. must update.
         // Here, Update max of rooms[toRoom]
-        P prevMax = *prev(rooms[toRoom].end());
         ms.erase(prevMax);
         ms.insert(child);
+        rooms[toRoom].insert(child);
       } else { // child is smaller. don't need to update
         rooms[toRoom].insert(child);
       }
