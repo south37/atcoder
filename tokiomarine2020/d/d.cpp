@@ -98,7 +98,8 @@ int main(int argc, char** argv) {
     // Here, parent is i/2
     for (ll j = maxL; j >= 0; --j) {
       ll p = i/2;
-      if (j-W[(i-1)] >= 0) {
+      chmax(dp[i][j], dp[p][j]); // not select
+      if (j-W[(i-1)] >= 0) { // select
         chmax(dp[i][j], dp[p][j-W[(i-1)]] + V[(i-1)]);
       }
     }
