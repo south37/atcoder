@@ -54,7 +54,7 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
-const ll ROOM_MAX = 2e5 + 5;
+const ll ROOM_MAX = 2e6 + 5;
 
 int main(int argc, char** argv) {
   cin.tie(NULL);
