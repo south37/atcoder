@@ -79,15 +79,12 @@ int main(int argc, char** argv) {
   d.resize(n);
   g.resize(n);
 
-  vector<ll> deg(n);
   rep(i,n-1) {
     ll a,b;
     cin >> a >> b;
     --a; --b;
     g[a].push_back(b);
     g[b].push_back(a);
-    ++deg[a];
-    ++deg[b];
   }
 
   rep(i,n) {
@@ -96,18 +93,9 @@ int main(int argc, char** argv) {
   sort(all(c));
   reverse(all(c));
 
-  int maxD = 0;
-  int root = 0;
-  rep(i,n) {
-    if (maxD < deg[i]) {
-      maxD = deg[i];
-      root = i;
-    }
-  }
-
   // printvec(c);
 
-  dfs(root);
+  dfs(0);
 
   ll m = 0;
   for (int i = 1; i < n; ++i) {
