@@ -64,6 +64,18 @@ struct mint {
     if (t & 1) a *= *this;
     return a;
   }
+  // ref. https://qiita.com/drken/items/3b4fdf0a78e7a138cd9a
+  mint invWithGcd() const {
+    ll a = x, b = MOD, u = 1, v = 0;
+    while (b) {
+      ll t = a/b;
+      a -= t*b; swap(a,b);
+      u -= t*v; swap(u,v);
+    }
+    u %= MOD;
+    if (u < 0) { u += MOD; }
+    return mint(u);
+  }
 
   // for prime mod
   mint inv() const {
@@ -86,11 +98,12 @@ int main(int argc, char** argv) {
 
   MOD = 13;
   mint p(10);
-  cout << (p + 15).x << endl;   // 12 (25 % 13)
-  cout << (p - 15).x << endl;   // 8  (-5 % 13)
-  cout << (p * 2).x << endl;    // 7  (20 % 13)
-  cout << (p.pow(3)).x << endl; // 12 (1000 % 13)
-  cout << (p / 3).x << endl;    // 12 (12 * 3 = 10 (36 % 13))
+  cout << (p + 15).x << endl;    // 12 (25 % 13)
+  cout << (p - 15).x << endl;    // 8  (-5 % 13)
+  cout << (p * 2).x << endl;     // 7  (20 % 13)
+  cout << (p.pow(3)).x << endl;  // 12 (1000 % 13)
+  cout << (p / 3).x << endl;     // 12 (12 * 3 = 10 (36 % 13))
+  cout << p * mint(3).invWithGcd().x << endl; // 12 (12 * 3 = 10 (36 % 13))
 
   mint p2(-3);
   cout << p2.x << endl; // 10 (-3 % 13)
