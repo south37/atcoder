@@ -153,7 +153,7 @@ int main(int argc, char** argv) {
     for (int c = B; c <= D; ++c) {
       rep(k,2) {
         if (k == 0) { // dest is multiple
-          dp[r][c+1][0] += dp[r][c][0] * r; // we can select black from r.
+          dp[r][c+1][0] += dp[r][c][0]*r; // we can select black from r.
           dp[r][c+1][0] += dp[r][c][1]; // we have to select top.
         } else { // k == 1. dest is single
           dp[r+1][c][1] += dp[r][c][0]*c;
