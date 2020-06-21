@@ -135,46 +135,6 @@ ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
 //   cout << p2.x << endl; // 10 (-3 % 13)
 // }
 
-// Combination mod prime.
-// cf. https://www.youtube.com/watch?v=1Z6ofKN03_Y
-struct Combination {
-  vector<mint> fact, ifact;
-  Combination(int n) { init(n); }
-  void init(int n) {
-    assert(n < MOD); // n must be lower than MOD.
-
-    fact.resize(n + 1);
-    ifact.resize(n + 1);
-
-    fact[0] = 1;
-    for (int i = 1; i <= n; ++i) { fact[i] = fact[i-1] * i; }
-    ifact[n] = fact[n].inv();
-    for (int i = n; i >= 1; --i) { ifact[i-1] = ifact[i] * i; }
-  }
-  mint operator() (int n, int k) const {
-    if (k < 0 || k > n) { return 0; }
-    return fact[n] * ifact[k] * ifact[n-k];
-  }
-  mint perm(int n, int k) const {
-    if (k < 0 || k > n) { return 0; }
-    return fact[n] * ifact[n-k];
-  }
-};
-
-// int main(int argc, char** argv) {
-//   MOD = 13;
-//
-//   Combination c(12);
-//   cout << c(12, 0).x << endl;  // 1  = 1 % 13
-//   cout << c(12, 1).x << endl;  // 12 = 12 % 13
-//   cout << c(12, 2).x << endl;  // 1  = 66 % 13 = (12 * 11 / 2) % 13
-//   cout << c(12, 3).x << endl;  // 12 = 220 % 13 = (12 * 11 * 10 / (3 * 2 * 1)) % 13
-//   cout << c(12, 11).x << endl; // 12 = 12 % 13
-//   cout << c(12, 12).x << endl; // 1  = 12 % 13
-//
-//   cout << c.perm(12, 3).x << endl; // 7 = 12 * 11 * 10 % 13
-// }
-
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -185,25 +145,26 @@ int main(int argc, char** argv) {
   cin >> k;
   string S;
   cin >> S;
+
   ll n = S.size();
+  // ll n = 0;
+  // dp[i][j] .. using [0,i),
+  vector<vector<mint>> dp(n+k+5, vector<mint>(n+5));
+  dp[0][0] = 1;
+  rep(i,n+k+1) {
+    rep(j,n+1) {
+      dp[i+1][j+1] += dp[i][j]; // same char
 
-  Combination comb(n+k+n);
-
-  // Here, n+k-h is set to n positions.
-  mint ans = 0;
-  for (ll h = 0; h <= k; ++h) {
-    // cout << "h: " << h << endl;
-    // cout << "comb: " << comb(n+k-h+(n-1), n-1) << endl;
-
-    // (k-h) to n position.
-    mint now = comb(k+n-1 - h, n-1);
-    // cout << "now: " << now << endl;
-
-    now *= mint(25).pow(k-h); // set k-h
-    now *= mint(26).pow(h);
-
-    // cout << "now: " << now << endl;
-    ans += now;
+      if (j == n) { // already reached to last
+        dp[i+1][j] += dp[i][j]*26; // we can select all
+      } else {
+        dp[i+1][j] += dp[i][j]*25; // other char
+      }
+    }
   }
-  cout << ans << endl;
+
+  rep(i,n+k+1) {
+    printvec(dp[i]);
+  }
+  cout << dp[n+k][n] << endl;
 }
