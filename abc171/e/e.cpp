@@ -62,4 +62,36 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n);
+  rep(i,n) {
+    cin >> a[i];
+  }
+
+  ll tot = 0;
+  for (ll v : a) {
+    tot ^= v;
+  }
+  // cout << tot << endl;
+
+  rep(i,n) {
+    cout << (tot^a[i]);
+    if (i < n-1) {
+      cout << " ";
+    }
+  }
+  cout << endl;
+
+  // // For Debug
+  // {
+  //   vector<ll> b = { 26, 5, 7, 22 };
+  //   ll tot = 0;
+  //   for (ll v : b) {
+  //     tot ^= v;
+  //   }
+  //   cout << tot << endl;
+
+  //   // for (ll v : b) {
+  //   //   cout << (tot ^ v) << endl;
+  //   // }
+  // }
 }

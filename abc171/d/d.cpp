@@ -62,4 +62,35 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  map<ll,ll> mp;
+  ll tot = 0;
+  vector<ll> a(n);
+  rep(i,n) {
+    cin >> a[i];
+    ++mp[a[i]];
+    tot += a[i];
+  }
+
+  // Here, mp has all values
+  // vector<P> ps; // pair of <value, count>
+  // for (auto& p : mp) {
+  //   ps.emplace_back(p.first, p.second
+
+  ll q;
+  cin >> q;
+  while(q--) {
+    ll b,c;
+    cin >> b >> c;
+    if (mp.find(b) != mp.end()) { // b is in mp
+      // move cnt from b to c.
+      ll cnt = mp[b];
+      mp[c] += cnt;
+      mp.erase(b);
+
+      // update tot
+      ll diff = (c-b)*cnt;
+      tot += diff;
+    }
+    cout << tot << endl;
+  }
 }

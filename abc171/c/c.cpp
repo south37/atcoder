@@ -62,4 +62,17 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<int> a;
+  while (n > 0) {
+    ll d = (n-1)%26;
+    a.push_back(d);
+    n = (n-1)/26;
+  }
+  // Here, a has all values.
+  reverse(all(a));
+  string ans;
+  for (int i : a) {
+    ans += (char)('a'+i);
+  }
+  cout << ans << endl;
 }
