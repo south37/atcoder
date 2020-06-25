@@ -38,6 +38,9 @@ struct BIT {
   }
   // The sum of [l, r)
   T sum(int l, int r) {
+    assert(l <= r);
+    if (r == 0) { return 0; } // Here, l == 0 && r == 0
+    if (l == 0) { return sum(r-1); }
     return sum(r-1) - sum(l-1);
   }
 };
