@@ -161,8 +161,8 @@ int main(int argc, char** argv) {
     cin >> p >> q >> r;
     --q; --r; // 0-indexed
     qs[i] = { p, q, r }; // position, typhoon start, typhoon end
-    marks[q].emplace_back(i,0);
-    marks[r+1].emplace_back(i,1);
+    marks[q].emplace_back(i,0); // check at prev of q
+    marks[r+1].emplace_back(i,1); // check at prev of r+1 (after r).
 
     // Set value to p
     mp[p] = 0;
