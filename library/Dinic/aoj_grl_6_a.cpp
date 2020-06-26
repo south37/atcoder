@@ -85,7 +85,7 @@ public:
     }
   }
 
-  // add edge "from -> to"
+  // add edge "from -> to" with capacity cap
   void addedge(ll from, ll to, FLOW cap) {
     list[from].push_back(Edge((ll)list[to].size(), from, to, cap));
     list[to].push_back(Edge((ll)list[from].size() - 1, to, from, 0));
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
   rep(i, E) {
     ll u, v, c;
     cin >> u >> v >> c;
-    g.addedge(u, v, c); // add edge "u -> v"
+    g.addedge(u, v, c); // add edge "u -> v" with capacity "c"
   }
 
   ll r = Dinic(g, 0, V - 1);
