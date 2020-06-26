@@ -1,40 +1,63 @@
-// Problem: http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_6_A&lang=jp
-// Ari-hon: https://qiita.com/drken/items/2f56925972c1d34e05d8
-// Dinic's Algorighm: https://qiita.com/drken/items/e805e3f514acceb87602
-
 #include <algorithm>
 #include <bitset>
 #include <cassert>
 #include <cmath>
+#include <functional>
+#include <iomanip>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <unordered_map>
 #include <vector>
 #include <string.h>
+#include <set>
+#include <stack>
 
 using namespace std;
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
 
-#define rep(i, n) for(int i = 0; i < n; ++i)
-#define all(s) s.begin(), s.end()
+template<class T> void printvec(const vector<T>& v) {
+  for (auto x : v) { cout << x << " "; }
+  cout << endl;
+}
+template<class T> void printtree(const vector< vector<T> >& tree) {
+  for (long long i = 0; i < tree.size(); ++i) {
+    cout << i + 1 << ": "; printvec(tree[i]);
+  }
+}
+template<class T, class U> void printmap(const map<T, U>& mp) {
+  for (auto x : mp) { cout << x.first << "=>" << x.second << endl; }
+}
 
-int dx[] = { 1, -1, 0, 0 };
-int dy[] = { 0, 0, 1, -1 };
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
+
+#define rep(i, n) for(ll i = 0; i < n; ++i)
+#define all(s) s.begin(), s.end()
+#define sz(x) (ll)(x).size()
+#define fr first
+#define sc second
+#define mp make_pair
+#define pb push_back
+#define eb emplace_back
 
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
 typedef tuple<ll, ll, ll> triple;
 typedef double D;
+typedef vector<ll> vl;
+typedef vector<P> vp;
 
+// const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
 // Dinic's algorithm.
 
 typedef ll FLOW;       // Type of flow. int here.
-const ll MAX_V = 205;  // Maximum number of nodes in a graph.
+const ll MAX_V = 215;  // Maximum number of nodes in a graph.
 const FLOW INF = 1e9;
 
 struct Edge {
@@ -85,7 +108,6 @@ public:
     }
   }
 
-  // add edge "from -> to"
   void addedge(ll from, ll to, FLOW cap) {
     list[from].push_back(Edge((ll)list[to].size(), from, to, cap));
     list[to].push_back(Edge((ll)list[from].size() - 1, to, from, 0));
@@ -148,16 +170,79 @@ FLOW Dinic(Graph &G, int s, int t) {
   }
 }
 
+// int main(int argc, char** argv) {
+//   int V, E;
+//   cin >> V >> E;
+//   Graph g(V);
+//   rep(i, E) {
+//     ll u, v, c;
+//     cin >> u >> v >> c;
+//     g.addedge(u, v, c); // add edge "u -> v"
+//   }
+//
+//   ll r = Dinic(g, 0, V - 1);
+//   cout << r << endl;
+// }
+
 int main(int argc, char** argv) {
-  int V, E;
-  cin >> V >> E;
-  Graph g(V);
-  rep(i, E) {
-    ll u, v, c;
-    cin >> u >> v >> c;
-    g.addedge(u, v, c); // add edge "u -> v"
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ios_base::sync_with_stdio(false);
+  //cout << setprecision(10) << fixed;
+
+  ll h,w;
+  cin >> h >> w;
+  vector<string> a(h);
+  rep(r,h) {
+    cin >> a[r];
   }
 
-  ll r = Dinic(g, 0, V - 1);
-  cout << r << endl;
+  P s, t;
+  vector<P> ps;
+  rep(r,h)rep(c,w) {
+    if (a[r][c] == 'o') {
+      ps.emplace_back(r,c);
+    } else if (a[r][c] == 'S') {
+      s = { r, c };
+    } else if (a[r][c] == 'T'){
+      t = { r, c };
+    }
+  }
+
+  // cout << "s:" << s.first << "," << s.second << endl;
+  // cout << "t:" << t.first << "," << t.second << endl;
+  // cout << "ps:";
+  // for (auto& p : ps) {
+  //   cout << "(" << p.first << "," << p.second << ")";
+  // }
+  // cout << endl;
+
+  Graph g(h+w+2);
+  int ss = h+w;
+  int tt = h+w+1;
+  g.addedge(ss,         s.first,    INF-1);
+  g.addedge(ss,         s.second+h, INF-1);
+  g.addedge(t.first,    tt,         INF-1);
+  g.addedge(t.second+h, tt,         INF-1);
+  for (auto& p : ps) {
+    int r = p.first;
+    int c = p.second;
+    g.addedge(r, c+h, 1);
+    g.addedge(c+h, r, 1);
+  }
+
+  // For Debug
+  // rep(i, h+w+2) {
+  //   for (auto& e : g[i]) {
+  //     cout << e;
+  //   }
+  //   cout << endl;
+  // }
+
+  ll ans = Dinic(g,ss,tt);
+  if (ans >= INF-1) { // one or multiple direct paths exist from ss to tt.
+    cout << -1 << endl;
+  } else {
+    cout << ans << endl;
+  }
 }
