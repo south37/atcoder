@@ -78,46 +78,52 @@ int main(int argc, char** argv) {
     b[2] = now;
   }
 
-  // printvec(b);
+  ll S = b[0]+b[1];
+  ll X = b[2];
 
-  ll k = 0;
-  // Here, check bit
-  rep(i,50) { // check 50 bit
-    ll bit0 = (b[0]>>i)&1ll;
-    ll bit1 = (b[1]>>i)&1ll;
-    ll bit2 = (b[2]>>i)&1ll;
+  // Find (i,j) where..
+  //   i+j == i^j + 2*(i&j)
+  //   S == X + 2*D
+  //   i+j == S
+  //   i^j == X
+  //   i&j == D
+  if (S < X) {
+    cout << -1 << endl;
+    return 0;
+  }
+  if ((S-X)%2 == 1) {
+    cout << -1 << endl;
+    return 0;
+  }
+  ll D = (S-X)/2;
 
-    cout << "i:" << i << endl;
-    cout << "bit0:" << bit0 << endl;
-    cout << "bit1:" << bit1 << endl;
-    cout << "bit2:" << bit2 << endl;
+  rep(i,50) {
+    if (((X>>i)&1ll) && ((D>>i)&1ll)) { // both is 1. invalid.
+      cout << -1 << endl;
+      return 0;
+    }
+  }
+  // Here, D is valid.
+  // (i,j) is (D+Y,D+Z) where Y^Z == X && Y&Z == 0
 
-    if (bit0 == bit1) {
-      if (bit2 == 1) { // invalid
-        cout << -1 << endl;
-        return 0;
+  ll c = D; // target. "a[0] - c" is diff.
+  if (c > a[0]) { // too large
+    cout << -1 << endl;
+    return 0;
+  }
+  // Here, i <= a[0]
+  for (ll i = 50; i >= 0; --i) {
+    if ((X>>i)&1ll) { // i bit exists in X
+      ll now = c+(1ll<<i);
+      if (now <= a[0]) {
+        c = now;
       }
-      // Here, bit2 == 0. valid.
-      if (bit1 == 1) { // bit0 == 1
-        k += (1ll<<i);
-      }
-    } else { // bit0 != bit1
-      if (bit2 == 0) { // invalid
-        cout << -1 << endl;
-        return 0;
-      }
-      // Here, bit2 == 1. valid.
     }
   }
 
-  cout << k << endl;
-
-  // For Debug
-  // --a[0];
-  // ++a[1];
-  // ll ans = 0;
-  // rep(i,n) {
-  //   ans ^= a[i];
-  // }
-  // cout << ans << endl;
+  if (c == 0) { // invalid
+    cout << -1 << endl;
+  } else {
+    cout << a[0]-c << endl;
+  }
 }

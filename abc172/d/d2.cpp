@@ -62,41 +62,11 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
-  vector<ll> a(n);
-  rep(i,n) {
-    cin >> a[i];
-  }
 
-  vector<ll> b(3);
-  b[0] = a[0];
-  b[1] = a[1];
-  if (n > 2) {
-    ll now = 0;
-    for (int i = 2; i < n; ++i) {
-      now ^= a[i];
-    }
-    b[2] ^= now;
+  ll ans = 0;
+  for (ll i = 1; i <= n; ++i) {
+    ll y = n/i;
+    ans += y*(y+1)/2 * i;
   }
-
-  if ((b[0]^b[1])%2 != b[2]%2) {
-    cout << -1 << endl;
-  }
-  rep(k,b[0]) {
-    ll now = (b[0]-k)^(b[1]+k);
-    if (now == b[2]) {
-      cout << k << endl;
-      return 0;
-    }
-  }
-  cout << -1 << endl;
-
-  // cout << "b[0]:" << b[0] << endl;
-  // cout << "b[1]:" << b[1] << endl;
-  // cout << "b[2]:" << b[2] << endl;
-
-  // rep(k,100) {
-  //   ll now = (b[0]-k)^(b[1]+k);
-  //   cout << "k: " << k << endl;
-  //   cout << "now: " << now  << endl;
-  // }
+  cout << ans << endl;
 }
