@@ -75,49 +75,28 @@ int main(int argc, char** argv) {
     for (int i = 2; i < n; ++i) {
       now ^= a[i];
     }
-    b[2] = now;
+    b[2] ^= now;
   }
 
-  // printvec(b);
-
-  ll k = 0;
-  // Here, check bit
-  rep(i,50) { // check 50 bit
-    ll bit0 = (b[0]>>i)&1ll;
-    ll bit1 = (b[1]>>i)&1ll;
-    ll bit2 = (b[2]>>i)&1ll;
-
-    cout << "i:" << i << endl;
-    cout << "bit0:" << bit0 << endl;
-    cout << "bit1:" << bit1 << endl;
-    cout << "bit2:" << bit2 << endl;
-
-    if (bit0 == bit1) {
-      if (bit2 == 1) { // invalid
-        cout << -1 << endl;
-        return 0;
-      }
-      // Here, bit2 == 0. valid.
-      if (bit1 == 1) { // bit0 == 1
-        k += (1ll<<i);
-      }
-    } else { // bit0 != bit1
-      if (bit2 == 0) { // invalid
-        cout << -1 << endl;
-        return 0;
-      }
-      // Here, bit2 == 1. valid.
+  if ((b[0]^b[1])%2 != b[2]%2) {
+    cout << -1 << endl;
+  }
+  rep(k,b[0]) {
+    ll now = (b[0]-k)^(b[1]+k);
+    if (now == b[2]) {
+      cout << k << endl;
+      return 0;
     }
   }
+  cout << -1 << endl;
 
-  cout << k << endl;
+  // cout << "b[0]:" << b[0] << endl;
+  // cout << "b[1]:" << b[1] << endl;
+  // cout << "b[2]:" << b[2] << endl;
 
-  // For Debug
-  // --a[0];
-  // ++a[1];
-  // ll ans = 0;
-  // rep(i,n) {
-  //   ans ^= a[i];
+  // rep(k,100) {
+  //   ll now = (b[0]-k)^(b[1]+k);
+  //   cout << "k: " << k << endl;
+  //   cout << "now: " << now  << endl;
   // }
-  // cout << ans << endl;
 }

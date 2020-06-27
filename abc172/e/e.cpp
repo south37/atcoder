@@ -187,21 +187,19 @@ int main(int argc, char** argv) {
   Combination comb(n+m+5);
 
   mint ans = 0;
-  rep(k, n+1) { // loop in [0,n]
-    mint now = comb.fact[m-k];
-    now /= comb.fact[m-n];
-
-    cout << "k:" << k << endl;
-    cout << "now: " << now << endl;
-    if (k%2 == 0) {
-      ans += now;
+  for (int k = 1; k <= n; ++k) {
+    if (k == 1) {
+      ans = m-1;
     } else {
-      ans -= now;
+      mint now = 0;
+      now += (k-1)*(m-k+1);
+      now += mint(ans-k+1)*(m-k);
+
+      ans = now;
     }
   }
-  cout << "ans(inter):" << ans << endl;
 
-  // ans *= comb.fact[n];
+  ans *= comb.fact[n];
   ans *= comb(m,n);
   cout << ans << endl;
 }
