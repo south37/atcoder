@@ -60,6 +60,15 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  string s, t;
+  cin >> s;
+  cin >> t;
+  ll n = s.size();
+  ll ans = 0;
+  rep(i,n) {
+    if (s[i] != t[i]) {
+      ++ans;
+    }
+  }
+  cout << ans << endl;
 }

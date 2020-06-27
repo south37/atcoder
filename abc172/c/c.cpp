@@ -60,6 +60,44 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n,m,k;
+  cin >> n >> m >> k;
+  vector<ll> a(n), b(m);
+  rep(i,n) {
+    cin >> a[i];
+  }
+  rep(i,m) {
+    cin >> b[i];
+  }
+
+  vector<ll> s(n+1);
+  rep(i,n) {
+    s[i+1] = s[i] + a[i];
+  }
+  vector<ll> sb(m+1);
+  rep(i,m) {
+    sb[i+1] = sb[i] + b[i];
+  }
+
+  ll ans = 0;
+  // Here, calculate max for each a
+  rep(i,n+1) {
+    ll now = i; // read i.
+
+    ll remain = k - s[i];
+    if (remain < 0) { break; } // too small
+    // Here, remain >= 0
+
+    // prev of upper_bound
+    auto it = upper_bound(all(sb), remain);
+    if (it == sb.begin()) { // invalid
+      continue;
+    } else {
+      ll idx = prev(it) - sb.begin(); // idx of sb. sb[idx] <= remain
+      now += idx;
+      chmax(ans, now);
+    }
+  }
+
+  cout << ans << endl;
 }

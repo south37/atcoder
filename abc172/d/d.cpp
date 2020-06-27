@@ -62,4 +62,20 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  vector<ll> a(n+1, 1);
+  for (int i = 2; i <= n; ++i) {
+    int k = 1;
+    while (i*k <= n) {
+      ++a[i*k];
+      ++k;
+    }
+  }
+  // printvec(a);
+
+  ll ans = 0;
+  for (int i = 1; i <= n; ++i) {
+    ans += i*a[i];
+  }
+
+  cout << ans << endl;
 }
