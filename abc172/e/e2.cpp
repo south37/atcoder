@@ -161,20 +161,6 @@ struct Combination {
   }
 };
 
-// int main(int argc, char** argv) {
-//   MOD = 13;
-//
-//   Combination c(12);
-//   cout << c(12, 0).x << endl;  // 1  = 1 % 13
-//   cout << c(12, 1).x << endl;  // 12 = 12 % 13
-//   cout << c(12, 2).x << endl;  // 1  = 66 % 13 = (12 * 11 / 2) % 13
-//   cout << c(12, 3).x << endl;  // 12 = 220 % 13 = (12 * 11 * 10 / (3 * 2 * 1)) % 13
-//   cout << c(12, 11).x << endl; // 12 = 12 % 13
-//   cout << c(12, 12).x << endl; // 1  = 12 % 13
-//
-//   cout << c.perm(12, 3).x << endl; // 7 = 12 * 11 * 10 % 13
-// }
-
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
@@ -184,13 +170,12 @@ int main(int argc, char** argv) {
   ll n,m;
   cin >> n >> m;
 
-  Combination comb(n+m+5);
+  Combination comb(m+5);
 
-  // ans = sum of (-1)^k * nCk * mPk * (m-kPn-k)^2
+  // ans = sum of (-1)^k * nCk * m-kPn-k * mPn
   mint ans = 0;
   rep(k,n+1) {
-    mint now = comb.perm(m,k);
-    now *= comb.perm(m-k,n-k) * comb.perm(m-k,n-k);
+    mint now = comb.perm(m-k,n-k);
     now *= comb(n,k);
     if (k%2==0) {
       ans += now;
@@ -198,5 +183,6 @@ int main(int argc, char** argv) {
       ans -= now;
     }
   }
+  ans *= comb.perm(m,n);
   cout << ans << endl;
 }
