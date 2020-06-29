@@ -1,4 +1,4 @@
-// ref. https://ei1333.github.io/luzhiled/snippets/structure/priority-sum-structure.html
+// ref. https://img.atcoder.jp/agc034/editorial.pdf
 
 #include <algorithm>
 #include <bitset>
@@ -146,41 +146,52 @@ int main(int argc, char** argv) {
   ll n, x;
   cin >> n >> x;
   vector<ll> b(n), l(n), u(n);
-  vector<ll> ord;
   ll loss = 0; // sum of lowest
   rep(i,n) {
     cin >> b[i] >> l[i] >> u[i];
     loss += b[i]*l[i];
-    ord.push_back(i);
   }
-  sort(all(ord), [&](const ll a, const ll b) {
-    return l[a] > l[b];
-  });
-  // Here, idx in ord are sorted in decreasing order of l[idx].
 
-  // sum is sum of left and right. If sum > b[idx], then larger than loss by
-  // u[idx]*(sum-b[idx]). Else, smaller than loss by l[idx]*(b[idx]-sum).
-  auto get_cost = [&](ll idx, ll sum) {
+  // Return cost when use ai at i.
+  auto di = [&](ll i, ll ai) {
     ll ret = 0;
-    // if sum > b[idx] then (b[idx], sum-b[idx])
-    //                 else (sum,    0)
-    ret += l[idx]*min(sum, b[idx]);
-    ret += u[idx]*max(0ll, sum-b[idx]);
+    ret += l[i]*min(b[i],ai);
+    if (ai > b[i]) {
+      ret += u[i]*(ai-b[i]);
+    }
     return ret;
   };
 
-  MaximumSum<ll> maxsum(0);
+  vector<P> ps; // pair of <di(i,x), i>
   rep(i,n) {
-    maxsum.insert(get_cost(i,x));
+    ps.emplace_back(di(i,x), i);
   }
-  auto check = [&](ll sum) {
-    ll v = sum/x; // required elements.
-    maxsum.set_k(v);
-    for (ll i : ord) {
-      maxsum.erase(get_cost(i,x));
-      bool now = maxsum.query() + get_cost(i, sum%x) >= loss;
-      maxsum.insert(get_cost(i,x)); // revert state
-      if (now) { return true; }
+  sort(all(ps));
+  reverse(all(ps));
+  // Here, ps is sorted in decreasing order
+
+  vector<ll> s(n+1); // cummulative sum of ps[j].first in [0,i)
+  rep(i,n) {
+    s[i+1] = s[i] + ps[i].first;
+  }
+
+  // return true when A can win with k.
+  auto check = [&](ll k) {
+    ll q = k/x;
+    ll r = k-q*x;
+    rep(i,n) {
+      P p = ps[i];
+      ll idx = p.second;
+
+      ll now = -loss; // now .. D
+      if (i < q) { // add sum of [0,q+1) except for idx.
+        now += s[q+1];
+        now -= p.first;
+      } else {
+        now += s[q]; // add sum of [0,q)
+      }
+      now += di(idx,r);
+      if (now >= 0) { return true; }
     }
     return false;
   };
