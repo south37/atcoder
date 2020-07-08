@@ -62,4 +62,20 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  // ans = sum of "vertex - edge"
+  ll vertex = 0; // sum of vertex in (L,R)
+  rep(i,n) {
+    vertex += (i+1)*(n-i); // pick "i+1" from left, "n-i" from right
+  }
+  ll edge = 0; // sum of edge in (L,R)
+  rep(iter,n-1) {
+    ll u,v;
+    cin >> u >> v;
+    if (u > v) { swap(u,v); }
+    // Here, u <= v
+    edge += u*(n-v+1); // pick "u" from left, "n-v+1" from right
+  }
+
+  ll ans = vertex - edge;
+  cout << ans << endl;
 }
