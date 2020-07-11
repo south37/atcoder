@@ -62,4 +62,105 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string s;
+  cin >> s;
+
+  ll c = 0; // count of 1 at first state
+  rep(i,n) {
+    if (s[i] == '1') {
+      ++c;
+    }
+  }
+
+  auto flip = [&](ll i) {
+    if (s[i] == '1') { s[i] = '0';
+    } else { s[i] = '1'; }
+  };
+
+  // calculate s
+  // ll now = 0;
+  // rep(i,n) {
+  //   now *= 2;
+  //   now += (s[i] - '0');
+  // }
+  // cout << "num: " << now << endl;
+
+  // We necessary only under 16 bit of first number.
+  rep(i,n) {
+    // cout << s << endl;
+
+    ll nc = c; // current c
+    if (s[i] == '1') { // we flip i, so decrease c.
+      --nc;
+    } else {
+      ++nc;
+    }
+
+    // flip
+    flip(i);
+
+    // Check 0
+    bool isAllZero = true;
+    rep(i,n) {
+      if (s[i] != '0') {
+        isAllZero = false;
+        break;
+      }
+    }
+    if (isAllZero) { // already 0
+      flip(i); // revert
+      cout << 0 << endl;
+      continue;
+    }
+
+    ll now = 0;
+    // use last 32 bit.
+    // rep(j,n) {
+    for (ll j = max(0ll, n-1-32); j < n; ++j) {
+      now *= 2;
+      now += (s[j] - '0');
+      // cout << "n-1-j: " << n-1-j << endl;
+      // cout << "s[n-1-j]:" << s[n-1-j] << endl;
+    }
+    // Here, this value represent value of last 16bit
+
+    // cout << "i: " << i << endl;
+    // cout << "c: " << c << endl;
+    // cout << "nc: " << nc << endl;
+    // cout << "now: " << now << endl;
+
+    // We simulat from "now".
+    ll cnt = 0;
+    ++cnt;
+    now %= nc; // decrease.
+
+    {
+      while (now > 0) {
+        ++cnt;
+        now %= __builtin_popcountll(now);
+      }
+    }
+    cout << cnt << endl;
+
+    // revert
+    flip(i);
+  }
+
+  // rep(i,10) {
+  //   if (i==0) { continue; }
+
+  //   cout << "i: " << i << endl;
+  //   // simulate by i
+  //   {
+  //     ll now = 0;
+
+  //     ll j = i;
+  //     while (j > 0) {
+  //       ++now;
+  //       j %= __builtin_popcountll(j);
+  //       // cout << "j: " << j << endl;
+  //     }
+  //     cout << now << endl;
+  //   }
+  // }
 }
