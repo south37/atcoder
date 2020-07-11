@@ -158,7 +158,6 @@ int main(int argc, char** argv) {
   // table[i] .. answer of i.
   vector<ll> table(n+1);
   table[0] = 0;
-  table[1] = 1;
   rep(i,n+1) {
     if (i == 0) { continue; }
     ll now = i % __builtin_popcountll(i);
