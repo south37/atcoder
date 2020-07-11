@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
   //   cout << "table["<<i<<"]: " << table[i] << endl;
   // }
 
-  ll firstState1 = 0; // remain for first value by n+1.
+  ll firstState1 = 0; // remain for first value by c+1.
   {
     MOD = c+1;
     mint now = 0;
@@ -183,7 +183,7 @@ int main(int argc, char** argv) {
     // Here, now represents the mod representation of first value.
     firstState1 = now.x;
   }
-  ll firstState2 = 0; // remain for first value by n-1.
+  ll firstState2 = 0; // remain for first value by c-1.
   if (c > 1) {
     MOD = c-1; // n-1 >= 1
     mint now = 0;
