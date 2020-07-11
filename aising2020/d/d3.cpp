@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
     firstState1 = now.x;
   }
   ll firstState2 = 0; // remain for first value by n-1.
-  if (n > 1) {
+  if (c > 1) {
     MOD = c-1; // n-1 >= 1
     mint now = 0;
     rep(i,n) {
