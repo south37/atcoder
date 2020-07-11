@@ -172,11 +172,6 @@ int main(int argc, char** argv) {
   //   cout << "table["<<i<<"]: " << table[i] << endl;
   // }
 
-  auto flip = [&](ll i) {
-    if (s[i] == '1') { s[i] = '0';
-    } else { s[i] = '1'; }
-  };
-
   ll firstState1 = 0; // remain for first value by n+1.
   {
     MOD = c+1;
@@ -202,22 +197,6 @@ int main(int argc, char** argv) {
     firstState2 = now.x;
   }
 
-  // calculate s
-  // ll num = 0;
-  // {
-  //   rep(i,n) {
-  //     num *= 2;
-  //     num += (s[i] - '0');
-  //   }
-  //   cout << "num: " << num << endl;
-  // }
-
-  // cout << "num%(n+1): " << num%(n+1) << endl;
-  // cout << "num%(n-1): " << num%(n-1) << endl;
-
-  // cout << "firstState1: " << firstState1 << endl;
-  // cout << "firstState2: " << firstState2 << endl;
-
   ll isZeroIdx = -1;
   if (c == 1) { // zero exists
     // Here, we treat specially
@@ -235,48 +214,15 @@ int main(int argc, char** argv) {
       cout << 0 << endl;
       continue;
     }
-    // cout << s << endl;
 
-    // // flip
-    // flip(i);
-
-    // // Check 0
-    // bool isAllZero = true;
-    // rep(i,n) {
-    //   if (s[i] != '0') {
-    //     isAllZero = false;
-    //     break;
-    //   }
-    // }
-    // if (isAllZero) { // already 0
-    //   flip(i); // revert
-    //   cout << 0 << endl;
-    //   continue;
-    // }
-
-    // flip(i);
-
-    ll nc = c; // current c
-    if (s[i] == '1') { // we flip i, so decrease c.
-      --nc;
-    } else {
-      ++nc;
-    }
-    // cout << "i: " << i << endl;
-    // cout << "nc: " << nc << endl;
-
-    if (nc == c+1) { // 0 => 1
+    if (s[i] == '0') { // 0 => 1
       // Here, we have to add 1<<i
       MOD = c+1;
       mint now = 0;
       now += firstState1;
       now += mint(2).pow(n-1-i);
-      // Here, now is the remain value by nc.
+      // Here, now is the remain value by c+1.
 
-      // cout << "now: " << now << endl;
-      // cout << "nc: " << nc << endl;
-      // cout << "diff: " << mint(2).pow(n-1-i) << endl;
-      // cout << "firstState1: " << firstState1 << endl;
       cout << table[now.x] + 1 << endl;
     } else { // 1 -> 0
       MOD = c-1;
@@ -284,9 +230,6 @@ int main(int argc, char** argv) {
       now += firstState2;
       now -= mint(2).pow(n-1-i);
 
-      // cout << "diff: " << mint(2).pow(n-1-i) << endl;
-      // cout << "firstState2: " << firstState2 << endl;
-      // cout << "now: " << now << endl;
       cout << table[now.x] + 1 << endl;
     }
   }
