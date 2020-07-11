@@ -54,12 +54,89 @@ typedef vector<P> vp;
 const ll INF = 1e9;
 const ll MOD = 1000000007;  // 1e9 + 7
 
+void solve() {
+  ll n;
+  cin >> n;
+  vector<ll> k(n), l(n), r(n);
+  map<ll,vector<ll>> mp; // k => list of idx
+  ll ans = 0;
+  rep(i,n) {
+    cin >> k[i] >> l[i] >> r[i];
+    mp[k[i]].push_back(i);
+    ll mn = min(l[i],r[i]);
+    ans += mn;
+    l[i] -= mn;
+    r[i] -= mn;
+  }
+
+  // cout << "l: "; printvec(l);
+  // cout << "r: "; printvec(r);
+  // cout << "ans: " << ans << endl;
+  // for (ll i = 1; i <= n; ++i) {
+  //   cout << i << ": ";
+  //   vector<ll>& indices = mp[i];
+  //   for (ll idx : indices) {
+  //     cout << idx << " ";
+  //   }
+  //   cout << endl;
+  // }
+
+  {
+    priority_queue<ll, vector<ll>, greater<ll>> q;
+    for (ll i = 1; i <= n; ++i) { // loop size
+      vector<ll>& indices = mp[i];
+      for (ll idx : indices) {
+        if (l[idx] > 0) {
+          q.emplace(l[idx]);
+          ans += l[idx];
+          // cout << "+l[idx]: " << l[idx] << endl;
+        }
+      }
+      // Here, all values are added.
+
+      // pop until q.size() <= i
+      while (q.size() > i) {
+        ll li = q.top(); q.pop();
+        ans -= li;
+        // cout << "-l[idx]: " << li << endl;
+      }
+    }
+  }
+
+  {
+    priority_queue<ll, vector<ll>, greater<ll>> q;
+    for (ll i = n; i >= 1; --i) { // loop size from right
+      vector<ll>& indices = mp[i-1]; // boundary is (i-1)+1 == i
+      for (ll idx : indices) {
+        if (r[idx] > 0) {
+          q.emplace(r[idx]);
+          ans += r[idx];
+          // cout << "+r[idx]: " << r[idx] << endl;
+        }
+      }
+      // Here, all values are added.
+
+      // pop until q.size() <= "n-i+1"
+      while (q.size() > n-i+1) {
+        ll ri = q.top(); q.pop();
+        ans -= ri;
+        // cout << "-r[idx]: " << ri << endl;
+      }
+    }
+  }
+
+  cout << ans << endl;
+}
+
 int main(int argc, char** argv) {
   cin.tie(NULL);
   cout.tie(NULL);
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll t;
+  cin >> t;
+  rep(iter,t) {
+    solve();
+  }
 }
