@@ -62,4 +62,19 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+
+  map<ll,ll> mp;
+
+  rep(i,100)rep(j,100)rep(k,100) {
+    ll i1 = i+1;
+    ll j1 = j+1;
+    ll k1 = k+1;
+
+    ll now = i1*i1 + j1*j1 + k1*k1 + i1*j1 + j1*k1 + k1*i1;
+    ++mp[now];
+  }
+
+  for (ll i = 1; i <= n; ++i) {
+    cout << mp[i] << endl;
+  }
 }
