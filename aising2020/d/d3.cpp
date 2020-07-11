@@ -218,28 +218,43 @@ int main(int argc, char** argv) {
   // cout << "firstState1: " << firstState1 << endl;
   // cout << "firstState2: " << firstState2 << endl;
 
-  // We necessary only under 16 bit of first number.
-  rep(i,n) {
-    // cout << s << endl;
-
-    // flip
-    flip(i);
-
-    // Check 0
-    bool isAllZero = true;
+  ll isZeroIdx = -1;
+  if (c == 1) { // zero exists
+    // Here, we treat specially
     rep(i,n) {
-      if (s[i] != '0') {
-        isAllZero = false;
+      if (s[i] == '1') {
+        isZeroIdx = i;
         break;
       }
     }
-    if (isAllZero) { // already 0
-      flip(i); // revert
+  }
+
+  // We necessary only under 16 bit of first number.
+  rep(i,n) {
+    if (i == isZeroIdx) {
       cout << 0 << endl;
       continue;
     }
+    // cout << s << endl;
 
-    flip(i);
+    // // flip
+    // flip(i);
+
+    // // Check 0
+    // bool isAllZero = true;
+    // rep(i,n) {
+    //   if (s[i] != '0') {
+    //     isAllZero = false;
+    //     break;
+    //   }
+    // }
+    // if (isAllZero) { // already 0
+    //   flip(i); // revert
+    //   cout << 0 << endl;
+    //   continue;
+    // }
+
+    // flip(i);
 
     ll nc = c; // current c
     if (s[i] == '1') { // we flip i, so decrease c.
