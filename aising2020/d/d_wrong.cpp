@@ -179,23 +179,23 @@ int main(int argc, char** argv) {
 
   ll firstState1 = 0; // remain for first value by n+1.
   {
-    MOD = c+1;
+    MOD = n+1;
     mint now = 0;
     rep(i,n) {
       if (s[i] == '1') {
-        now += mint(2).pow(n-1-i);
+        now += mint(2).pow(n+1-i);
       }
     }
     // Here, now represents the mod representation of first value.
     firstState1 = now.x;
   }
   ll firstState2 = 0; // remain for first value by n-1.
-  if (c > 1) {
-    MOD = c-1; // n-1 >= 1
+  if (n > 1) {
+    MOD = n-1; // n-1 >= 1
     mint now = 0;
     rep(i,n) {
       if (s[i] == '1') {
-        now += mint(2).pow(n-1-i);
+        now += mint(2).pow(n+1-i);
       }
     }
     // Here, now represents the mod representation of first value.
@@ -203,58 +203,16 @@ int main(int argc, char** argv) {
   }
 
   // calculate s
-  // ll num = 0;
-  // {
-  //   rep(i,n) {
-  //     num *= 2;
-  //     num += (s[i] - '0');
-  //   }
-  //   cout << "num: " << num << endl;
+  // ll now = 0;
+  // rep(i,n) {
+  //   now *= 2;
+  //   now += (s[i] - '0');
   // }
-
-  // cout << "num%(n+1): " << num%(n+1) << endl;
-  // cout << "num%(n-1): " << num%(n-1) << endl;
-
-  // cout << "firstState1: " << firstState1 << endl;
-  // cout << "firstState2: " << firstState2 << endl;
-
-  ll isZeroIdx = -1;
-  if (c == 1) { // zero exists
-    // Here, we treat specially
-    rep(i,n) {
-      if (s[i] == '1') {
-        isZeroIdx = i;
-        break;
-      }
-    }
-  }
+  // cout << "num: " << now << endl;
 
   // We necessary only under 16 bit of first number.
   rep(i,n) {
-    if (i == isZeroIdx) {
-      cout << 0 << endl;
-      continue;
-    }
     // cout << s << endl;
-
-    // // flip
-    // flip(i);
-
-    // // Check 0
-    // bool isAllZero = true;
-    // rep(i,n) {
-    //   if (s[i] != '0') {
-    //     isAllZero = false;
-    //     break;
-    //   }
-    // }
-    // if (isAllZero) { // already 0
-    //   flip(i); // revert
-    //   cout << 0 << endl;
-    //   continue;
-    // }
-
-    // flip(i);
 
     ll nc = c; // current c
     if (s[i] == '1') { // we flip i, so decrease c.
@@ -262,32 +220,77 @@ int main(int argc, char** argv) {
     } else {
       ++nc;
     }
-    // cout << "i: " << i << endl;
-    // cout << "nc: " << nc << endl;
 
-    if (nc == c+1) { // 0 => 1
-      // Here, we have to add 1<<i
-      MOD = c+1;
-      mint now = 0;
-      now += firstState1;
-      now += mint(2).pow(n-1-i);
-      // Here, now is the remain value by nc.
+    // flip
+    flip(i);
 
-      // cout << "now: " << now << endl;
-      // cout << "nc: " << nc << endl;
-      // cout << "diff: " << mint(2).pow(n-1-i) << endl;
-      // cout << "firstState1: " << firstState1 << endl;
-      cout << table[now.x] + 1 << endl;
-    } else { // 1 -> 0
-      MOD = c-1;
-      mint now = 0;
-      now += firstState2;
-      now -= mint(2).pow(n-1-i);
-
-      // cout << "diff: " << mint(2).pow(n-1-i) << endl;
-      // cout << "firstState2: " << firstState2 << endl;
-      // cout << "now: " << now << endl;
-      cout << table[now.x] + 1 << endl;
+    // Check 0
+    bool isAllZero = true;
+    rep(i,n) {
+      if (s[i] != '0') {
+        isAllZero = false;
+        break;
+      }
     }
+    if (isAllZero) { // already 0
+      flip(i); // revert
+      cout << 0 << endl;
+      continue;
+    }
+
+    ll now = 0;
+    // use last 32 bit.
+    // rep(j,n) {
+    rep(j,n) {
+      if (s[n-1-j] == '1') {
+        now += 1ll<<j;
+      }
+      // for (ll j = max(0ll, n-1-16); j < n; ++j) {
+      // now *= 2;
+      // now += (s[j] - '0');
+      // cout << "n-1-j: " << n-1-j << endl;
+      // cout << "s[n-1-j]:" << s[n-1-j] << endl;
+    }
+    // Here, this value represent value of last 16bit
+
+    // cout << "i: " << i << endl;
+    // cout << "c: " << c << endl;
+    // cout << "nc: " << nc << endl;
+    // cout << "now: " << now << endl;
+
+    // We simulat from "now".
+    ll cnt = 0;
+    ++cnt;
+    now %= nc; // decrease.
+    cout << table[now] + 1 << endl;
+
+    // {
+    //   while (now > 0) {
+    //     ++cnt;
+    //     now %= __builtin_popcountll(now);
+    //   }
+    // }
+    // cout << cnt << endl;
+
+    // revert
+    flip(i);
   }
+
+  // rep(i,10) {
+  //   if (i==0) { continue; }
+
+  //   cout << "i: " << i << endl;
+  //   // simulate by i
+  //   {
+  //     ll now = 0;
+
+  //     ll j = i;
+  //     while (j > 0) {
+  //       ++now;
+  //       j %= __builtin_popcountll(j);
+  //       // cout << "j: " << j << endl;
+  //     }
+  //     cout << now << endl;
+  //   }
+  // }
 }
