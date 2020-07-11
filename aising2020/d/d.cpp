@@ -218,16 +218,14 @@ int main(int argc, char** argv) {
     if (s[i] == '0') { // 0 => 1
       // Here, we have to add 1<<i
       MOD = c+1;
-      mint now = 0;
-      now += firstState1;
+      mint now = firstState1;
       now += mint(2).pow(n-1-i);
       // Here, now is the remain value by c+1.
 
       cout << table[now.x] + 1 << endl;
     } else { // 1 -> 0
       MOD = c-1;
-      mint now = 0;
-      now += firstState2;
+      mint now = firstState2;
       now -= mint(2).pow(n-1-i);
 
       cout << table[now.x] + 1 << endl;
