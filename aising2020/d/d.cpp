@@ -72,6 +72,23 @@ int main(int argc, char** argv) {
     }
   }
 
+  // table[i] .. answer of i.
+  vector<ll> table(n+1);
+  table[0] = 0;
+  table[1] = 1;
+  rep(i,n+1) {
+    if (i == 0) { continue; }
+    ll now = i % __builtin_popcountll(i);
+    // cout << "i: " << i << endl;
+    // cout << "popcount(i): " << __builtin_popcountll(i) << endl;
+    // cout << "now: " << now << endl;
+    table[i] = table[now] + 1;
+  }
+
+  // rep(i,n+1) {
+  //   cout << "table["<<i<<"]: " << table[i] << endl;
+  // }
+
   auto flip = [&](ll i) {
     if (s[i] == '1') { s[i] = '0';
     } else { s[i] = '1'; }
@@ -116,9 +133,13 @@ int main(int argc, char** argv) {
     ll now = 0;
     // use last 32 bit.
     // rep(j,n) {
-    for (ll j = max(0ll, n-1-32); j < n; ++j) {
-      now *= 2;
-      now += (s[j] - '0');
+    rep(j,n) {
+      if (s[n-1-j] == '1') {
+        now += 1ll<<j;
+      }
+      // for (ll j = max(0ll, n-1-16); j < n; ++j) {
+      // now *= 2;
+      // now += (s[j] - '0');
       // cout << "n-1-j: " << n-1-j << endl;
       // cout << "s[n-1-j]:" << s[n-1-j] << endl;
     }
@@ -133,14 +154,15 @@ int main(int argc, char** argv) {
     ll cnt = 0;
     ++cnt;
     now %= nc; // decrease.
+    cout << table[now] + 1 << endl;
 
-    {
-      while (now > 0) {
-        ++cnt;
-        now %= __builtin_popcountll(now);
-      }
-    }
-    cout << cnt << endl;
+    // {
+    //   while (now > 0) {
+    //     ++cnt;
+    //     now %= __builtin_popcountll(now);
+    //   }
+    // }
+    // cout << cnt << endl;
 
     // revert
     flip(i);
