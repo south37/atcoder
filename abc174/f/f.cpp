@@ -66,7 +66,42 @@ int main(int argc, char** argv) {
   rep(i,n) {
     cin >> c[i];
   }
-  rep(iter,q) {
-    // TODO
+  vector<triple> qs; // (l,r,idx)
+  rep(i,q) {
+    ll l,r;
+    cin >> l >> r;
+    --l; --r;
+    qs.emplace_back(l,r,i);
+  }
+  sort(all(qs));
+  vector<vector<ll>> lmarks(n);
+  vector<vector<ll>> rmarks(n);
+  for (auto& q : qs) {
+    ll l,r,idx;
+    tie(l,r,idx) = q;
+    lmarks[l].push_back(idx);
+    rmarks[r].push_back(idx);
+  }
+
+  vector<set<ll>> cs(q); // cs[i] .. colors in query i.
+
+  set<ll> now; // current queries
+  rep(i,n) {
+    for (ll idx : lmarks[i]) {
+      now.insert(idx);
+    }
+
+    // Here, now is valid. Update cs.
+    for (ll idx : now) {
+      cs[idx].insert(c[i]);
+    }
+
+    for (ll idx : rmarks[i]) {
+      now.erase(idx);
+    }
+  }
+
+  rep(i,q) {
+    cout << cs[i].size() << endl;
   }
 }
