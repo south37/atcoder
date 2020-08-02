@@ -60,6 +60,13 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, q;
+  cin >> n >> q;
+  vector<ll> c(n);
+  rep(i,n) {
+    cin >> c[i];
+  }
+  rep(iter,q) {
+    // TODO
+  }
 }
