@@ -60,6 +60,37 @@ int main(int argc, char** argv) {
   ios_base::sync_with_stdio(false);
   //cout << setprecision(10) << fixed;
 
-  ll n;
-  cin >> n;
+  ll n, k;
+  cin >> n >> k;
+  vector<ll> a(n);
+  rep(i,n) {
+    cin >> a[i];
+  }
+  sort(all(a));
+  reverse(all(a));
+  // Here, a is decreasing order.
+
+  auto check = [&](ll m) {
+    // Here, max length is m. we caount all by m.
+    ll now = 0;
+    rep(i,n) {
+      ll cnt = (a[i]+(m-1)) / m;
+      now += cnt;
+    }
+    // Here, we cant make now or more.
+    return now <= n+k;
+  };
+
+  ll l = 0;
+  ll r = 1e9+1;
+  // Here, we want minimum.
+  while (r-l > 1) {
+    ll m = (r+l)/2;
+    if (check(m)) { // ok
+      r = m;
+    } else {
+      l = m;
+    }
+  }
+  cout << r << endl;
 }
