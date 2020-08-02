@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
   }
 
   mint now = 0;
-  rep(i,k*10) {
+  rep(i,k+5) {
     now += mint(10).pow(i) * 7;
     if (now.x == 0) {
       cout << i+1 << endl;

@@ -85,19 +85,28 @@ int main(int argc, char** argv) {
 
   vector<set<ll>> cs(q); // cs[i] .. colors in query i.
 
-  set<ll> now; // current queries
+  vector<set<ll>> nows(n+1);
+  // set<ll> now; // current queries
   rep(i,n) {
     for (ll idx : lmarks[i]) {
-      now.insert(idx);
+      rep(i,n+1) {
+        nows[i].insert(idx);
+      }
+      // now.insert(idx);
     }
 
     // Here, now is valid. Update cs.
-    for (ll idx : now) {
+    for (ll idx : nows[c[i]-1])  {
+    // for (ll idx : now) {
       cs[idx].insert(c[i]);
+      nows[c[i]-1].erase(idx);
     }
 
     for (ll idx : rmarks[i]) {
-      now.erase(idx);
+      rep(i,n+1) {
+        nows[i].erase(idx);
+      }
+      // now.erase(idx);
     }
   }
 
