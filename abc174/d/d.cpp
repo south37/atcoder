@@ -62,4 +62,21 @@ int main(int argc, char** argv) {
 
   ll n;
   cin >> n;
+  string s;
+  cin >> s;
+  ll wCnt = 0;
+  rep(i,n) {
+    if (s[i] == 'W') {
+      ++wCnt;
+    }
+  }
+
+  ll ans = 0;
+  // Here, we want all w in right.
+  rep(i,wCnt) {
+    if (s[n-1-i] != 'W') {
+      ++ans;
+    }
+  }
+  cout << ans << endl;
 }
