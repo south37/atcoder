@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
   }
 
   vector<ll> ans(q);
-  BIT<int> bit(n+5);
+  BIT<ll> bit(n+5);
   // Start scan.
   rep(i,n) {
     ll nc = c[i]; // current color
